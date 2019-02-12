@@ -1,14 +1,13 @@
 package controller;
 
-import java.sql.*;
 import model.Database;
 
 public abstract class Main {
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) {
 		// Tentative de connexion à la base de données
 		try {
 			System.out.println("Connexion en cours...");
-			Database.database = new Database("os-vps418.infomaniak.ch:3306", "l2_gr2", "l2_gr2", "5KUavzaM");
+			Database.database = new Database("localhost", "l2_gr2", "l2_gr2", "5KUavzaM");
 			System.out.println("Connexion réussie !");
 		}
 		catch (Exception e) {
