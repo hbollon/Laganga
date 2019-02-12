@@ -1,28 +1,14 @@
 package Window;
 
-import java.awt.BorderLayout;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTree;
-
 public class main {
 	
-	static private JFrame fenetre;
-	static private JTree listeUser;
-	static private JPanel panelGauche;
-	
 	public static void main(String[] args) {
-		fenetre = new JFrame();
-		listeUser = new JTree();
-		initializeFrame(fenetre);
-		initializeListe(listeUser);
-		fenetre.setContentPane(getJPanel());
-
-	  }       
+		MainWin fenetre = new MainWin();
+		fenetre.setVisible(true);
+		
+	}       
 	
-	public static void initializeFrame(JFrame fenetre)
+	/*public static void initializeFrame()
 	{
 		fenetre.setTitle("Laganga");
 	    fenetre.setSize(1280, 720);
@@ -33,7 +19,16 @@ public class main {
 	    fenetre.setVisible(true);
 	}
 	
-	public static void initializeListe(JTree listeUser)
+	public static JTree getJTree()
+	{
+		if(listeUser == null)
+		{
+			listeUser = new JTree();
+		}
+		return listeUser;
+	}
+	
+	public static void initializeListe()
 	{
 		listeUser = new JTree();
 		listeUser.setSize(200, 420);
@@ -41,10 +36,12 @@ public class main {
 
 	public static JPanel getJPanel()
 	{
-		listeUser.setSize(200, 420);
-		panelGauche = new JPanel();
-		panelGauche.setLayout(new BorderLayout());
-		panelGauche.add(
+		if(panelGauche == null)
+		{
+			panelGauche = new JPanel();
+			panelGauche.setLayout(new BorderLayout());
+			panelGauche.add(getJTree(), BorderLayout.WEST);
+		}
 		return panelGauche;
-	}
+	}*/
 }
