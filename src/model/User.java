@@ -20,6 +20,8 @@ public class User extends Model {
 	// Champs de la table
 	public String firstName;
 	public String lastName;
+	public String email;
+	public Date birth;
 	
 	
 	/*
@@ -36,8 +38,10 @@ public class User extends Model {
 	public void save(ResultSet res) throws Exception {
 		super.save(res);
 		
-		firstName = res.getString(getPrefix()+"firstname");
-		lastName = res.getString(getPrefix()+"lastname");
+		firstName = res.getString(getPrefix()+"firstName");
+		lastName = res.getString(getPrefix()+"lastName");
+		email = res.getString(getPrefix()+"email");
+		birth = res.getDate(getPrefix()+"birth");
 	}
 	
 	/*
@@ -46,12 +50,13 @@ public class User extends Model {
 	protected void update() throws SQLException {
 		super.update();
 		
-		res.updateString(getPrefix()+"firstname", firstName);
-		res.updateString(getPrefix()+"lastname", lastName);
+		res.updateString(getPrefix()+"firstName", firstName);
+		res.updateString(getPrefix()+"lastName", lastName);
+		res.updateString(getPrefix()+"email", email);
+		res.updateDate(getPrefix()+"birth", birth);
 	}
 	public void updateDatabase() throws SQLException {
 		update();
-		
 		res.updateRow();
 	}
 	
@@ -60,6 +65,12 @@ public class User extends Model {
 	 * Affiche l'instance sous forme textuelle
 	 */
 	public String toString() {
-		return getID()+"/"+firstName+"/"+lastName;
+		String str = "User no. "+getID()+":\n";
+		str += "\t- firstName: "+firstName+"\n";
+		str += "\t- lastName: "+lastName+"\n";
+		str += "\t- email: "+email+"\n";
+		str += "\t- birth: "+birth+"\n";
+		
+		return str;
 	}
 }

@@ -1,19 +1,17 @@
-/*
- * Fichier : ModelFactory.java
- * Auteur : Julien Valverdé
- */
 package model;
 
 import java.util.*;
 import java.sql.*;
 
-
-/*
- * ModelFactory
- * Permet de créer des instances du modèle.
+/**
+ * Un ModelFactory est associé à une table de la base de données et à une classe du modèle (ex: users/User).
+ * Il permet d'effectuer plusieurs opérations sur le modèle, comme récupérer un certain nombre de lignes depuis la
+ * base de données, instancier la classe qui leur est associée et créer de nouvelles entrées.
+ * 
+ * @author Julien Valverdé
  */
 public class ModelFactory {
-	// Usines
+	// Factories
 	public static ModelFactory users;
 	public static ModelFactory events;
 	
@@ -76,9 +74,12 @@ public class ModelFactory {
 		return object;
 	}
 	
-	/*
-	 * getSQLQuery
-	 * Génère la requête SQL
+	/**
+	 * Assemble une requête SQL pour récupérer les lignes du modèle.
+	 * 
+	 * @param whereClause Clause WHERE de la requête (null pour ne pas la préciser).
+	 * @param additionalClauses Clauses additionnelles (null pour ne pas en préciser).
+	 * @return Un String contenant la requête SQL.
 	 */
 	private String getSelectQuery(String whereClause, String additionalClauses) {
 		String query = "SELECT * FROM "+getTable();

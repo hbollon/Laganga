@@ -1,9 +1,10 @@
 package controller;
 
-import model.Database;
+import java.util.*;
+import model.*;
 
 public abstract class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// Tentative de connexion à la base de données
 		try {
 			System.out.println("Connexion en cours...");
@@ -13,7 +14,13 @@ public abstract class Main {
 		catch (Exception e) {
 			// Actions à effectuer si la connexion a échoué
 			System.out.println("Connexion à MySQL impossible !");
-			e.printStackTrace();
+			throw e;
 		}
+		
+		// Affichage de tous les utilisateurs
+		ArrayList<Model> usersList = ModelFactory.users.getAll();
+		
+		for (int i = 0; i < usersList.size(); i++)
+			System.out.println(usersList.get(i));
 	}
 }
