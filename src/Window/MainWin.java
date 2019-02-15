@@ -18,6 +18,7 @@ private JPanel rightPanel = null;
 private JPanel jContentPane = null;
 private JTree jTree = null;
 private JScrollPane jScrollTree = null;
+private JTextArea notificationBar = null;
 
 private JTree getJTree() {
 	if (jTree == null) {
@@ -38,7 +39,6 @@ public void initialize()
 	JFrame.setDefaultLookAndFeelDecorated(true);
 	this.setTitle("Laganga");
     this.setSize(1280, 720);
-    //this.setLayout(new GridBagLayout());
     ImageIcon img = new ImageIcon("icon.png");
     this.setIconImage(img.getImage());
 	this.setContentPane(getWindowPane());
@@ -50,7 +50,7 @@ public void initialize()
 
 public void setTree()
 {
-	jScrollTree.setPreferredSize(new Dimension(240,450));
+	
 }
 
 private JPanel getWindowPane()
@@ -63,6 +63,7 @@ private JPanel getWindowPane()
 		rightPanel = new JPanel(new BorderLayout());
 		
 		leftPanel.add(getJContentPane(), BorderLayout.SOUTH);
+		rightPanel.add(getNotificationBar(), BorderLayout.EAST);
 		windowPanel.add(leftPanel, BorderLayout.WEST);
 		windowPanel.add(centerPanel, BorderLayout.CENTER);
 		windowPanel.add(rightPanel, BorderLayout.EAST);
@@ -84,12 +85,20 @@ private JScrollPane getJScrollPane()
 	{
 		jScrollTree = new JScrollPane();
 		jScrollTree.setViewportView(getJTree());
+		jScrollTree.setPreferredSize(new Dimension(240,450));
 	}
 	return jScrollTree;
 }
 
-/*private JTextArea getNotificationBar()
+private JTextArea getNotificationBar()
 {
-	return
-}*/
+	if(notificationBar == null)
+	{
+		notificationBar = new JTextArea();
+		notificationBar.setPreferredSize(new Dimension(200, 720));
+		notificationBar.setEditable(false);
+	}
+	
+	return notificationBar;
+}
 }
