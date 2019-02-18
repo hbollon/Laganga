@@ -1,6 +1,7 @@
 package model;
 
 import java.util.*;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 /**
@@ -10,30 +11,31 @@ import java.sql.*;
  * 
  * @author Julien Valverdé
  */
-public class ModelFactory {
+public class EntityModel {
 	// Factories
-	public static ModelFactory users;
-	public static ModelFactory events;
+	public static EntityModel users;
+	public static EntityModel events;
 	
 	static {
 		try {
-			users = new ModelFactory("model.User");
-			events = new ModelFactory("model.Event");
+			users = new EntityModel("model.User");
+			events = new EntityModel("model.Event");
 		}
 		catch (Exception e) {}
 	}
 	
 	
 	// Propriétés du modèle
-	private Class<?> modelClass;
-	private Map<Integer, Model> objects;
+	private Class<?> entityClass;
+	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>();
 	private String table;
 	private String single;
 	private String prefix;
-	private ModelFactory[] relations;
+	private EntityModel[] relations;
+	private EntityFields fields;
 	
 	public Class<?> getModelClass() {
-		return modelClass;
+		return entityClass;
 	}
 	public String getTable() {
 		return table;
@@ -44,34 +46,38 @@ public class ModelFactory {
 	public String getPrefix() {
 		return prefix;
 	}
-	public ModelFactory[] getRelations() {
+	public EntityModel[] getRelations() {
 		return relations;
+	}
+	public EntityFields getFields() {
+		return fields;
 	}
 	
 	
 	// Constructeur
-	public ModelFactory(String className) throws Exception {
-		modelClass = Class.forName(className);
+	public EntityModel(String className) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		entityClass = Class.forName(className);
 		
-		objects = new HashMap<Integer, Model>();		
-		table = (String) modelClass.getDeclaredField("TABLE").get(null);
-		single = (String) modelClass.getDeclaredField("SINGLE").get(null);
+		table = (String) entityClass.getDeclaredField("TABLE").get(null);
+		single = (String) entityClass.getDeclaredField("SINGLE").get(null);
 		prefix = single+"_";
 		
+		fields = (EntityFields) entityClass.getDeclaredField("FIELDS").get(null);
+		
 		try {
-			relations = (ModelFactory[]) modelClass.getDeclaredField("RELATIONS").get(null);
+			relations = (EntityModel[]) entityClass.getDeclaredField("RELATIONS").get(null);
 		}
 		catch (Exception e) {}
 	}
 	
 	// Créateurs d'instances du modèle
-	private Model newObject(ResultSet res) throws Exception {
-		Model object = (Model) modelClass.getConstructor(ModelFactory.class).newInstance(this);
-		object.save(res);
+	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Entity entity = (Entity) entityClass.getConstructor(EntityModel.class).newInstance(this);
+		entity.save(res);
 		
-		objects.put(object.getID(), object);
+		entities.put((int) entity.get("id"), entity);
 		
-		return object;
+		return entity;
 	}
 	
 	/**
@@ -105,12 +111,12 @@ public class ModelFactory {
 	 * getInstanceFromID
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
-	public Model getObjectFromResultSet(ResultSet res) throws Exception {
-		Model object = objects.get(res.getInt(getPrefix()+"id"));
-		if (object == null)
-			object = newObject(res);
+	public Entity getEntityFromResultSet(ResultSet res) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Entity entity = entities.get(res.getInt(getPrefix()+"id"));
+		if (entity == null)
+			entity = newEntity(res);
 		
-		return object;
+		return entity;
 	}
 	
 	/*
@@ -119,12 +125,12 @@ public class ModelFactory {
 	 * 
 	 * Retourne les instances du modèle vérifiant la requête passée.
 	 */
-	public ArrayList<Model> get(String whereClause, String additionalClauses) throws Exception {
-		ArrayList<Model> list = new ArrayList<Model>();
+	public ArrayList<Entity> get(String whereClause, String additionalClauses) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		ArrayList<Entity> list = new ArrayList<Entity>();
 		ResultSet res = Database.database.execute(getSelectQuery(whereClause, additionalClauses));
 		
 		while (res.next())
-			list.add(getObjectFromResultSet(res));
+			list.add(getEntityFromResultSet(res));
 		
 		return list;
 	}
@@ -133,7 +139,7 @@ public class ModelFactory {
 	 * getAll
 	 * Retourne une liste de tous les objets du modèle.
 	 */
-	public ArrayList<Model> getAll() throws Exception {
+	public ArrayList<Entity> getAll() throws Exception {
 		return get(null, null);
 	}
 	
@@ -143,8 +149,8 @@ public class ModelFactory {
 	 * 
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
-	public Model getByID(int id) throws Exception {
-		ArrayList<Model> list = get(getPrefix()+"id = "+id, "");
+	public Entity getByID(int id) throws Exception {
+		ArrayList<Entity> list = get(getPrefix()+"id = "+id, "");
 		
 		if (list.size() == 0)
 			return null;
