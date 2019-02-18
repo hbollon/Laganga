@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 /*
@@ -21,8 +22,8 @@ public class User extends Entity {
 	/*
 	 * Constructeur
 	 */
-	public User(EntityModel model) {
-		super(model);
+	public User(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException, SQLException {
+		super(model, res);
 	}
 	
 	/*

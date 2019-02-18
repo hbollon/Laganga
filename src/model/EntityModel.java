@@ -28,11 +28,12 @@ public class EntityModel {
 	// Propriétés du modèle
 	private Class<?> entityClass;
 	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>();
+	
 	private String table;
 	private String single;
 	private String prefix;
-	private EntityModel[] relations;
 	private EntityFields fields;
+	private EntityModel[] relations;
 	
 	public Class<?> getModelClass() {
 		return entityClass;
@@ -46,11 +47,11 @@ public class EntityModel {
 	public String getPrefix() {
 		return prefix;
 	}
-	public EntityModel[] getRelations() {
-		return relations;
-	}
 	public EntityFields getFields() {
 		return fields;
+	}
+	public EntityModel[] getRelations() {
+		return relations;
 	}
 	
 	
@@ -72,8 +73,7 @@ public class EntityModel {
 	
 	// Créateurs d'instances du modèle
 	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Entity entity = (Entity) entityClass.getConstructor(EntityModel.class).newInstance(this);
-		entity.save(res);
+		Entity entity = (Entity) entityClass.getConstructor(EntityModel.class, ResultSet.class).newInstance(this, res);
 		
 		entities.put((int) entity.get("id"), entity);
 		

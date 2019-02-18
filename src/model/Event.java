@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 public class Event extends Entity {
@@ -16,8 +17,8 @@ public class Event extends Entity {
 	/*
 	 * Constructeur
 	 */
-	public Event(EntityModel model) {
-		super(model);
+	public Event(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException, SQLException {
+		super(model, res);
 	}
 	
 	/*

@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 public abstract class Entity {
@@ -11,15 +12,10 @@ public abstract class Entity {
 	
 	// Propriétés du modèle
 	private EntityModel model;
-	private String table;
-	private String prefix;
 	private EntityFields fields;
 	
-	public String getTable() {
-		return table;
-	}
-	public String getPrefix() {
-		return prefix;
+	public EntityModel getModel() {
+		return model;
 	}
 	public EntityFields getFields() {
 		return fields;
@@ -30,12 +26,11 @@ public abstract class Entity {
 	 * Constructeur
 	 * Sauvegarde les propriétés du modèle à partir de l'usine
 	 */
-	public Entity(EntityModel model) {
+	public Entity(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException, SQLException {
 		this.model = model;
 		
-		table = model.getTable();
-		prefix = model.getPrefix();
 		fields = new EntityFields(model.getFields());
+		fields.save(model, res);
 	}
 	
 	public Object get(String name) {
