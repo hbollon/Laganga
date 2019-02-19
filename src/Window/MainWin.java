@@ -1,15 +1,11 @@
 package Window;
 
 import java.awt.*;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
+import javax.swing.*;
 
 public class MainWin extends JFrame { 
+
+private static final long serialVersionUID = 1L;
 
 private JPanel windowPanel = null;
 private JPanel centerPanel = null;
@@ -19,6 +15,17 @@ private JPanel jContentPane = null;
 private JTree jTree = null;
 private JScrollPane jScrollTree = null;
 private JTextArea notificationBar = null;
+private JMenuBar barMenu = null;
+private JMenu fichier = null;
+private JMenu edition = null;
+private JMenu option = null;
+private JMenu aPropos = null;
+private JMenuItem createEvent = null;
+private JMenuItem deleteEvent = null;
+private JMenuItem settings = null;
+private JMenuItem close = null;
+private JMenuItem aide = null;
+private JMenuItem credit = null;
 
 private JTree getJTree() {
 	if (jTree == null) {
@@ -39,6 +46,7 @@ public void initialize()
 	JFrame.setDefaultLookAndFeelDecorated(true);
 	this.setTitle("Laganga");
     this.setSize(1280, 720);
+    this.setJMenuBar(getMenu());
     ImageIcon img = new ImageIcon("icon.png");
     this.setIconImage(img.getImage());
 	this.setContentPane(getWindowPane());
@@ -101,4 +109,37 @@ private JTextArea getNotificationBar()
 	
 	return notificationBar;
 }
+
+private JMenuBar getMenu()
+{
+	JMenuBar barMenu = new JMenuBar();
+	JMenu fichier = new JMenu("Fichier");
+	JMenu edition = new JMenu("Edition");
+	JMenu option = new JMenu("Options");
+	JMenu help = new JMenu("Help");
+	JMenuItem createEvent = new JMenuItem("Créer un nouvel évènement");
+	JMenuItem deleteEvent = new JMenuItem("Supprimer un évènement");
+	JMenuItem settings = new JMenuItem("Options");
+	JMenuItem close = new JMenuItem("Quitter");
+	JMenuItem helpItem = new JMenuItem("Aide");
+	JMenuItem credit = new JMenuItem("A propos");
+	
+	fichier.add(createEvent);
+	fichier.add(deleteEvent);
+	fichier.add(close);
+	
+	option.add(settings);
+	
+	help.add(helpItem);
+	help.add(credit);
+	
+	barMenu.add(fichier);
+	barMenu.add(edition);
+	barMenu.add(option);
+	barMenu.add(help);
+	
+	return barMenu;
+}
+
+
 }
