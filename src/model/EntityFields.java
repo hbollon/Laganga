@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 /**
- * Un ModelFields est une structure associée à un modèle contenant :
+ * Un EntityFields est une structure associée à une entité contenant :
  * - Le nom des champs du dit modèle.
  * - Les données de la ligne courante.
  * 
@@ -44,16 +44,17 @@ public class EntityFields {
 	 * 
 	 * @param res Le ResultSet.
 	 * 
-	 * @throws SQLException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 * @throws ClassNotFoundException
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
+	 * @throws NoSuchFieldException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-	public void save(EntityModel model, ResultSet res) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+	public void save(EntityModel model, ResultSet res) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException, ClassNotFoundException {
 		for (int i = 0; i < names.size(); i++) {
 			String name = names.get(i);
 			String prefixedName = model.getPrefix()+name;
@@ -68,7 +69,7 @@ public class EntityFields {
 				case "Date":   data.put(name, res.getDate(prefixedName)); break;
 				
 				// Types du modèle
-				default:       Class.forName(type).getConstructor(ResultSet.class).newInstance(res);
+				default:       ((EntityModel) Class.forName(type).getDeclaredField("model").get(null)).getEntityFromResultSet(res);
 			}
 		}
 	}

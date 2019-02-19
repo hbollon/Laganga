@@ -12,19 +12,6 @@ import java.sql.*;
  * @author Julien Valverdé
  */
 public class EntityModel {
-	// Factories
-	public static EntityModel users;
-	public static EntityModel events;
-	
-	static {
-		try {
-			users = new EntityModel("model.User");
-			events = new EntityModel("model.Event");
-		}
-		catch (Exception e) {}
-	}
-	
-	
 	// Propriétés du modèle
 	private Class<?> entityClass;
 	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>();
@@ -33,7 +20,8 @@ public class EntityModel {
 	private String single;
 	private String prefix;
 	private EntityFields fields;
-	private EntityModel[] relations;
+	private EntityModel[] singleJoin;
+	private EntityModel[] multipleJoin;
 	
 	public Class<?> getModelClass() {
 		return entityClass;
@@ -50,8 +38,11 @@ public class EntityModel {
 	public EntityFields getFields() {
 		return fields;
 	}
-	public EntityModel[] getRelations() {
-		return relations;
+	public EntityModel[] getSingleJoin() {
+		return singleJoin;
+	}
+	public EntityModel[] getMultipleJoin() {
+		return multipleJoin;
 	}
 	
 	
@@ -66,14 +57,18 @@ public class EntityModel {
 		fields = (EntityFields) entityClass.getDeclaredField("FIELDS").get(null);
 		
 		try {
-			relations = (EntityModel[]) entityClass.getDeclaredField("RELATIONS").get(null);
+			singleJoin = (EntityModel[]) entityClass.getDeclaredField("SINGLE_JOIN").get(null);
+		}
+		catch (Exception e) {}
+		try {
+			multipleJoin = (EntityModel[]) entityClass.getDeclaredField("MULTIPLE_JOIN").get(null);
 		}
 		catch (Exception e) {}
 	}
 	
 	// Créateurs d'instances du modèle
 	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Entity entity = (Entity) entityClass.getConstructor(EntityModel.class, ResultSet.class).newInstance(this, res);
+		Entity entity = (Entity) entityClass.getConstructor(ResultSet.class).newInstance(res);
 		
 		entities.put((int) entity.get("id"), entity);
 		
@@ -90,9 +85,9 @@ public class EntityModel {
 	private String getSelectQuery(String whereClause, String additionalClauses) {
 		String query = "SELECT * FROM "+getTable();
 		
-		if (relations != null && relations.length > 0) {
-			for (int i = 0; i < relations.length; i++) {
-				query += "\nINNER JOIN "+relations[i].getTable()+" ON "+relations[i].getPrefix()+"id = "+getPrefix()+relations[i].getSingle();
+		if (singleJoin != null && singleJoin.length > 0) {
+			for (int i = 0; i < singleJoin.length; i++) {
+				query += "\nINNER JOIN "+singleJoin[i].getTable()+" ON "+singleJoin[i].getPrefix()+"id = "+getPrefix()+singleJoin[i].getSingle();
 				
 				if (i == 0 && whereClause != null)
 					query += " AND "+whereClause;

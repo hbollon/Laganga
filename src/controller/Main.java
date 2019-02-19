@@ -18,9 +18,13 @@ public abstract class Main {
 		}
 		
 		// Affichage de tous les utilisateurs
-		ArrayList<Entity> usersList = EntityModel.users.getAll();
+		/*
+		ArrayList<Entity> usersList = User.model.getAll();
 		
 		for (int i = 0; i < usersList.size(); i++)
 			System.out.println(usersList.get(i));
+		*/
+		
+		System.out.println(User.model.getAll());
 	}
 }

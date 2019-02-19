@@ -26,7 +26,7 @@ public abstract class Entity {
 	 * Constructeur
 	 * Sauvegarde les propriétés du modèle à partir de l'usine
 	 */
-	public Entity(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException, SQLException {
+	public Entity(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException, ClassNotFoundException, SQLException {
 		this.model = model;
 		
 		fields = new EntityFields(model.getFields());
@@ -38,13 +38,6 @@ public abstract class Entity {
 	}
 	public void put(String name, Object value) {
 		fields.put(name, value);
-	}
-	
-	/*
-	 * save
-	 * Sauvegarde les champs de la table issus du ResultSet
-	 */
-	public void save(ResultSet res) {
 	}
 	
 	/*

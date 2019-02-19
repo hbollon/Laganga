@@ -3,12 +3,13 @@ package model;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
-/*
- * User
- * Une instance du modèle. Une instance du modèle représente une table de la base de données.
+/**
+ * Une Entity est une entrée de table.
+ * 
+ * @author Julien Valverdé
  */
 public class User extends Entity {
-	// Propriétés du modèle
+	// Propriétés du type d'entité
 	public static final String TABLE = "users";
 	public static final String SINGLE = "user";
 	public static final EntityFields FIELDS = new EntityFields(Entity.FIELDS);
@@ -19,10 +20,22 @@ public class User extends Entity {
 		FIELDS.addField("birth", "Date");
 	}
 	
+	// Modèle du type d'entité
+	public static EntityModel model;
+	static {
+		try {
+			model = new EntityModel("model.User");
+		} catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
+				| SecurityException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/*
 	 * Constructeur
 	 */
-	public User(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException, SQLException {
+	public User(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException, ClassNotFoundException, SQLException {
 		super(model, res);
 	}
 	
