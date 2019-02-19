@@ -2,10 +2,11 @@ package controller;
 
 import java.util.*;
 import model.*;
+import view.*;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
-		// Tentative de connexion à la base de données
+		// Connexion à la base de données
 		try {
 			System.out.println("Connexion en cours...");
 			Database.database = new Database("localhost", "l2_gr2", "l2_gr2", "5KUavzaM");
@@ -14,7 +15,7 @@ public abstract class Main {
 		catch (Exception e) {
 			// Actions à effectuer si la connexion a échoué
 			System.out.println("Connexion à MySQL impossible !");
-			throw e;
+			//throw e;
 		}
 		
 		// Affichage de tous les utilisateurs
@@ -25,6 +26,11 @@ public abstract class Main {
 			System.out.println(usersList.get(i));
 		*/
 		
-		System.out.println(User.model.getAll());
+		// Fenêtre principale
+		MainWin fenetre = new MainWin();
+		fenetre.setVisible(true);
+		
+		// Calendrier de la fenêtre principale
+		MainWinCalendar calendar = new MainWinCalendar(fenetre);
 	}
 }
