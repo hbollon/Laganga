@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
+import controller.ControllerWeek;
+
 import java.text.DateFormat;
 import java.util.Date;
 
