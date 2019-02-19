@@ -15,24 +15,27 @@ public class MainWinCalendar extends JPanel {
 	public MainWinCalendar(JFrame fenetre) {
 		super(new BorderLayout());
 		
-		JButton semainePrec = new JButton("Semaine");
-		JButton semaineActu = new JButton("Mois");
-		JButton semaineSuiv = new JButton("Année");
+		JButton weekButton = new JButton("Semaine");
+		JButton monthButton = new JButton("Mois");
+		JButton yearButton = new JButton("Année");
 		
 		JPanel choixSemaine = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		
-		choixSemaine.add(semainePrec, BorderLayout.WEST);
-		choixSemaine.add(semaineActu, BorderLayout.CENTER);
-		choixSemaine.add(semaineSuiv, BorderLayout.EAST);
+		choixSemaine.add(weekButton, BorderLayout.WEST);
+		choixSemaine.add(monthButton, BorderLayout.CENTER);
+		choixSemaine.add(yearButton, BorderLayout.EAST);
 		
 		JPanel semaine = new Semaine();
+		JPanel mois = new Mois();
+		JPanel annee = new Annee();
 		
 		this.add(choixSemaine, BorderLayout.NORTH);
-		this.add(semaine, BorderLayout.CENTER);
+		this.add(mois, BorderLayout.CENTER);
 
 		fenetre.add(this);
 		
-		DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-		System.out.println(shortDateFormat.format(aujourdhui));
+		weekButton.addActionListener(new ControllerWeek(semaine, mois, annee));
+		monthButton.addActionListener(new ControllerWeek(semaine, mois, annee));
+		yearButton.addActionListener(new ControllerWeek(semaine, mois, annee));
 	}
 }
