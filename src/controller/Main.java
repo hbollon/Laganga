@@ -19,18 +19,16 @@ public abstract class Main {
 		}
 		
 		// Affichage de tous les utilisateurs
-		/*
 		ArrayList<Entity> usersList = User.model.getAll();
 		
 		for (int i = 0; i < usersList.size(); i++)
 			System.out.println(usersList.get(i));
-		*/
 		
 		// Fenêtre principale
-		MainWin fenetre = new MainWin();
-		fenetre.setVisible(true);
+		//MainWin fenetre = new MainWin();
+		//fenetre.setVisible(true);
 		
 		// Calendrier de la fenêtre principale
-		MainWinCalendar calendar = new MainWinCalendar(fenetre);
+		//MainWinCalendar calendar = new MainWinCalendar(fenetre);
 	}
 }

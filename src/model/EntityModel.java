@@ -20,8 +20,7 @@ public class EntityModel {
 	private String single;
 	private String prefix;
 	private EntityFields fields;
-	private EntityModel[] singleJoin;
-	private EntityModel[] multipleJoin;
+	private EntityModel[] joins;
 	
 	public Class<?> getModelClass() {
 		return entityClass;
@@ -38,11 +37,8 @@ public class EntityModel {
 	public EntityFields getFields() {
 		return fields;
 	}
-	public EntityModel[] getSingleJoin() {
-		return singleJoin;
-	}
-	public EntityModel[] getMultipleJoin() {
-		return multipleJoin;
+	public EntityModel[] getJoins() {
+		return joins;
 	}
 	
 	
@@ -57,11 +53,7 @@ public class EntityModel {
 		fields = (EntityFields) entityClass.getDeclaredField("FIELDS").get(null);
 		
 		try {
-			singleJoin = (EntityModel[]) entityClass.getDeclaredField("SINGLE_JOIN").get(null);
-		}
-		catch (Exception e) {}
-		try {
-			multipleJoin = (EntityModel[]) entityClass.getDeclaredField("MULTIPLE_JOIN").get(null);
+			joins = (EntityModel[]) entityClass.getDeclaredField("JOINS").get(null);
 		}
 		catch (Exception e) {}
 	}
@@ -85,15 +77,16 @@ public class EntityModel {
 	private String getSelectQuery(String whereClause, String additionalClauses) {
 		String query = "SELECT * FROM "+getTable();
 		
-		if (singleJoin != null && singleJoin.length > 0) {
-			for (int i = 0; i < singleJoin.length; i++) {
-				query += "\nINNER JOIN "+singleJoin[i].getTable()+" ON "+singleJoin[i].getPrefix()+"id = "+getPrefix()+singleJoin[i].getSingle();
+		if (joins != null && joins.length > 0) {
+			for (int i = 0; i < joins.length; i++) {
+				String table = joins[i].getTable();
+				String row = joins[i].getPrefix()+"id";
 				
-				if (i == 0 && whereClause != null)
-					query += " AND "+whereClause;
+				query += "\nJOIN "+table+" ON "+table+"."+row+" = "+getTable()+"."+row;
 			}
 		}
-		else if (whereClause != null)
+		
+		if (whereClause != null)
 			query += "\nWHERE "+whereClause;
 		
 		if (additionalClauses == null)
@@ -145,7 +138,7 @@ public class EntityModel {
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
 	public Entity getByID(int id) throws Exception {
-		ArrayList<Entity> list = get(getPrefix()+"id = "+id, "");
+		ArrayList<Entity> list = get(getPrefix()+"id = "+id, null);
 		
 		if (list.size() == 0)
 			return null;

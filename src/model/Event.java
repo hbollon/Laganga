@@ -12,7 +12,7 @@ public class Event extends Entity {
 		FIELDS.addField("name", "String");
 		FIELDS.addField("user", "User");
 	}
-	public static final EntityModel[] SINGLE_JOIN = {User.model};
+	public static final EntityModel[] JOINS = {User.model};
 	
 	// Modèle du type d'entité
 	public static EntityModel model;
