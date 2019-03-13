@@ -34,7 +34,7 @@ public class MainWinCalendar extends JPanel {
 		this.add(choixSemaine, BorderLayout.NORTH);
 		this.add(mois, BorderLayout.CENTER);
 
-		fenetre.add(this);
+		//fenetre.add(this);
 		
 		weekButton.addActionListener(new ControllerWeek(semaine, mois, annee));
 		monthButton.addActionListener(new ControllerWeek(semaine, mois, annee));

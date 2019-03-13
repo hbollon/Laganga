@@ -16,8 +16,6 @@ public class Mois extends JPanel {
 		super(new FlowLayout(FlowLayout.CENTER));
 		
 		DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-		JLabel label_date = new JLabel(shortDateFormat.format(date));
-		this.add(label_date, BorderLayout.CENTER);
 		
 		String  title[] = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
 		Object[][] data = { 
@@ -47,8 +45,16 @@ public class Mois extends JPanel {
 				{"", "", "", "", "", "", ""}
 		};
 		
-		tableau = new JTable(data, title);
+		tableau = new JTable(data, title){
+	        private static final long serialVersionUID = 1L;
+
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+	    };
 	    tableContainer = new JScrollPane(tableau);
+	    tableau.getTableHeader().setReorderingAllowed(false);
+	    tableau.getTableHeader().setResizingAllowed(false);
 		this.add(tableContainer, BorderLayout.CENTER);
 	}
 }
