@@ -38,7 +38,15 @@ public class Semaine extends JPanel {
 				{"23:00", "", "", "", "", "", "", ""}
 		};
 		
-	    tableau = new JTable(data, title);
+	    tableau = new JTable(data, title){
+	        private static final long serialVersionUID = 1L;
+
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+	    };
+	    tableau.getTableHeader().setReorderingAllowed(false);
+	    tableau.getTableHeader().setResizingAllowed(false);
 	    tableContainer = new JScrollPane(tableau);
 		this.add(tableContainer, BorderLayout.CENTER);
 	}

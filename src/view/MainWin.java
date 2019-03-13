@@ -46,7 +46,7 @@ public class MainWin extends JFrame {
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());
-	    ImageIcon img = new ImageIcon("icon.png");
+	    ImageIcon img = new ImageIcon("./icon.png");
 	    this.setIconImage(img.getImage());
 		this.setContentPane(getWindowPane());
 		this.getContentPane().setBackground(Color.white);
@@ -71,6 +71,7 @@ public class MainWin extends JFrame {
 			
 			leftPanel.add(getJContentPane(), BorderLayout.SOUTH);
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
+			centerPanel.add(new MainWinCalendar(this));
 			windowPanel.add(leftPanel, BorderLayout.WEST);
 			windowPanel.add(centerPanel, BorderLayout.CENTER);
 			windowPanel.add(rightPanel, BorderLayout.EAST);

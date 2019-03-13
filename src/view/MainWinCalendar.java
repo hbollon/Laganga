@@ -30,7 +30,7 @@ public class MainWinCalendar extends JPanel {
 		this.add(choixSemaine, BorderLayout.NORTH);
 		this.add(semaine, BorderLayout.CENTER);
 
-		fenetre.add(this);
+		//fenetre.add(this);
 		
 		DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 		System.out.println(shortDateFormat.format(aujourdhui));
