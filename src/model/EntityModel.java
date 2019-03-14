@@ -58,7 +58,7 @@ public class EntityModel {
 		catch (Exception e) {}
 	}
 	
-	// Créateurs d'instances du modèle
+	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Entity entity = (Entity) entityClass.getConstructor(ResultSet.class).newInstance(res);
 		
