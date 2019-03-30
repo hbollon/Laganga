@@ -90,7 +90,7 @@ public class EntityModel {
 			query += "\nWHERE "+whereClause;
 		
 		if (additionalClauses == null)
-			additionalClauses = "ORDER BY "+getPrefix()+"id ASC";
+			additionalClauses = "ORDER BY "+getPrefix()+"id DESC";
 		
 		return query+"\n"+additionalClauses;
 	}
