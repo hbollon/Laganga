@@ -18,8 +18,11 @@ public abstract class Main {
 			//throw e;
 		}
 		
+		// Création d'une usine d'entités
+		EntityFactory users = new EntityFactory("model.User");
+		
 		// Affichage de tous les utilisateurs
-		ArrayList<Entity> usersList = User.model.getAll();
+		ArrayList<Entity> usersList = users.getAll();
 		
 		for (int i = 0; i < usersList.size(); i++)
 			System.out.println(usersList.get(i));

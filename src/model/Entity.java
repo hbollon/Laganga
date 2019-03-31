@@ -31,7 +31,9 @@ public abstract class Entity {
 	}
 	
 	private void saveDataFromResultSet(ResultSet res) throws Exception {
+		System.out.println(fields);
 		for (int i = 0; i < fields.size(); i++) {
+			System.out.println(i+" "+fields.get(i));
 			String name = fields.get(i);
 			String prefixedName = factory.getPrefix()+name;
 			String type = fields.getType(i);
