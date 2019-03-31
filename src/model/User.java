@@ -12,18 +12,24 @@ public class User extends Entity {
 	public static final String TABLE = "users";
 	public static final String SINGLE = "user";
 	
+	// Liste et type des champs
 	public static EntityFields fields;
 	static {
-		String[] names = {"firstName", "lastName", "email", "birth"};
-		String[] types = {"String", "String", "String", "Date"};
+		String[] names = {"firstName", "lastName", "email", "password", "birth"};
+		String[] types = {"String", "String", "String", "String", "Date"};
 		
 		fields = new EntityFields(Entity.fields, names, types);
 	}
 	
-	/*
-	 * Constructeur
-	 */
-	public User(EntityFactory factory, ResultSet res) throws Exception {
+	// Usine
+	public static EntityFactory factory;
+	static {
+		try {
+			factory = new EntityFactory("model.User");
+		} catch (Exception e) {}
+	}
+	
+	public User(ResultSet res) throws Exception {
 		super(factory, res);
 	}
 	

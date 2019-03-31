@@ -1,36 +1,31 @@
 package model;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.*;
+import java.sql.ResultSet;
 
 public class Event extends Entity {
 	// Propriétés du type d'entité
 	public static final String TABLE = "events";
 	public static final String SINGLE = "event";
-	public static final EntityFields FIELDS = new EntityFields(Entity.FIELDS);
-	static {
-		FIELDS.addField("name", "String");
-		FIELDS.addField("user", "User");
-	}
-	public static final EntityModel[] JOINS = {User.model};
 	
-	// Modèle du type d'entité
-	public static EntityModel model;
+	// Liste et type des champs
+	public static EntityFields fields;
+	static {
+		String[] names = {"name", "type", "date", "begin", "end", "agenda", "location"};
+		String[] types = {"String", "String", "Date", "Time", "Time", "Agenda", "Location"};
+		
+		fields = new EntityFields(Entity.fields, names, types);
+	}
+	
+	// Usine
+	public static EntityFactory factory;
 	static {
 		try {
-			model = new EntityModel("model.Event");
-		} catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-				| SecurityException e) {
-			e.printStackTrace();
-		}
+			factory = new EntityFactory("model.Event");
+		} catch (Exception e) {}
 	}
 	
-	
-	/*
-	 * Constructeur
-	 */
-	public Event(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException, ClassNotFoundException, SQLException {
-		super(model, res);
+	public Event(ResultSet res) throws Exception {
+		super(factory, res);
 	}
 	
 	/*
