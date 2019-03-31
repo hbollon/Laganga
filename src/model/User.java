@@ -17,7 +17,7 @@ public class User extends Entity {
 		String[] names = {"firstName", "lastName", "email", "birth"};
 		String[] types = {"String", "String", "String", "Date"};
 		
-		fields = new EntityFields(names, types);
+		fields = new EntityFields(Entity.fields, names, types);
 	}
 	
 	/*

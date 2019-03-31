@@ -26,7 +26,7 @@ public class EntityFields extends ArrayList<String> {
 		for (i = 0; i < newNames.length; i++)
 			add(newNames[i]);
 		for (i = 0; i < newTypes.length; i++)
-			add(newTypes[i]);		
+			types.add(newTypes[i]);
 	}
 	public EntityFields(String[] newNames, String[] newTypes) {
 		this(null, newNames, newTypes);

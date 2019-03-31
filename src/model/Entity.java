@@ -26,17 +26,20 @@ public abstract class Entity {
 	 */
 	public Entity(EntityFactory factory, ResultSet res) throws Exception {
 		this.factory = factory;
+		this.fields = factory.getFields();
 		
 		saveDataFromResultSet(res);
 	}
 	
 	private void saveDataFromResultSet(ResultSet res) throws Exception {
-		System.out.println(fields);
+		//System.out.println(fields);
+		//System.out.println(fields.getTypes());
+		//System.out.println();
 		for (int i = 0; i < fields.size(); i++) {
-			System.out.println(i+" "+fields.get(i));
 			String name = fields.get(i);
 			String prefixedName = factory.getPrefix()+name;
 			String type = fields.getType(i);
+			System.out.println(i+" "+name+" "+prefixedName+" "+type);
 			
 			switch (type) {
 				// Types SQL
@@ -47,7 +50,7 @@ public abstract class Entity {
 				case "Date":   put(name, res.getDate(prefixedName)); break;
 				
 				// Types du modèle
-				default:       ((EntityModel) Class.forName(type).getDeclaredField("model").get(null)).getEntityFromResultSet(res);
+				//default:       ((EntityFactory) Class.forName(type).getDeclaredField("factory").get(null)).getEntityFromResultSet(res);
 			}
 		}
 	}
@@ -56,6 +59,7 @@ public abstract class Entity {
 		return data.get(key);
 	}
 	public void put(String key, Object value) {
+		System.out.println(key+" "+value);
 		data.put(key, value);
 	}
 	
