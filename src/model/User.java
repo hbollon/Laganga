@@ -1,7 +1,6 @@
 package model;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.*;
+import java.sql.ResultSet;
 
 /**
  * Une Entity est une entrée de table.
@@ -12,31 +11,26 @@ public class User extends Entity {
 	// Propriétés du type d'entité
 	public static final String TABLE = "users";
 	public static final String SINGLE = "user";
-	public static final EntityFields FIELDS = new EntityFields(Entity.FIELDS);
+	
+	// Liste et type des champs
+	public static EntityFields fields;
 	static {
-		FIELDS.addField("firstName", "String");
-		FIELDS.addField("lastName", "String");
-		FIELDS.addField("email", "String");
-		FIELDS.addField("birth", "Date");
+		String[] names = {"firstName", "lastName", "email", "password", "birth"};
+		String[] types = {"String", "String", "String", "String", "Date"};
+		
+		fields = new EntityFields(Entity.fields, names, types);
 	}
 	
-	// Modèle du type d'entité
-	public static EntityModel model;
+	// Usine
+	public static EntityFactory factory;
 	static {
 		try {
-			model = new EntityModel("model.User");
-		} catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-				| SecurityException e) {
-			e.printStackTrace();
-		}
+			factory = new EntityFactory("model.User");
+		} catch (Exception e) {}
 	}
 	
-	
-	/*
-	 * Constructeur
-	 */
-	public User(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException, ClassNotFoundException, SQLException {
-		super(model, res);
+	public User(ResultSet res) throws Exception {
+		super(factory, res);
 	}
 	
 	/*
@@ -51,5 +45,13 @@ public class User extends Entity {
 		str += "\t- birth: "+get("birth")+"\n";
 		
 		return str;
+	}
+	
+	public static String hashPassword(String password) {
+		return password;
+	}
+	
+	public static boolean testPassword(String password, String hash) {
+		return (password == hash);
 	}
 }

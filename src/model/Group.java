@@ -2,16 +2,20 @@ package model;
 
 import java.sql.ResultSet;
 
-public class Event extends Entity {
+/**
+ * 
+ * @author Julien Valverdé
+ */
+public class Group extends Entity {
 	// Propriétés du type d'entité
-	public static final String TABLE = "events";
-	public static final String SINGLE = "event";
+	public static final String TABLE = "groups";
+	public static final String SINGLE = "group";
 	
 	// Liste et type des champs
 	public static EntityFields fields;
 	static {
-		String[] names = {"name", "type", "date", "begin", "end", "agenda", "location"};
-		String[] types = {"String", "String", "Date", "Time", "Time", "Agenda", "Location"};
+		String[] names = {"name"};
+		String[] types = {"String"};
 		
 		fields = new EntityFields(Entity.fields, names, types);
 	}
@@ -20,11 +24,11 @@ public class Event extends Entity {
 	public static EntityFactory factory;
 	static {
 		try {
-			factory = new EntityFactory("model.Event");
+			factory = new EntityFactory("model.Group");
 		} catch (Exception e) {}
 	}
 	
-	public Event(ResultSet res) throws Exception {
+	public Group(ResultSet res) throws Exception {
 		super(factory, res);
 	}
 	
@@ -33,6 +37,6 @@ public class Event extends Entity {
 	 * Affiche l'instance sous forme textuelle
 	 */
 	public String toString() {
-		return get("id")+"/"+get("name")+"/"+get("user");
+		return "(Group) "+get("id");
 	}
 }

@@ -1,43 +1,62 @@
 package model;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.util.HashMap;
 
 public abstract class Entity {
-	public static final EntityFields FIELDS = new EntityFields();
+	// Propriétés de l'entité
+	public static final String TABLE = "entities";
+	public static final String SINGLE = "entity";
+	
+	// Champs de l'entité
+	public static EntityFields fields;
 	static {
-		FIELDS.addField("id", "int");
+		String[] names = {"id"};
+		String[] types = {"int"};
+		
+		fields = new EntityFields(names, types);
 	}
 	
-	
-	// Propriétés du modèle
-	private EntityModel model;
-	private EntityFields fields;
-	
-	public EntityModel getModel() {
-		return model;
-	}
-	public EntityFields getFields() {
-		return fields;
-	}
-	
+	private EntityFactory factory; // Objet usine
+	private HashMap<String, Object> data = new HashMap<String, Object>(); // Valeur des champs
 	
 	/*
 	 * Constructeur
 	 * Sauvegarde les propriétés du modèle à partir de l'usine
 	 */
-	public Entity(EntityModel model, ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException, ClassNotFoundException, SQLException {
-		this.model = model;
+	public Entity(EntityFactory factory, ResultSet res) throws Exception {
+		this.factory = factory;
 		
-		fields = new EntityFields(model.getFields());
-		fields.save(model, res);
+		saveDataFromResultSet(res);
 	}
 	
-	public Object get(String name) {
-		return fields.get(name);
+	private void saveDataFromResultSet(ResultSet res) throws Exception {
+		EntityFields fields = factory.getFields();
+		
+		for (int i = 0; i < fields.size(); i++) {
+			String name = fields.get(i);
+			String prefixedName = factory.getPrefix()+name;
+			String type = fields.getType(i);
+			
+			switch (type) {
+				// Types SQL
+				case "int":    put(name, res.getInt(prefixedName)); break;
+				case "float":  put(name, res.getFloat(prefixedName)); break;
+				case "String": put(name, res.getString(prefixedName)); break;
+				case "Time":   put(name, res.getTime(prefixedName)); break;
+				case "Date":   put(name, res.getDate(prefixedName)); break;
+				
+				// Types du modèle
+				//default:       ((EntityFactory) Class.forName(type).getDeclaredField("factory").get(null)).getEntityFromResultSet(res);
+			}
+		}
 	}
-	public void put(String name, Object value) {
-		fields.put(name, value);
+	
+	public Object get(String key) {
+		return data.get(key);
+	}
+	public void put(String key, Object value) {
+		data.put(key, value);
 	}
 	
 	/*

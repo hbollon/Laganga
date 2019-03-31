@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.ResultSet;
 import java.util.*;
 import model.*;
 import view.*;
@@ -17,20 +18,5 @@ public abstract class Main {
 			System.out.println("Connexion à MySQL impossible !");
 			//throw e;
 		}
-		
-		// Affichage de tous les utilisateurs
-		/*
-		ArrayList<Entity> usersList = User.model.getAll();
-		
-		for (int i = 0; i < usersList.size(); i++)
-			System.out.println(usersList.get(i));
-		*/
-		
-		// Fenêtre principale
-		MainWin fenetre = new MainWin();
-		fenetre.setVisible(true);
-		
-		// Calendrier de la fenêtre principale
-		MainWinCalendar calendar = new MainWinCalendar(fenetre);
 	}
 }
