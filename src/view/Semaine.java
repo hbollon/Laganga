@@ -45,9 +45,9 @@ public class Semaine extends JPanel {
 	                return false;               
 	        };
 	    };
+	    tableContainer = new JScrollPane(tableau);
 	    tableau.getTableHeader().setReorderingAllowed(false);
 	    tableau.getTableHeader().setResizingAllowed(false);
-	    tableContainer = new JScrollPane(tableau);
 		this.add(tableContainer, BorderLayout.CENTER);
 	}
 }
