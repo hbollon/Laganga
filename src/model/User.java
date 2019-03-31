@@ -46,4 +46,12 @@ public class User extends Entity {
 		
 		return str;
 	}
+	
+	public static String hashPassword(String password) {
+		return password;
+	}
+	
+	public static boolean testPassword(String password, String hash) {
+		return (password == hash);
+	}
 }

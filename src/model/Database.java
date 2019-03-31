@@ -52,4 +52,39 @@ public class Database {
 		
 		return res;
 	}
+	
+	/**
+	 * 
+	 * @param query
+	 * @param values
+	 * @param types
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ResultSet prepareAndExecute(String query, Object[] values, String[] types) throws SQLException {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		// Application des paramètres (s'ils sont précisés)
+		if (values != null && types != null) {
+			for (int i = 0; i < values.length; i++) {
+				Object value = values[i];
+				
+				switch (types[i]) {
+					case "int": st.setInt(i + 1, (int) value); break;
+					case "boolean": st.setBoolean(i + 1, (boolean) value); break;
+					case "String": st.setString(i + 1, (String) value); break;
+					case "Date": st.setDate(i + 1, (Date) value); break;
+				}
+			}
+		}
+		
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		return res;
+	}
 }

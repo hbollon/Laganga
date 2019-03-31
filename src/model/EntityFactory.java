@@ -71,7 +71,7 @@ public class EntityFactory {
 	 * @param additionalClauses Clauses additionnelles (null pour ne pas en préciser).
 	 * @return La requête SQL.
 	 */
-	private String getSelectQuery(String whereClause, String additionalClauses) {
+	private String getSelectQuery(String clauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
 		
 		if (joins != null && joins.length > 0) {
@@ -83,13 +83,10 @@ public class EntityFactory {
 			}
 		}
 		
-		if (whereClause != null)
-			query += "\nWHERE "+whereClause;
+		if (clauses == null)
+			clauses = "ORDER BY `"+getPrefix()+"id` DESC";
 		
-		if (additionalClauses == null)
-			additionalClauses = "ORDER BY `"+getPrefix()+"id` DESC";
-		
-		return query+"\n"+additionalClauses;
+		return query+"\n"+clauses;
 	}
 	
 	/*
@@ -110,9 +107,9 @@ public class EntityFactory {
 	 * 
 	 * Retourne les instances du modèle vérifiant la requête passée.
 	 */
-	public ArrayList<Entity> get(String whereClause, String additionalClauses) throws Exception {
+	public ArrayList<Entity> get(String clauses, Object[] values, String[] types) throws Exception {
 		ArrayList<Entity> list = new ArrayList<Entity>();
-		ResultSet res = Database.database.execute(getSelectQuery(whereClause, additionalClauses));
+		ResultSet res = Database.database.prepareAndExecute(getSelectQuery(clauses), values, types);
 		
 		while (res.next())
 			list.add(getEntityFromResultSet(res));
@@ -125,7 +122,22 @@ public class EntityFactory {
 	 * Retourne une liste de tous les objets du modèle.
 	 */
 	public ArrayList<Entity> getAll() throws Exception {
-		return get(null, null);
+		return get(null, null, null);
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public Entity getOne(String clauses, Object[] values, String[] types) throws Exception {
+		ArrayList<Entity> list = get(clauses, values, types);
+		
+		if (list.size() == 0)
+			return null;
+		
+		return list.get(0);
 	}
 	
 	/*
@@ -135,11 +147,17 @@ public class EntityFactory {
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
 	public Entity getByID(int id) throws Exception {
-		ArrayList<Entity> list = get(getPrefix()+"id = "+id, null);
+		Object[] values = {id};
+		String[] types = {"int"};
+		
+		ArrayList<Entity> list = get(
+				"WHERE `"+getPrefix()+"id` = ?",
+				values,
+				types);
 		
 		if (list.size() == 0)
 			return null;
-
+		
 		return list.get(0);
 	}
 }
