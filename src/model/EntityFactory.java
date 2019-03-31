@@ -1,8 +1,9 @@
 package model;
 
-import java.util.*;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Un ModelFactory est associé à une table de la base de données et à une classe du modèle (ex: users/User).
@@ -11,17 +12,16 @@ import java.sql.*;
  * 
  * @author Julien Valverdé
  */
-public class EntityModel {
-	// Propriétés du modèle
-	private Class<?> entityClass;
-	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>();
+public class EntityFactory {
+	private Class<?> entityClass; // Classe de l'entité
+	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
 	
-	private String table;
-	private String single;
-	private String prefix;
-	private EntityFields fields;
-	private EntityModel[] joins;
+	private String table; // Table associée à l'entitée
+	private String single; // Appellation d'une entité seule
+	private EntityFactory[] joins; // Entités jointes
+	private EntityFields fields; // Champs
 	
+	// Getteurs
 	public Class<?> getModelClass() {
 		return entityClass;
 	}
@@ -32,35 +32,31 @@ public class EntityModel {
 		return single;
 	}
 	public String getPrefix() {
-		return prefix;
+		return single+"_";
+	}
+	public EntityFactory[] getJoins() {
+		return joins;
 	}
 	public EntityFields getFields() {
 		return fields;
 	}
-	public EntityModel[] getJoins() {
-		return joins;
-	}
-	
 	
 	// Constructeur
-	public EntityModel(String className) throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		entityClass = Class.forName(className);
+	public EntityFactory(String className) throws Exception {
+		entityClass = Class.forName(className); // Objet de la classe de l'entité
 		
 		table = (String) entityClass.getDeclaredField("TABLE").get(null);
 		single = (String) entityClass.getDeclaredField("SINGLE").get(null);
-		prefix = single+"_";
-		
-		fields = (EntityFields) entityClass.getDeclaredField("FIELDS").get(null);
 		
 		try {
-			joins = (EntityModel[]) entityClass.getDeclaredField("JOINS").get(null);
+			joins = (EntityFactory[]) entityClass.getDeclaredField("JOINS").get(null);
 		}
 		catch (Exception e) {}
 	}
 	
 	// Créateurs d'objets
-	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Entity entity = (Entity) entityClass.getConstructor(ResultSet.class).newInstance(res);
+	private Entity newEntity(ResultSet res) throws Exception {
+		Entity entity = (Entity) entityClass.getConstructor(EntityFactory.class, ResultSet.class).newInstance(this, res);
 		
 		entities.put((int) entity.get("id"), entity);
 		
@@ -68,11 +64,11 @@ public class EntityModel {
 	}
 	
 	/**
-	 * Assemble une requête SQL pour récupérer les lignes du modèle.
+	 * Assemble une requête SQL pour récupérer des objets.
 	 * 
 	 * @param whereClause Clause WHERE de la requête (null pour ne pas la préciser).
 	 * @param additionalClauses Clauses additionnelles (null pour ne pas en préciser).
-	 * @return Un String contenant la requête SQL.
+	 * @return La requête SQL.
 	 */
 	private String getSelectQuery(String whereClause, String additionalClauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
@@ -82,7 +78,7 @@ public class EntityModel {
 				String table = joins[i].getTable();
 				String row = joins[i].getPrefix()+"id";
 				
-				query += "\nJOIN "+table+" ON "+table+"."+row+" = "+getTable()+"."+row;
+				query += "\nJOIN `"+table+"` ON `"+table+"`.`"+row+"` = `"+getTable()+"`.`"+row+"`";
 			}
 		}
 		
@@ -90,7 +86,7 @@ public class EntityModel {
 			query += "\nWHERE "+whereClause;
 		
 		if (additionalClauses == null)
-			additionalClauses = "ORDER BY "+getPrefix()+"id DESC";
+			additionalClauses = "ORDER BY `"+getPrefix()+"id` DESC";
 		
 		return query+"\n"+additionalClauses;
 	}
@@ -99,7 +95,7 @@ public class EntityModel {
 	 * getInstanceFromID
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
-	public Entity getEntityFromResultSet(ResultSet res) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public Entity getEntityFromResultSet(ResultSet res) throws Exception {
 		Entity entity = entities.get(res.getInt(getPrefix()+"id"));
 		if (entity == null)
 			entity = newEntity(res);
@@ -113,7 +109,7 @@ public class EntityModel {
 	 * 
 	 * Retourne les instances du modèle vérifiant la requête passée.
 	 */
-	public ArrayList<Entity> get(String whereClause, String additionalClauses) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public ArrayList<Entity> get(String whereClause, String additionalClauses) throws Exception {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		ResultSet res = Database.database.execute(getSelectQuery(whereClause, additionalClauses));
 		
