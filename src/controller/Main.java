@@ -18,5 +18,12 @@ public abstract class Main {
 			System.out.println("Connexion à MySQL impossible !");
 			//throw e;
 		}
+		
+		// Fenêtre principale
+		MainWin fenetre = new MainWin();
+		fenetre.setVisible(true);
+		
+		// Calendrier de la fenêtre principale
+		MainWinCalendar calendar = new MainWinCalendar(fenetre);
 	}
 }
