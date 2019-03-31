@@ -18,6 +18,6 @@ public class MainWinCalendar extends JTabbedPane {
 		
 		this.addTab("Semaine", semaine);
 		this.addTab("Mois", mois);
-		this.addTab("Année", annee);
+		this.addTab("Année", annee);		
 	}
 }
