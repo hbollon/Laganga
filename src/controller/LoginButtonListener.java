@@ -11,9 +11,9 @@ import model.LocalUser;
 
 public class LoginButtonListener implements ActionListener {
 	private LocalUser localUser;
+	private JButton login;
 	private JTextField emailField;
 	private JPasswordField passwordField;
-	private JButton login;
 	
 	public LoginButtonListener(LocalUser localUser, JButton login, JTextField emailField, JPasswordField passwordField) {
 		this.localUser = localUser;
