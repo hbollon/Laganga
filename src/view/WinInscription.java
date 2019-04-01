@@ -20,7 +20,7 @@ public class WinInscription extends JFrame {
 
 	public WinInscription() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
-		this.setTitle("Création événement");
+		this.setTitle("Insription");
 	    this.setSize(600, 250);
 	  
 		this.setBackground(Color.white);
