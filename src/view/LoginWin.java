@@ -71,12 +71,11 @@ public class LoginWin extends JFrame implements Observer {
 					fenetre.setVisible(true);
 					
 					// Calendrier de la fenêtre principale
-					MainWinCalendar calendar = new MainWinCalendar(fenetre);					
+					MainWinCalendar calendar = new MainWinCalendar(fenetre);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			break;
 			
 			case LocalUser.ERROR_ALREADY_LOGGED_IN:

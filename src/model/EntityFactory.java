@@ -152,4 +152,19 @@ public class EntityFactory {
 		
 		return getSingle("WHERE `"+getPrefix()+"id` = ?", values, types);
 	}
+	
+	
+	/*
+	 * Insertion
+	 */
+	
+	private String getInsertQuery() {
+		String query = "INSERT INTO `"+table+"`(";
+		
+		// Récupération des noms des champs
+		for (int i = 0; i < fields.size(); i++)
+			query += "`"+getPrefix()+fields.get(i)+"`, ";
+		
+		return query;
+	}
 }

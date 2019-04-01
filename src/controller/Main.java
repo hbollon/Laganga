@@ -20,7 +20,15 @@ public abstract class Main {
 		// Initialisation de l'utilisateur local
 		LocalUser localUser = new LocalUser();
 		
+		// Fenêtre principale
+		MainWin fenetre;
+		fenetre = new MainWin();
+		fenetre.setVisible(true);
+		
+		// Calendrier de la fenêtre principale
+		MainWinCalendar calendar = new MainWinCalendar(fenetre);
+		
 		// Affichage de la fenêtre de connexion
-		LoginWin loginWindow = new LoginWin(localUser);
+		//LoginWin loginWindow = new LoginWin(localUser);
 	}
 }
