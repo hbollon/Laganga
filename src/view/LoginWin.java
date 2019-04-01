@@ -64,12 +64,19 @@ public class LoginWin extends JFrame implements Observer {
 				// Fermeture de la fenêtre de connexion
 				dispose();
 				
-				// Fenêtre principale
-				MainWin fenetre = new MainWin();
-				fenetre.setVisible(true);
+				try {
+					// Fenêtre principale
+					MainWin fenetre;
+					fenetre = new MainWin();
+					fenetre.setVisible(true);
+					
+					// Calendrier de la fenêtre principale
+					MainWinCalendar calendar = new MainWinCalendar(fenetre);					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-				// Calendrier de la fenêtre principale
-				MainWinCalendar calendar = new MainWinCalendar(fenetre);
 			break;
 			
 			case LocalUser.ERROR_ALREADY_LOGGED_IN:

@@ -1,7 +1,12 @@
- package view;
+package view;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
+
+import model.Entity;
+import model.User;
 
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
@@ -33,7 +38,7 @@ public class MainWin extends JFrame {
 		return jTree;
 	}
 	
-	public MainWin() 
+	public MainWin() throws Exception 
 	{
 		super();
 		initialize();
@@ -49,14 +54,26 @@ public class MainWin extends JFrame {
 	    ImageIcon img = new ImageIcon("./icon.png");
 	    this.setIconImage(img.getImage());
 		this.setContentPane(getWindowPane());
-		this.getContentPane().setBackground(Color.white);
+	    this.getContentPane().setBackground(Color.white);
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
 	}
 	
-	public void setTree()
+	public void setTree() throws Exception
 	{
+		ArrayList<Entity> usersList = User.factory.getAll();
+		ArrayList<String> usersNames = new ArrayList<String>();
+		
+		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Users");
+		  jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+		  jScrollTree.setViewportView(jTree);
+		  
+		for (int i = 0; i < usersList.size(); i++) {
+			usersNames.add(((String) usersList.get(i).get("firstName")) + " " + ((String) usersList.get(i).get("lastName")));
+			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
+		    treeNode1.add(treeNode2);
+		}
 		
 	}
 	
