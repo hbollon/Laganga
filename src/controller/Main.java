@@ -1,7 +1,5 @@
 package controller;
 
-import java.sql.ResultSet;
-import java.util.*;
 import model.*;
 import view.*;
 
@@ -16,8 +14,14 @@ public abstract class Main {
 		catch (Exception e) {
 			// Actions à effectuer si la connexion a échoué
 			System.out.println("Connexion à MySQL impossible !");
-			//throw e;
+			throw e;
 		}
+		
+		// Initialisation de l'utilisateur local
+		LocalUser localUser = new LocalUser();
+		
+		// Affichage de la fenêtre de connexion
+		LoginWin loginWindow = new LoginWin(localUser);
 		
 		// Fenêtre principale
 		MainWin fenetre = new MainWin();

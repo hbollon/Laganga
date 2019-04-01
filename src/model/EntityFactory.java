@@ -131,7 +131,7 @@ public class EntityFactory {
 	 * @return
 	 * @throws Exception
 	 */
-	public Entity getOne(String clauses, Object[] values, String[] types) throws Exception {
+	public Entity getSingle(String clauses, Object[] values, String[] types) throws Exception {
 		ArrayList<Entity> list = get(clauses, values, types);
 		
 		if (list.size() == 0)
@@ -146,18 +146,10 @@ public class EntityFactory {
 	 * 
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
-	public Entity getByID(int id) throws Exception {
+	public Entity getSingleByID(int id) throws Exception {
 		Object[] values = {id};
 		String[] types = {"int"};
 		
-		ArrayList<Entity> list = get(
-				"WHERE `"+getPrefix()+"id` = ?",
-				values,
-				types);
-		
-		if (list.size() == 0)
-			return null;
-		
-		return list.get(0);
+		return getSingle("WHERE `"+getPrefix()+"id` = ?", values, types);
 	}
 }
