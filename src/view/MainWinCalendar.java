@@ -11,7 +11,7 @@ public class MainWinCalendar extends JTabbedPane {
 	public MainWinCalendar(JFrame fenetre) {
 		super();
 		
-		JPanel semaine = new Semaine();
+		Semaine semaine = new Semaine();
 		JPanel mois = new Mois();
 		JPanel annee = new Annee(date);
 		

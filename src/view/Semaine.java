@@ -3,8 +3,24 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
-public class Semaine extends JPanel {
-	private JTable tableau;
+public class Semaine extends Canvas {
+
+	public void paint(Graphics g){
+		Dimension currentSize = getParent().getSize();
+		setBackground(Color.DARK_GRAY);
+		int width = currentSize.width;
+	    int height = currentSize.height;
+		g.setColor(Color.WHITE);
+		int widthDessin = width - 75;
+		int heightDessin = height -20;
+		for (int ligne = 0; ligne < 48; ligne++) {
+			for(int colonne = 0; colonne < 7; colonne++) {
+				g.drawRect(75 + colonne*widthDessin/7, 20 + ligne*heightDessin/48, widthDessin/7, heightDessin/48);
+			}
+		}
+	}
+}
+	/*private JTable tableau;
 	private JScrollPane tableContainer;
 	
 	public Semaine() {
@@ -51,3 +67,4 @@ public class Semaine extends JPanel {
 		this.add(tableContainer, BorderLayout.CENTER);
 	}
 }
+*/
