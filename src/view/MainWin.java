@@ -3,6 +3,8 @@
 import java.awt.*;
 import javax.swing.*;
 
+import controller.OpenWinCreatEvent;
+
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
 	
@@ -137,6 +139,8 @@ public class MainWin extends JFrame {
 		barMenu.add(edition);
 		barMenu.add(option);
 		barMenu.add(help);
+		
+		createEvent.addActionListener(new OpenWinCreatEvent());
 		
 		return barMenu;
 	}
