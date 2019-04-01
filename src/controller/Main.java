@@ -22,12 +22,5 @@ public abstract class Main {
 		
 		// Affichage de la fenêtre de connexion
 		LoginWin loginWindow = new LoginWin(localUser);
-		
-		// Fenêtre principale
-		MainWin fenetre = new MainWin();
-		fenetre.setVisible(true);
-		
-		// Calendrier de la fenêtre principale
-		MainWinCalendar calendar = new MainWinCalendar(fenetre);
 	}
 }
