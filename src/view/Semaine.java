@@ -35,13 +35,13 @@ public class Semaine extends Canvas {
 		int ligne, colonne;
 		
 		Dimension size = getSize();
-		setBackground(Color.DARK_GRAY);
+		setBackground(Color.WHITE);
 	    
 	    int cellWidth = getCellWidth(size.width);
 	    int cellHeight = getCellHeight(size.height);
 	    
 	    // Cadrillage
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		for (ligne = 0; ligne < NB_LIGNES; ligne++) {
 			for (colonne = 0; colonne < NB_COLONNES; colonne++) {
 				g.drawRect(getXFromColonneNb(colonne, cellWidth), getYFromLigneNb(ligne, cellHeight), cellWidth, cellHeight);
@@ -52,7 +52,7 @@ public class Semaine extends Canvas {
 		int heures = 0;
 		int minutes = 0;
 		
-		g.setColor(Color.WHITE);		
+		g.setColor(Color.BLACK);		
 		for (ligne = 0; ligne < NB_LIGNES; ligne++) {
 			if (minutes > 0) { 
 				g.drawString(heures+"h"+minutes, 0, getYFromLigneNb(ligne, cellHeight) + cellHeight / 2);
@@ -68,7 +68,7 @@ public class Semaine extends Canvas {
 		}
 		
 		// Jours
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		for (colonne = 0; colonne < NB_COLONNES; colonne++) {
 			g.drawString(JOURS[colonne], getXFromColonneNb(colonne, cellWidth), OFFSET_HAUT / 2);
 		}
