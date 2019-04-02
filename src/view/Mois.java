@@ -11,10 +11,15 @@ import com.toedter.calendar.JCalendar;
 public class Mois extends JPanel {
 		
 	public Mois() {
-		super(new FlowLayout(FlowLayout.CENTER));
-		    
+		super(new BorderLayout());
+		
+		JPanel changerMois = new JPanel(new FlowLayout());
+		changerMois.add(new JButton("Mois précédent"));
+		changerMois.add(new JButton("Mois suivant"));
+		
 	    JCalendar calendar = new JCalendar();
-	    calendar.setPreferredSize(new Dimension(800, 735));
-	    this.add(calendar);
+	    
+	    this.add(changerMois, BorderLayout.NORTH);
+	    this.add(calendar, BorderLayout.CENTER);
 	}
 }

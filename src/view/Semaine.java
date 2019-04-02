@@ -1,76 +1,22 @@
 package view;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
-public class Semaine extends Canvas {
-	// Nombre de colonnes et de lignes
-	private static final int NB_COLONNES = 7;
-	private static final int NB_LIGNES = 48;
-	
-	// Offsets
-	private static final int OFFSET_GAUCHE = 50;
-	private static final int OFFSET_DROITE = 2;
-	private static final int OFFSET_HAUT = 30;
-	private static final int OFFSET_BAS = 0;
-	
-	// Jours
-	private static final String[] JOURS = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
-	
-	private int getCellWidth(int width) {
-		return (width - OFFSET_GAUCHE - OFFSET_DROITE) / NB_COLONNES;
-	}
-	private int getCellHeight(int height) {
-		return (height - OFFSET_HAUT - OFFSET_BAS) / NB_LIGNES;
-	}
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
-	private int getXFromColonneNb(int colonne, int cellWidth) {
-		return OFFSET_GAUCHE + cellWidth * colonne;
-	}
-	private int getYFromLigneNb(int ligne, int cellHeight) {
-		return OFFSET_HAUT + cellHeight * ligne;
-	}
+public class Semaine extends JPanel {
 	
-	public void paint(Graphics g){
-		int ligne, colonne;
+	public Semaine() {
+		this.setLayout(new BorderLayout());
 		
-		Dimension size = getSize();
-		setBackground(Color.WHITE);
-	    
-	    int cellWidth = getCellWidth(size.width);
-	    int cellHeight = getCellHeight(size.height);
-	    
-	    // Cadrillage
-		g.setColor(Color.BLACK);
-		for (ligne = 0; ligne < NB_LIGNES; ligne++) {
-			for (colonne = 0; colonne < NB_COLONNES; colonne++) {
-				g.drawRect(getXFromColonneNb(colonne, cellWidth), getYFromLigneNb(ligne, cellHeight), cellWidth, cellHeight);
-			}
-		}
+		JPanel changerSemaine = new JPanel(new FlowLayout());
+		changerSemaine.add(new JButton("Semaine précédente"));
+		changerSemaine.add(new JButton("Semaine suivante"));
 		
-		// Heures
-		int heures = 0;
-		int minutes = 0;
 		
-		g.setColor(Color.BLACK);		
-		for (ligne = 0; ligne < NB_LIGNES; ligne++) {
-			if (minutes > 0) { 
-				g.drawString(heures+"h"+minutes, 0, getYFromLigneNb(ligne, cellHeight) + cellHeight / 2);
-			}else {
-				g.drawString(heures+"h", 0, getYFromLigneNb(ligne, cellHeight) + cellHeight / 2);
-			}
-			minutes += 30;
-			
-			if (minutes >= 60) {
-				heures++;
-				minutes = 0;
-			}
-		}
-		
-		// Jours
-		g.setColor(Color.BLACK);
-		for (colonne = 0; colonne < NB_COLONNES; colonne++) {
-			g.drawString(JOURS[colonne], getXFromColonneNb(colonne, cellWidth), OFFSET_HAUT / 2);
-		}
+		this.add(changerSemaine, BorderLayout.NORTH);
+		this.add(new CanevasSemaine(), BorderLayout.CENTER);
 	}
 }
