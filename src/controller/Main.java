@@ -20,6 +20,9 @@ public abstract class Main {
 		// Initialisation de l'utilisateur local
 		LocalUser localUser = new LocalUser();
 		
+		System.out.println(User.factory.getSingleByID(1));
+		
+		/*
 		// Fenêtre principale
 		MainWin fenetre;
 		fenetre = new MainWin();
@@ -27,6 +30,7 @@ public abstract class Main {
 		
 		// Calendrier de la fenêtre principale
 		MainWinCalendar calendar = new MainWinCalendar(fenetre);
+		*/
 		
 		// Affichage de la fenêtre de connexion
 		//LoginWin loginWindow = new LoginWin(localUser);

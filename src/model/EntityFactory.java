@@ -43,11 +43,10 @@ public class EntityFactory {
 	
 	// Constructeur
 	public EntityFactory(String className) throws Exception {
-		entityClass = Class.forName(className); // Objet de la classe de l'entité
+		entityClass = Class.forName(className); // Classe de l'entité
 		
 		table = (String) entityClass.getDeclaredField("TABLE").get(null);
 		single = (String) entityClass.getDeclaredField("SINGLE").get(null);
-		fields = (EntityFields) entityClass.getDeclaredField("fields").get(null);
 		
 		try {
 			joins = (EntityFactory[]) entityClass.getDeclaredField("JOINS").get(null);
@@ -57,9 +56,9 @@ public class EntityFactory {
 	
 	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws Exception {
-		Entity entity = (Entity) entityClass.getConstructor(ResultSet.class).newInstance(res);
+		Entity entity = (Entity) entityClass.getConstructor(EntityFactory.class, ResultSet.class).newInstance(this, res);
 		
-		entities.put((int) entity.get("id"), entity);
+		entities.put((int) entity.getId(), entity);
 		
 		return entity;
 	}

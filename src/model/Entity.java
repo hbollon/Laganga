@@ -1,24 +1,33 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.HashMap;
 
 public abstract class Entity {
-	// Propriétés de l'entité
-	public static final String TABLE = "entities";
-	public static final String SINGLE = "entity";
+	// Objet usine
+	private EntityFactory factory;
 	
-	// Champs de l'entité
-	public static EntityFields fields;
-	static {
-		String[] names = {"id"};
-		String[] types = {"int"};
-		
-		fields = new EntityFields(names, types);
+	// Propriétés du type d'entité
+	private String table;
+	private String single;
+	private String prefix;
+	
+	public String getTable() {
+		return table;
+	}
+	public String getSingle() {
+		return single;
+	}
+	public String getPrefix() {
+		return prefix;
 	}
 	
-	private EntityFactory factory; // Objet usine
-	private HashMap<String, Object> data = new HashMap<String, Object>(); // Valeur des champs
+	// Attributs de l'entité
+	private int id;
+	
+	public int getId() {
+		return id;
+	}
 	
 	/*
 	 * Constructeur
@@ -27,42 +36,27 @@ public abstract class Entity {
 	public Entity(EntityFactory factory, ResultSet res) throws Exception {
 		this.factory = factory;
 		
-		saveDataFromResultSet(res);
-	}
-	
-	private void saveDataFromResultSet(ResultSet res) throws Exception {
-		EntityFields fields = factory.getFields();
+		// Stockage des propriétés de l'entité
+		table = factory.getTable();
+		single = factory.getSingle();
+		prefix = factory.getPrefix();
 		
-		for (int i = 0; i < fields.size(); i++) {
-			String name = fields.get(i);
-			String prefixedName = factory.getPrefix()+name;
-			String type = fields.getType(i);
-			
-			switch (type) {
-				// Types SQL
-				case "int":    put(name, res.getInt(prefixedName)); break;
-				case "float":  put(name, res.getFloat(prefixedName)); break;
-				case "String": put(name, res.getString(prefixedName)); break;
-				case "Time":   put(name, res.getTime(prefixedName)); break;
-				case "Date":   put(name, res.getDate(prefixedName)); break;
-				
-				// Types du modèle
-				//default:       ((EntityFactory) Class.forName(type).getDeclaredField("factory").get(null)).getEntityFromResultSet(res);
-			}
-		}
+		save(res);
 	}
 	
-	public Object get(String key) {
-		return data.get(key);
+	private void save(ResultSet res) throws Exception {
+		id = res.getInt(getPrefix()+"id");
 	}
-	public void put(String key, Object value) {
-		data.put(key, value);
+	
+	public void refresh() {
+		
 	}
 	
 	/*
 	 * update
 	 */
-	protected void update() {
+	protected int bind(PreparedStatement st) throws Exception {
+		return 1;
 	}
 	
 	/*

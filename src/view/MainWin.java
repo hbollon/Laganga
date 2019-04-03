@@ -72,7 +72,7 @@ public class MainWin extends JFrame {
 		  jScrollTree.setViewportView(jTree);
 		  
 		for (int i = 0; i < usersList.size(); i++) {
-			usersNames.add(((String) usersList.get(i).get("firstName")) + " " + ((String) usersList.get(i).get("lastName")));
+			usersNames.add(((String) ((User) usersList.get(i)).getFirstName()) + " " + ((String) ((User) usersList.get(i)).getLastName()));
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
