@@ -74,8 +74,8 @@ public class User extends Entity {
 		birth = res.getDate(getPrefix()+"birth");
 	}
 	
-	protected int bind(PreparedStatement st) throws Exception {
-		int i = super.bind(st);
+	protected int bindUpdateFields(PreparedStatement st) throws Exception {
+		int i = super.bindUpdateFields(st);
 		
 		st.setString(i, firstName); i++;
 		st.setString(i, lastName); i++;
@@ -92,11 +92,11 @@ public class User extends Entity {
 	public String getUpdateFields() {
 		String fields = super.getUpdateFields();
 		
-		fields += getPrefix()+"firstName = ?, ";
-		fields += getPrefix()+"lastName = ?, ";
-		fields += getPrefix()+"email = ?, ";
-		fields += getPrefix()+"password = ?, ";
-		fields += getPrefix()+"birth = ?, ";
+		fields += "`"+getPrefix()+"firstName` = ?, ";
+		fields += "`"+getPrefix()+"lastName` = ?, ";
+		fields += "`"+getPrefix()+"email` = ?, ";
+		fields += "`"+getPrefix()+"password` = ?, ";
+		fields += "`"+getPrefix()+"birth` = ?";
 		
 		return fields;
 	}

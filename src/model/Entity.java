@@ -46,7 +46,7 @@ public abstract class Entity {
 		id = res.getInt(getPrefix()+"id");
 	}
 	
-	protected int bind(PreparedStatement st) throws Exception {
+	protected int bindUpdateFields(PreparedStatement st) throws Exception {
 		return 1;
 	}
 	
@@ -67,7 +67,7 @@ public abstract class Entity {
 	public void update() throws Exception {
 		PreparedStatement st = Database.database.getPreparedQuery(factory.getUpdateQuery(this));
 		
-		factory.bind(this, st);
+		int i = factory.bindUpdateFields(this, st);
 		
 		Database.database.executePreparedQuery(st);
 	}

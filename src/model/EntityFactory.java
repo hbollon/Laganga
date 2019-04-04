@@ -68,8 +68,8 @@ public class EntityFactory {
 		ent.save(res);
 	}
 	
-	public void bind(Entity ent, PreparedStatement st) throws Exception {
-		ent.bind(st);
+	public int bindUpdateFields(Entity ent, PreparedStatement st) throws Exception {
+		return ent.bindUpdateFields(st);
 	}
 	
 	/**
@@ -182,10 +182,9 @@ public class EntityFactory {
 	
 	public String getUpdateQuery(Entity ent) {
 		String query = "";
-		String fields = ent.getUpdateFields();
 		
 		query += "UPDATE `"+getTable()+"`\n";
-		query += "SET "+fields.substring(0, fields.length() - 2)+"\n";
+		query += "SET "+ent.getUpdateFields()+"\n";
 		query += "WHERE `"+getPrefix()+"id` = ?";
 		
 		return query;
