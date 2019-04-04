@@ -33,6 +33,35 @@ public class Database {
 	}
 	
 	/**
+	 * Retourne un objet de requête préparée (mais pas exécutée).
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public PreparedStatement getPreparedQuery(String query) throws SQLException {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		return st;
+	}
+	
+	/**
+	 * Exécute une requête préparée et retourne le résultat.
+	 * @param st
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet executePreparedQuery(PreparedStatement st) throws SQLException {
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		return res;
+	}
+	
+	/**
 	 * Exécute une requête et retourne un objet ResultSet.
 	 * 
 	 * @param query Requête SQL.
@@ -81,6 +110,28 @@ public class Database {
 				}
 			}
 		}
+		
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		return res;
+	}
+	
+	/**
+	 * 
+	 * @param query
+	 * @param ent
+	 * @return
+	 * @throws Exception
+	 */
+	public ResultSet prepareWithEntityAttributes(String query, Entity ent) throws Exception {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		ent.bind(st);
 		
 		ResultSet res = st.executeQuery();
 		res.beforeFirst();

@@ -3,6 +3,7 @@ package model;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  * Une Entity est une entrée de table.
@@ -63,10 +64,9 @@ public class User extends Entity {
 	
 	public User(EntityFactory factory, ResultSet res) throws Exception {
 		super(factory, res);
-		save(res);
 	}
 	
-	private void save(ResultSet res) throws Exception {
+	public void save(ResultSet res) throws Exception {
 		firstName = res.getString(getPrefix()+"firstName");
 		lastName = res.getString(getPrefix()+"lastName");
 		email = res.getString(getPrefix()+"email");
@@ -84,6 +84,21 @@ public class User extends Entity {
 		st.setDate(i, birth); i++;
 		
 		return i;
+	}
+	
+	/**
+	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
+	 */
+	public String getUpdateFields() {
+		String fields = super.getUpdateFields();
+		
+		fields += getPrefix()+"firstName = ?, ";
+		fields += getPrefix()+"lastName = ?, ";
+		fields += getPrefix()+"email = ?, ";
+		fields += getPrefix()+"password = ?, ";
+		fields += getPrefix()+"birth = ?, ";
+		
+		return fields;
 	}
 	
 	/*

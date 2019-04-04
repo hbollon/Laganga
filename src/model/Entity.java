@@ -40,27 +40,47 @@ public abstract class Entity {
 		table = factory.getTable();
 		single = factory.getSingle();
 		prefix = factory.getPrefix();
-		
-		save(res);
 	}
 	
-	private void save(ResultSet res) throws Exception {
+	public void save(ResultSet res) throws Exception {
 		id = res.getInt(getPrefix()+"id");
 	}
 	
-	public void refresh() {
-		
-	}
-	
-	/*
-	 * update
-	 */
 	protected int bind(PreparedStatement st) throws Exception {
 		return 1;
 	}
 	
 	/*
-	 * delete
+	 * Opérations sur la base de données
+	 */
+	
+	/**
+	 * Met à jour les attributs de l'objet depuis la base de données.
+	 */
+	public void refresh() {
+		
+	}
+	
+	/**
+	 * Met à jour la base de données depuis les attributs de l'objet.
+	 */
+	public void update() throws Exception {
+		PreparedStatement st = Database.database.getPreparedQuery(factory.getUpdateQuery(this));
+		
+		factory.bind(this, st);
+		
+		Database.database.executePreparedQuery(st);
+	}
+	
+	/**
+	 * Récupère la liste des champs à mettre à jour lors d'une opération update.
+	 */
+	public String getUpdateFields() {
+		return "";
+	}
+	
+	/**
+	 * Supprime l'entrée de la base de données.
 	 */
 	public void delete() {
 	}

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +62,14 @@ public class EntityFactory {
 		entities.put((int) entity.getId(), entity);
 		
 		return entity;
+	}
+	
+	public void save(Entity ent, ResultSet res) throws Exception {
+		ent.save(res);
+	}
+	
+	public void bind(Entity ent, PreparedStatement st) throws Exception {
+		ent.bind(st);
 	}
 	
 	/**
@@ -163,6 +172,21 @@ public class EntityFactory {
 		// Récupération des noms des champs
 		for (int i = 0; i < fields.size(); i++)
 			query += "`"+getPrefix()+fields.get(i)+"`, ";
+		
+		return query;
+	}
+	
+	/*
+	 * Construction des requêtes SQL
+	 */
+	
+	public String getUpdateQuery(Entity ent) {
+		String query = "";
+		String fields = ent.getUpdateFields();
+		
+		query += "UPDATE `"+getTable()+"`\n";
+		query += "SET "+fields.substring(0, fields.length() - 2)+"\n";
+		query += "WHERE `"+getPrefix()+"id` = ?";
 		
 		return query;
 	}
