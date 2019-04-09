@@ -5,6 +5,9 @@ import view.*;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
+		// Splash screen
+		new SplashWin();
+		
 		// Connexion à la base de données
 		try {
 			System.out.println("Connexion en cours...");

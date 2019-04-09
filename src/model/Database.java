@@ -131,7 +131,7 @@ public class Database {
 				ResultSet.CONCUR_UPDATABLE);
 		st.closeOnCompletion();
 		
-		ent.bind(st);
+		ent.bindUpdateFields(st);
 		
 		ResultSet res = st.executeQuery();
 		res.beforeFirst();
