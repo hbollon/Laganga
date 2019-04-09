@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 public class SplashWin extends JFrame {
 	private static final long serialVersionUID = -4244014342067339792L;
 	
-	public SplashWin() {
+	public SplashWin() throws Exception {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		
 		setTitle("Laganga");
@@ -33,17 +33,13 @@ public class SplashWin extends JFrame {
 		// Image du splash
 		JLabel splash;
 		
-		try {
-			BufferedImage splashImage = ImageIO.read(new File("./res/splash.png"));
-			splash = new JLabel(new ImageIcon(splashImage));
-		} catch (IOException e) {
-			splash = new JLabel("Chargement de l'image impossible.", JLabel.CENTER);
-		}
+		BufferedImage splashImage = ImageIO.read(new File("./res/splash.png"));
+		splash = new JLabel(new ImageIcon(splashImage));
 		
 		add(splash, BorderLayout.CENTER);
 		
 		// Texte de statut
-		add(new JLabel("Connexion à la base de données...", JLabel.CENTER), BorderLayout.SOUTH);
+		add(new JLabel("Connexion...", JLabel.CENTER), BorderLayout.SOUTH);
 		
 		setVisible(true);
 	}
