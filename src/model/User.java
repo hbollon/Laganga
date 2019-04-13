@@ -62,11 +62,13 @@ public class User extends Entity {
 		this.birth = birth;
 	}
 	
-	public User(EntityFactory factory, ResultSet res) throws Exception {
-		super(factory, res);
+	public User(EntityFactory factory) throws Exception {
+		super(factory);
 	}
 	
 	public void save(ResultSet res) throws Exception {
+		super.save(res);
+		
 		firstName = res.getString(getPrefix()+"firstName");
 		lastName = res.getString(getPrefix()+"lastName");
 		email = res.getString(getPrefix()+"email");

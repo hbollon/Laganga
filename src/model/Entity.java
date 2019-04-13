@@ -33,7 +33,7 @@ public abstract class Entity {
 	 * Constructeur
 	 * Sauvegarde les propriétés du modèle à partir de l'usine
 	 */
-	public Entity(EntityFactory factory, ResultSet res) throws Exception {
+	public Entity(EntityFactory factory) throws Exception {
 		this.factory = factory;
 		
 		// Stockage des propriétés de l'entité
