@@ -2,10 +2,9 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.awt.Container;
+import java.awt.Image;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,20 +22,19 @@ public class SplashWin extends JFrame {
 		setLocationRelativeTo(null);
 		setSize(400, 300);
 		setResizable(false);
-		getContentPane().setBackground(Color.WHITE);
 		
-		setLayout(new BorderLayout());
+		Container content = getContentPane();
+		content.setLayout(new BorderLayout());
+		content.setBackground(Color.WHITE);
 		
 		// Image du splash
-		JLabel splash;
+		JLabel image = new JLabel(new ImageIcon(new ImageIcon("./res/splash.png").getImage().getScaledInstance(400, 300, Image.SCALE_DEFAULT)), JLabel.CENTER);
 		
-		BufferedImage splashImage = ImageIO.read(new File("./res/splash.png"));
-		splash = new JLabel(new ImageIcon(splashImage));
-		
-		add(splash, BorderLayout.CENTER);
+		content.add(image, BorderLayout.CENTER);
+		//System.out.println(image.getWidth()+" "+image.getHeight());
 		
 		// Texte de statut
-		add(new JLabel("Connexion...", JLabel.CENTER), BorderLayout.SOUTH);
+		content.add(new JLabel("Connexion...", JLabel.CENTER), BorderLayout.SOUTH);
 		
 		setVisible(true);
 	}

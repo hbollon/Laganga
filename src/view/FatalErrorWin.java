@@ -2,10 +2,13 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import controller.CloseWindowButtonListener;
 
@@ -21,18 +24,23 @@ public class FatalErrorWin extends JFrame {
 		setLocationRelativeTo(null);
 		setSize(600, 150);
 		setResizable(false);
-		getContentPane().setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setLayout(new BorderLayout());
+		Container content = getContentPane();
+		content.setLayout(new BorderLayout());
+		content.setBackground(Color.WHITE);
 		
 		// Message d'erreur
-		add(new JLabel("Une erreur est survenue :\n"+status, JLabel.CENTER), BorderLayout.CENTER);
+		JPanel statusPanel = new JPanel(new GridLayout(0, 1));
+		statusPanel.add(new JLabel("Une erreur est survenue :", JLabel.CENTER));
+		statusPanel.add(new JLabel(status, JLabel.CENTER));
+		
+		content.add(statusPanel);
 		
 		// Bouton de fermeture
 		JButton ok = new JButton("Ok");
 		ok.addActionListener(new CloseWindowButtonListener(this));
-		add(ok, BorderLayout.SOUTH);
+		content.add(ok, BorderLayout.SOUTH);
 		
 		setVisible(true);
 	}
