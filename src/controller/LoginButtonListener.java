@@ -22,6 +22,7 @@ public class LoginButtonListener implements ActionListener {
 		this.passwordField = passwordField;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		login.setText("Connexion en cours...");

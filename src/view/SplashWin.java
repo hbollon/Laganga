@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- * Le SplashWindow est le splash screen affiché au démarrage pendant la connexion à MySQL.
+ * Le SplashWin est le splash screen affiché au démarrage pendant la connexion à MySQL.
  * 
  * @author Julien Valverdé
  */
