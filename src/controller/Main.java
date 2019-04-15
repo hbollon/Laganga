@@ -2,6 +2,8 @@ package controller;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.JFrame;
+
 import model.*;
 import view.*;
 
@@ -26,6 +28,9 @@ public abstract class Main {
 		
 		// Initialisation de l'utilisateur local
 		LocalUser localUser = new LocalUser();
+		
+		// Désactivation de la décoration des fenêtres par Swing
+		JFrame.setDefaultLookAndFeelDecorated(false);
 		
 		// Affichage de la fenêtre de connexion
 		//LoginWin loginWindow = new LoginWin(localUser);

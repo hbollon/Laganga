@@ -49,7 +49,6 @@ public class MainWin extends JFrame {
 	 
 	public void initialize()
 	{
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());

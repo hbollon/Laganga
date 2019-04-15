@@ -17,8 +17,6 @@ import controller.CloseWindowButtonListener;
 @SuppressWarnings("serial")
 public class FatalErrorWin extends JFrame {
 	public FatalErrorWin(String status) throws Exception {
-		JFrame.setDefaultLookAndFeelDecorated(false);
-		
 		setTitle("Laganga - Erreur");
 		setLocationRelativeTo(null);
 		setSize(600, 150);

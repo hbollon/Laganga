@@ -24,7 +24,6 @@ import controller.CloseWindow;
 public class WinCreatEvent extends JFrame{
 
 	public WinCreatEvent() {
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		this.setTitle("Création événement");
 	    this.setSize(1000, 500);
 	  

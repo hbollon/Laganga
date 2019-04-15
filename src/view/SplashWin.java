@@ -19,8 +19,6 @@ public class SplashWin extends JFrame {
 	private static final long serialVersionUID = -4244014342067339792L;
 	
 	public SplashWin() throws Exception {
-		JFrame.setDefaultLookAndFeelDecorated(true);
-		
 		setTitle("Laganga");
 		setLocationRelativeTo(null);
 		setSize(400, 300);
