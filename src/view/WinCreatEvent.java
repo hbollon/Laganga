@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,16 +23,18 @@ import com.toedter.calendar.JCalendar;
 import controller.AnnuleEvent;
 import controller.CloseWindow;
 
-public class WinCreatEvent extends JFrame{
+public class WinCreatEvent extends JFrame implements Observer {
 
+	private JLabel status = new JLabel("Ajouter un événement", JLabel.CENTER);
+			
 	public WinCreatEvent() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		this.setTitle("Création événement");
 	    this.setSize(1000, 500);
-	  
 		this.setBackground(Color.white);
-		
 		this.setLayout(new BorderLayout());
+		
+		this.add(status, BorderLayout.NORTH);
 		
 		//Panel au centre de la fenêtre
 		JPanel newEvent = new JPanel(new GridLayout(4,2));
@@ -105,4 +109,15 @@ public class WinCreatEvent extends JFrame{
 	    annuleEvent.addActionListener(new AnnuleEvent(this));
 	    this.addWindowListener(new CloseWindow(this));
 	}
+
+	@Override
+	public void update(Observable arg0, Object state) {
+//		switch((int) state) {
+//			case success:
+//				this.dispose();
+//				break;
+//				
+//			case gange:
+				status.setText("Cette date n'est pas libre");
+		}
 }
