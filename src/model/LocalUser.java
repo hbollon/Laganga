@@ -54,7 +54,7 @@ public class LocalUser extends Observable {
 			
 			else {
 				// Vérification du mot de passe
-				if (!testPassword(password, (String) user.get("password")))
+				if (!testPassword(password, (String) user.getPassword()))
 					state = ERROR_WRONG_PASSWORD;
 				
 				else {

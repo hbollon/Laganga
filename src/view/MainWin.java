@@ -9,6 +9,8 @@ import model.Entity;
 import model.Group;
 import model.User;
 
+import controller.OpenWinCreatEvent;
+
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
 	
@@ -59,7 +61,6 @@ public class MainWin extends JFrame {
 	 
 	public void initialize()
 	{
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());
@@ -82,7 +83,7 @@ public class MainWin extends JFrame {
 		  jScrollTree.setViewportView(jTree);
 		  
 		for (int i = 0; i < usersList.size(); i++) {
-			usersNames.add(((String) usersList.get(i).get("firstName")) + " " + ((String) usersList.get(i).get("lastName")));
+			usersNames.add(((String) ((User) usersList.get(i)).getFirstName()) + " " + ((String) ((User) usersList.get(i)).getLastName()));
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
@@ -201,6 +202,8 @@ public class MainWin extends JFrame {
 		barMenu.add(edition);
 		barMenu.add(option);
 		barMenu.add(help);
+		
+		createEvent.addActionListener(new OpenWinCreatEvent());
 		
 		return barMenu;
 	}

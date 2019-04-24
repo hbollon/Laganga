@@ -1,6 +1,12 @@
 package model;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Un objet Database permet d'initier une connexion vers une base de données MySQL à l'aide de la bibliothèque JDBC
@@ -11,25 +17,54 @@ import java.sql.*;
  */
 public class Database {
 	// Instance principale de Database
-	public static Database database;
+	public static Database database = new Database();
+	
+	// Coordonnées de la base de données
+	private static final String HOST = "localhost";
+	private static final String DATABASE = "l2_gr2";
+	private static final String USER = "l2_gr2";
+	private static final String PASSWORD = "5KUavzaM";
 	
 	// Objet de connexion
 	private Connection connection;
 	
 	/**
-	 * Constructeur de Database. Initie la connexion avec la base de données MySQL.
-	 * 
-	 * @param host Adresse du serveur MySQL.
-	 * @param database Nom de la base de données.
-	 * @param user Nom d'utilisateur.
-	 * @param password Mot de passe.
-	 * 
-	 * @throws ClassNotFoundException Le driver JDBC n'a pas pu être chargé.
-	 * @throws SQLException	 La connexion avec la base de données n'a pas pu être initiée.
+	 * Initialise la connexion à la base de données.
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
 	 */
-	public Database(String host, String database, String user, String password) throws ClassNotFoundException, SQLException {
-		Class.forName("org.mariadb.jdbc.Driver");		
-		connection = DriverManager.getConnection("jdbc:mysql://"+host+"/"+database, user, password);
+	public void connect() throws ClassNotFoundException, SQLException {
+		Class.forName("org.mariadb.jdbc.Driver");
+		connection = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+DATABASE, USER, PASSWORD);
+	}
+	
+	/**
+	 * Retourne un objet de requête préparée (mais pas exécutée).
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public PreparedStatement getPreparedQuery(String query) throws SQLException {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		return st;
+	}
+	
+	/**
+	 * Exécute une requête préparée et retourne le résultat.
+	 * @param st
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet executePreparedQuery(PreparedStatement st) throws SQLException {
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		return res;
 	}
 	
 	/**
@@ -81,6 +116,28 @@ public class Database {
 				}
 			}
 		}
+		
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		return res;
+	}
+	
+	/**
+	 * 
+	 * @param query
+	 * @param ent
+	 * @return
+	 * @throws Exception
+	 */
+	public ResultSet prepareWithEntityAttributes(String query, Entity ent) throws Exception {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		ent.bindUpdateFields(st);
 		
 		ResultSet res = st.executeQuery();
 		res.beforeFirst();

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.Observable;
 import java.util.Observer;
@@ -12,6 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controller.LoginButtonListener;
+import controller.OpenWinInsription;
 import model.LocalUser;
 
 public class LoginWin extends JFrame implements Observer {
@@ -27,7 +29,7 @@ public class LoginWin extends JFrame implements Observer {
 		localUser.addObserver(this);
 		
 		setTitle("Laganga - Connexion");
-		setSize(600, 200);
+		setSize(600, 250);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -49,8 +51,14 @@ public class LoginWin extends JFrame implements Observer {
 		JPasswordField passwordField = new JPasswordField();
 		panel.add(passwordField);
 		
+		JPanel buttonPanel = new JPanel(new FlowLayout());
+		JButton inscription = new JButton("S'inscrire");
+		buttonPanel.add(inscription);
+		buttonPanel.add(login);
+		
 		login.addActionListener(new LoginButtonListener(localUser, login, emailField, passwordField));
-		panel.add(login);
+		inscription.addActionListener(new OpenWinInsription());
+		panel.add(buttonPanel);
 		
 		return panel;
 	}
@@ -71,12 +79,11 @@ public class LoginWin extends JFrame implements Observer {
 					fenetre.setVisible(true);
 					
 					// Calendrier de la fenêtre principale
-					MainWinCalendar calendar = new MainWinCalendar(fenetre);					
+					MainWinCalendar calendar = new MainWinCalendar(fenetre);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			break;
 			
 			case LocalUser.ERROR_ALREADY_LOGGED_IN:

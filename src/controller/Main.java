@@ -1,26 +1,51 @@
 package controller;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
+
 import model.*;
 import view.*;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
-		// Connexion à la base de données
+		// Splash screen
+		SplashWin splash = new SplashWin();
+		
+		TimeUnit.SECONDS.sleep(1);
 		try {
-			System.out.println("Connexion en cours...");
-			Database.database = new Database("localhost", "l2_gr2", "l2_gr2", "5KUavzaM");
-			System.out.println("Connexion réussie !");
+			// Connexion à la base de données
+			Database.database.connect();
 		}
 		catch (Exception e) {
 			// Actions à effectuer si la connexion a échoué
-			System.out.println("Connexion à MySQL impossible !");
+			new FatalErrorWin(e.getMessage());
 			throw e;
+		}
+		finally {
+			splash.dispose();
 		}
 		
 		// Initialisation de l'utilisateur local
 		LocalUser localUser = new LocalUser();
 		
+		// Désactivation de la décoration des fenêtres par Swing
+		JFrame.setDefaultLookAndFeelDecorated(false);
+		
 		// Affichage de la fenêtre de connexion
-		LoginWin loginWindow = new LoginWin(localUser);
+		//LoginWin loginWindow = new LoginWin(localUser);
+		
+		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
+		localUser.login("julien.valverde@netc.fr", "issou");
+		
+		System.out.println(User.factory.getSingleByID(1));
+		
+		// Fenêtre principale
+		MainWin fenetre;
+		fenetre = new MainWin();
+		fenetre.setVisible(true);
+		
+		// Calendrier de la fenêtre principale
+		MainWinCalendar calendar = new MainWinCalendar(fenetre);
 	}
 }
