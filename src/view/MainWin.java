@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import model.Entity;
+import model.Group;
 import model.User;
 
 public class MainWin extends JFrame { 
@@ -16,8 +17,11 @@ public class MainWin extends JFrame {
 	private JPanel leftPanel = null;
 	private JPanel rightPanel = null;
 	private JPanel jContentPane = null;
+	private JPanel jContentPaneGroup = null;
 	private JTree jTree = null;
+	private JTree jTreeGroupe = null;
 	private JScrollPane jScrollTree = null;
+	private JScrollPane jScrollTreeGroup = null;
 	private JTextArea notificationBar = null;
 	private JMenuBar barMenu = null;
 	private JMenu fichier = null;
@@ -38,11 +42,19 @@ public class MainWin extends JFrame {
 		return jTree;
 	}
 	
+	private JTree getJTreeGroupe() {
+		if (jTreeGroupe == null) {
+			jTreeGroupe = new JTree();
+		}
+		return jTreeGroupe;
+	} 
+	
 	public MainWin() throws Exception 
 	{
 		super();
 		initialize();
 		setTree();
+		setTreeGroupe();
 	}
 	 
 	public void initialize()
@@ -74,7 +86,22 @@ public class MainWin extends JFrame {
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
+	}
+	
+	public void setTreeGroupe() throws Exception
+	{
+		ArrayList<Entity> groupeList = Group.factory.getAll();
+		ArrayList<String> groupeNames = new ArrayList<String>();
 		
+		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Groupe");
+		  jTreeGroupe.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+		  jScrollTreeGroup.setViewportView(jTreeGroupe);
+		  
+		for (int i = 0; i < groupeList.size(); i++) {
+			groupeNames.add((String) groupeList.get(i).get("name"));
+			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
+		    treeNode1.add(treeNode2);
+		}
 	}
 	
 	private JPanel getWindowPane()
@@ -87,6 +114,7 @@ public class MainWin extends JFrame {
 			rightPanel = new JPanel(new BorderLayout());
 			
 			leftPanel.add(getJContentPane(), BorderLayout.SOUTH);
+			leftPanel.add(getJContentPaneGroupe(), BorderLayout.NORTH);
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
 			centerPanel.add(new MainWinCalendar(this));
 			windowPanel.add(leftPanel, BorderLayout.WEST);
@@ -104,6 +132,14 @@ public class MainWin extends JFrame {
 		return jContentPane;
 	}
 	
+	private JPanel getJContentPaneGroupe() {
+		if (jContentPaneGroup == null) {
+			jContentPaneGroup = new JPanel(new BorderLayout());
+			jContentPaneGroup.add(getJScrollPaneGroup(), BorderLayout.NORTH);
+		}
+		return jContentPaneGroup;
+	}
+	
 	private JScrollPane getJScrollPane()
 	{
 		if(jScrollTree == null)
@@ -113,6 +149,17 @@ public class MainWin extends JFrame {
 			jScrollTree.setPreferredSize(new Dimension(240,450));
 		}
 		return jScrollTree;
+	}
+	
+	private JScrollPane getJScrollPaneGroup()
+	{
+		if(jScrollTreeGroup == null)
+		{
+			jScrollTreeGroup = new JScrollPane();
+			jScrollTreeGroup.setViewportView(getJTreeGroupe());
+			jScrollTreeGroup.setPreferredSize(new Dimension(240,450));
+		}
+		return jScrollTreeGroup;
 	}
 	
 	private JTextArea getNotificationBar()
