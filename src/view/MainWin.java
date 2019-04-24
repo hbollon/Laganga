@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import model.Entity;
+import model.Group;
 import model.User;
 
 import controller.OpenWinCreatEvent;
@@ -90,20 +91,18 @@ public class MainWin extends JFrame {
 	
 	public void setTreeGroupe() throws Exception
 	{
-		//ArrayList<Entity> groupeList = Group.factory.getAll();
+		ArrayList<Entity> groupeList = Group.factory.getAll();
 		ArrayList<String> groupeNames = new ArrayList<String>();
 		
 		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Groupe");
 		  jTreeGroupe.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
 		  jScrollTreeGroup.setViewportView(jTreeGroupe);
 		  
-		/*
 		for (int i = 0; i < groupeList.size(); i++) {
-			groupeNames.add((String) groupeList.get(i).get("name"));
+			groupeNames.add(((Group) groupeList.get(i)).getName());
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
-		*/
 	}
 	
 	private JPanel getWindowPane()
