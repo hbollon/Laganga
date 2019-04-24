@@ -2,7 +2,7 @@ package view;
 
 import java.awt.*;
 
-public class Semaine extends Canvas {
+public class SemaineCanevas extends Canvas {
 	// Nombre de colonnes et de lignes
 	private static final int NB_COLONNES = 7;
 	private static final int NB_LIGNES = 48;
