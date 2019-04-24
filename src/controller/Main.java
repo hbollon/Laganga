@@ -38,7 +38,9 @@ public abstract class Main {
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		localUser.login("julien.valverde@netc.fr", "issou");
 		
-		System.out.println(User.factory.getSingleByID(1));
+		//System.out.println(User.factory.getByID(1));
+		Group group1 = (Group) Group.factory.getByID(1);
+		System.out.println(group1.getMembers());
 		
 		// Fenêtre principale
 		MainWin fenetre;

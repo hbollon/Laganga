@@ -8,8 +8,8 @@ public class Group extends Entity {
 	// Propriétés du type d'entité
 	public static final String TABLE = "groups";
 	public static final String SINGLE = "group";
-	public static final String[] JOIN_FIELDS = {"owner"};
 	public static final EntityFactory[] JOIN_ENTITIES = {User.factory};
+	public static final String[] JOINED_IDS = {"owner"};
 	
 	// Objet usine
 	public static EntityFactory factory;
@@ -42,9 +42,6 @@ public class Group extends Entity {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	public void setMembers(ArrayList<Entity> members) {
-		this.members = members;
-	}
 	
 	// Constructeur
 	public Group(EntityFactory factory) throws Exception {
@@ -57,7 +54,16 @@ public class Group extends Entity {
 		name = res.getString(getPrefix()+"name");
 		
 		// Récupération de la liste des membres du groupe
+		refreshMembers();
+		/*
+		Object[] values = {getId()};
+		String[] types = {"int"};
 		
+		memberships = GroupMembership.factory.get(
+				"WHERE `"+getTable()+"`.`"+getPrefix()+"id` = ?",
+				values, types
+				);
+		*/
 	}
 	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {
@@ -78,5 +84,24 @@ public class Group extends Entity {
 		fields += "`"+getPrefix()+"owner` = ? ";
 		
 		return fields;
+	}
+	
+	/**
+	 * Renvoie un ArrayList des membres du groupe.
+	 * @throws Exception 
+	 */
+	private void refreshMembers() throws Exception {
+		String usersTable = User.factory.getTable();
+		String usersPrefix = User.factory.getPrefix();
+		String usersGroupsTable = usersTable+"_"+getTable();
+		
+		String clauses = "";
+		clauses += "JOIN `"+usersGroupsTable+"` ON `"+usersGroupsTable+"`.`"+usersPrefix+"id` = `"+usersTable+"`.`"+usersPrefix+"id`";
+		clauses += "WHERE `"+usersGroupsTable+"`.`"+getPrefix()+"id` = ?";
+		
+		Object[] values = {getID()};
+		String[] types = {"int"};
+		
+		members = User.factory.get(clauses, values, types);
 	}
 }

@@ -25,7 +25,7 @@ public abstract class Entity {
 	// Attributs de l'entité
 	private int id;
 	
-	public int getId() {
+	public int getID() {
 		return id;
 	}
 	

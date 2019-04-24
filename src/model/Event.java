@@ -9,8 +9,6 @@ public class Event extends Entity {
 	// Propriétés du type d'entité
 	public static final String TABLE = "events";
 	public static final String SINGLE = "event";
-	public static final EntityFactory[] JOIN_FIELDS = {User.factory};
-	public static final EntityFactory[] JOIN_ENTITIES = {User.factory};
 	
 	// Objet usine
 	public static EntityFactory factory;
@@ -119,7 +117,7 @@ public class Event extends Entity {
 	 * Retourne une représentation textuelle de l'évènement.
 	 */
 	public String toString() {
-		String str = "Event no. "+getId()+":\n";
+		String str = "Event no. "+getID()+":\n";
 		str += "\t- name: "+getName()+"\n";
 		str += "\t- type: "+getType()+"\n";
 		str += "\t- priority: "+getPriority()+"\n";
