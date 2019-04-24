@@ -99,6 +99,7 @@ public class EntityFactory {
 		if (clauses == null)
 			clauses = "ORDER BY `"+getPrefix()+"id` DESC";
 		
+		System.out.println(query+"\n"+clauses);
 		return query+"\n"+clauses;
 	}
 	
@@ -107,7 +108,7 @@ public class EntityFactory {
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
 	public Entity getFromResultSet(ResultSet res) throws Exception {
-		Entity entity = entities.get(res.getInt(getPrefix()+"id"));
+		Entity entity = entities.get(res.getInt(getTable()+"."+getPrefix()+"id"));
 		if (entity == null)
 			entity = newEntity(res);
 		

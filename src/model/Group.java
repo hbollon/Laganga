@@ -8,7 +8,7 @@ public class Group extends Entity {
 	// Propriétés du type d'entité
 	public static final String TABLE = "groups";
 	public static final String SINGLE = "group";
-	public static final EntityFactory[] JOIN_ENTITIES = {User.factory};
+	public static final EntityFactory[] JOINED_ENTITIES = {User.factory};
 	public static final String[] JOINED_IDS = {"owner"};
 	
 	// Objet usine
@@ -52,18 +52,10 @@ public class Group extends Entity {
 		super.save(res);
 		
 		name = res.getString(getPrefix()+"name");
+		owner = (User) User.factory.getFromResultSet(res);
 		
 		// Récupération de la liste des membres du groupe
 		refreshMembers();
-		/*
-		Object[] values = {getId()};
-		String[] types = {"int"};
-		
-		memberships = GroupMembership.factory.get(
-				"WHERE `"+getTable()+"`.`"+getPrefix()+"id` = ?",
-				values, types
-				);
-		*/
 	}
 	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {

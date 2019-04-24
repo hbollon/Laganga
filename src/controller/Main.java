@@ -40,7 +40,7 @@ public abstract class Main {
 		
 		//System.out.println(User.factory.getByID(1));
 		Group group1 = (Group) Group.factory.getByID(1);
-		System.out.println(group1.getMembers());
+		System.out.println(group1.getOwner());
 		
 		// Fenêtre principale
 		MainWin fenetre;
