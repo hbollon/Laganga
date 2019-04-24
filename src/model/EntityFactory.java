@@ -57,6 +57,7 @@ public class EntityFactory {
 	
 	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws Exception {
+		System.out.println("Nouvelle entité : "+res.getInt(getPrefix()+"id"));
 		Entity entity = (Entity) entityClass.getConstructor(EntityFactory.class).newInstance(this);
 		entity.save(res);
 		

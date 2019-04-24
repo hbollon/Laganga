@@ -109,7 +109,7 @@ public class Event extends Entity {
 		fields += "`"+getPrefix()+"type` = ?, ";
 		fields += "`"+getPrefix()+"priority` = ?, ";
 		fields += "`"+getPrefix()+"date` = ?, ";
-		fields += "`"+getPrefix()+"begin` = ?";
+		fields += "`"+getPrefix()+"begin` = ?, ";
 		fields += "`"+getPrefix()+"end` = ?";
 		
 		return fields;

@@ -47,6 +47,7 @@ public abstract class Entity {
 	}
 	
 	public void saveJoined(ResultSet res) throws Exception {
+		System.out.println("Ajout des jointures : "+res.getInt(getPrefix()+"id"));
 	}
 	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {
