@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-import javax.swing.*;
 
 public class CanevasSemaine extends Canvas {
 	// Nombre de colonnes et de lignes
@@ -9,7 +8,7 @@ public class CanevasSemaine extends Canvas {
 	private static final int NB_LIGNES = 48;
 	
 	// Offsets
-	private static final int OFFSET_GAUCHE = 50;
+	private static final int OFFSET_GAUCHE = 35;
 	private static final int OFFSET_DROITE = 2;
 	private static final int OFFSET_HAUT = 30;
 	private static final int OFFSET_BAS = 0;
@@ -37,10 +36,10 @@ public class CanevasSemaine extends Canvas {
 		Dimension size = getSize();
 		setBackground(Color.WHITE);
 	    
-	    int cellWidth = getCellWidth(size.width);
+		int cellWidth = getCellWidth(size.width);
 	    int cellHeight = getCellHeight(size.height);
 	    
-	    // Cadrillage
+	    // Quadrillage
 		g.setColor(Color.BLACK);
 		for (ligne = 0; ligne < NB_LIGNES; ligne++) {
 			for (colonne = 0; colonne < NB_COLONNES; colonne++) {
@@ -70,7 +69,31 @@ public class CanevasSemaine extends Canvas {
 		// Jours
 		g.setColor(Color.BLACK);
 		for (colonne = 0; colonne < NB_COLONNES; colonne++) {
-			g.drawString(JOURS[colonne], getXFromColonneNb(colonne, cellWidth), OFFSET_HAUT / 2);
+			g.drawString(JOURS[colonne], 24+getXFromColonneNb(colonne, cellWidth), 5+OFFSET_HAUT / 2);
 		}
+		
+		drawEvent(8,0,12,0,1,g,Color.BLUE, "Event1");
+		drawEvent(15,0,17,0,1,g,Color.DARK_GRAY, "Event2");
+		drawEvent(8,30,11,30,2,g,Color.GREEN, "Event3");
+		drawEvent(13,0,16,0,3,g,Color.ORANGE, "Event4");
+		drawEvent(8,0,11,30,4,g,Color.RED, "Event5");
+		drawEvent(1,0,9,0,6,g,Color.YELLOW, "Event6");
+	}
+	
+	public void drawEvent (int heure_debut, int minute_debut, int heure_fin, int minute_fin, int jour, Graphics g, Color couleur, String nom) {
+		
+		g.setColor(couleur);
+		
+		Dimension size = getSize();
+		int demi_heure_debut = heure_debut*2 + minute_debut/30;
+		int demi_heure_fin = heure_fin*2 + minute_fin/30;
+		int nb_demi_heure = demi_heure_fin - demi_heure_debut;
+		int cellWidth = getCellWidth(size.width);
+	    int cellHeight = getCellHeight(size.height);
+	    int taille_nom = nom.length()*7;
+	    
+		g.fillRect(jour*cellWidth+OFFSET_GAUCHE+1, demi_heure_debut*cellHeight+OFFSET_HAUT+1, cellWidth-1, cellHeight*nb_demi_heure-1);
+		g.setColor(Color.BLACK);
+		g.drawString(nom, jour*cellWidth+OFFSET_GAUCHE + (cellWidth-taille_nom)/2, OFFSET_HAUT + demi_heure_debut*cellHeight + nb_demi_heure/2*cellHeight+5);
 	}
 }
