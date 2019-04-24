@@ -46,6 +46,9 @@ public abstract class Entity {
 		id = res.getInt(getPrefix()+"id");
 	}
 	
+	public void saveJoined(ResultSet res) throws Exception {
+	}
+	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {
 		return 1;
 	}

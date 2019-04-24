@@ -120,8 +120,21 @@ public class EntityFactory {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		ResultSet res = Database.database.prepareAndExecute(getSelectQuery(clauses), values, types);
 		
-		while (res.next())
-			list.add(getFromResultSet(res));
+		// ID de la dernière ligne traitée
+		int previousId = -1;
+		
+		// Parcours des lignes récupérées
+		while (res.next()) {
+			Entity ent = getFromResultSet(res); // Récupération/création de l'entité
+			
+			// On traite une nouvelle entité, l'enregistrer dans la liste
+			if (ent.getId() != previousId) {
+				list.add(ent);
+				previousId = ent.getId();
+			}
+			
+			ent.saveJoined(res); // Sauvegarde des champs joins
+		}
 		
 		return list;
 	}
