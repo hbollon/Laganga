@@ -16,6 +16,7 @@ import controller.LoginButtonListener;
 import controller.OpenWinInsription;
 import model.LocalUser;
 
+@SuppressWarnings("deprecation")
 public class LoginWin extends JFrame implements Observer {
 	private static final long serialVersionUID = 4411916212116263837L;
 	
@@ -36,6 +37,9 @@ public class LoginWin extends JFrame implements Observer {
 		setContentPane(getWindowPane());
 		
 		setVisible(true);
+		
+		// Permet de changer le curseur lors d'une opération avec la BDD
+		new CursorChanger(this);
 	}
 	
 	private JPanel getWindowPane() {
@@ -74,14 +78,13 @@ public class LoginWin extends JFrame implements Observer {
 				
 				try {
 					// Fenêtre principale
-					MainWin fenetre;
-					fenetre = new MainWin();
+					MainWin fenetre = new MainWin();
 					fenetre.setVisible(true);
 					
 					// Calendrier de la fenêtre principale
-					MainWinCalendar calendar = new MainWinCalendar(fenetre);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					new MainWinCalendar(fenetre);
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			break;

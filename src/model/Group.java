@@ -79,7 +79,7 @@ public class Group extends Entity {
 	}
 	
 	/**
-	 * Renvoie un ArrayList des membres du groupe.
+	 * Récupère la liste des membres du groupe.
 	 * @throws Exception 
 	 */
 	private void refreshMembers() throws Exception {

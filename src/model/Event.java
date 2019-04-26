@@ -25,7 +25,6 @@ public class Event extends Entity {
 	private Date date;
 	private Time begin;
 	private Time end;
-	//private Agenda agenda;
 	//private Location location;
 	
 	// Getteurs des attributs

@@ -33,7 +33,7 @@ public abstract class Main {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		
 		// Affichage de la fenêtre de connexion
-		//LoginWin loginWindow = new LoginWin(localUser);
+		LoginWin loginWindow = new LoginWin(localUser);
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		localUser.login("julien.valverde@netc.fr", "issou");
@@ -42,6 +42,7 @@ public abstract class Main {
 		Group group1 = (Group) Group.factory.getByID(1);
 		System.out.println(group1.getOwner());
 		
+		/*
 		// Fenêtre principale
 		MainWin fenetre;
 		fenetre = new MainWin();
@@ -49,5 +50,6 @@ public abstract class Main {
 		
 		// Calendrier de la fenêtre principale
 		MainWinCalendar calendar = new MainWinCalendar(fenetre);
+		*/
 	}
 }

@@ -28,14 +28,17 @@ public class SplashWin extends JFrame {
 		content.setBackground(Color.WHITE);
 		
 		// Image du splash
-		JLabel image = new JLabel(new ImageIcon(new ImageIcon("./res/splash.png").getImage().getScaledInstance(400, 300, Image.SCALE_DEFAULT)), JLabel.CENTER);
+		JLabel image = new JLabel(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT)), JLabel.CENTER);
 		
 		content.add(image, BorderLayout.CENTER);
 		//System.out.println(image.getWidth()+" "+image.getHeight());
 		
 		// Texte de statut
-		content.add(new JLabel("Connexion...", JLabel.CENTER), BorderLayout.SOUTH);
+		content.add(new JLabel("Chargement...", JLabel.CENTER), BorderLayout.SOUTH);
 		
 		setVisible(true);
+		
+		// Permet de changer le curseur lors d'une opération avec la BDD
+		new CursorChanger(this);
 	}
 }

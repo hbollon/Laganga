@@ -71,6 +71,9 @@ public class MainWin extends JFrame {
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
+	    
+	    // Permet de changer le curseur lors d'une opération avec la BDD
+	    new CursorChanger(this);
 	}
 	
 	public void setTree() throws Exception
