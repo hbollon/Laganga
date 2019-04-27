@@ -41,9 +41,20 @@ public class Database extends Observable {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public void connect() throws ClassNotFoundException, SQLException {
-		Class.forName("org.mariadb.jdbc.Driver");
-		connection = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+DATABASE, USER, PASSWORD);
+	public void connect() throws Exception {
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+DATABASE, USER, PASSWORD);
+		}
+		catch (Exception e) {
+			setChanged();
+			notifyObservers(CONNECTION_FAILURE);
+			
+			throw e;
+		}
+		
+		setChanged();
+		notifyObservers(CONNECTION_SUCCESS);
 	}
 	
 	/**

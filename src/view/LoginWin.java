@@ -20,14 +20,13 @@ import model.LocalUser;
 public class LoginWin extends JFrame implements Observer {
 	private static final long serialVersionUID = 4411916212116263837L;
 	
-	private LocalUser localUser;
-	
 	private JLabel status = new JLabel("Bienvenue dans l'Aganga ! Merci de bien vouloir vous connecter.", JLabel.CENTER);
 	private JButton login = new JButton("Connexion");
 	
-	public LoginWin(LocalUser localUser) {
-		this.localUser = localUser;
-		localUser.addObserver(this);
+	public LoginWin() {
+		super();
+		
+		LocalUser.localUser.addObserver(this);
 		
 		setTitle("Laganga - Connexion");
 		setSize(600, 250);
@@ -60,7 +59,7 @@ public class LoginWin extends JFrame implements Observer {
 		buttonPanel.add(inscription);
 		buttonPanel.add(login);
 		
-		login.addActionListener(new LoginButtonListener(localUser, login, emailField, passwordField));
+		login.addActionListener(new LoginButtonListener(login, emailField, passwordField));
 		inscription.addActionListener(new OpenWinInsription());
 		panel.add(buttonPanel);
 		
@@ -87,19 +86,20 @@ public class LoginWin extends JFrame implements Observer {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
-			break;
+				
+				break;
 			
 			case LocalUser.ERROR_ALREADY_LOGGED_IN:
 				status.setText("Erreur : vous êtes déjà connecté (wtf ?)");
-			break;
+				break;
 			
 			case LocalUser.ERROR_NO_SUCH_USER:
 				status.setText("Erreur : cet E-mail ne correspond à aucun compte d'utilisateur !");
-			break;
+				break;
 			
 			case LocalUser.ERROR_WRONG_PASSWORD:
 				status.setText("Erreur : le mot de passe est incorrect !");
-			break;
+				break;
 		}
 	}
 }

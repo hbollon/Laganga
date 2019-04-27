@@ -28,6 +28,8 @@ public class WinCreatEvent extends JFrame implements Observer {
 	private JLabel status = new JLabel("Ajouter un événement", JLabel.CENTER);
 			
 	public WinCreatEvent() {
+		super();
+		
 		this.setTitle("Création événement");
 	    this.setSize(1000, 500);
 		this.setBackground(Color.white);

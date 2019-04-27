@@ -19,6 +19,8 @@ import controller.Inscription;
 public class WinInscription extends JFrame {
 
 	public WinInscription() {
+		super();
+		
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		this.setTitle("Insription");
 	    this.setSize(600, 250);
