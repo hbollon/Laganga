@@ -55,13 +55,14 @@ public class Group extends Entity {
 		owner = (User) User.factory.getFromResultSet(res);
 		
 		// Récupération de la liste des membres du groupe
-		refreshMembers();
+		members = refreshMembers();
 	}
 	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {
 		int i = super.bindUpdateFields(st);
 		
 		st.setString(i, name); i++;
+		st.setInt(i, owner.getID()); i++;
 		
 		return i;
 	}
@@ -82,7 +83,7 @@ public class Group extends Entity {
 	 * Récupère la liste des membres du groupe.
 	 * @throws Exception 
 	 */
-	private void refreshMembers() throws Exception {
+	private ArrayList<Entity> refreshMembers() throws Exception {
 		String usersTable = User.factory.getTable();
 		String usersPrefix = User.factory.getPrefix();
 		String usersGroupsTable = usersTable+"_"+getTable();
@@ -94,6 +95,24 @@ public class Group extends Entity {
 		Object[] values = {getID()};
 		String[] types = {"int"};
 		
-		members = User.factory.get(clauses, values, types);
+		return User.factory.get(clauses, values, types);
+	}
+	
+	private void updateMembers() throws Exception {
+		ArrayList<Entity> oldList = refreshMembers();
+		ArrayList<Entity> updatedList = getMembers();
+		
+		ArrayList<Entity> toRemoveList = toRemove(oldList, updatedList);
+		
+		/*
+		 * Requête d'ajout des nouveaux membres
+		 */
+		ArrayList<Entity> toAddList = toAdd(oldList, updatedList);
+		
+		String usersGroupsTable = User.factory.getTable()+"_"+getTable();
+		String addQuery = "INSERT INTO `"+usersGroupsTable+"` VALUES(";
+		
+		for (int i = 0; i < toAddList.size(); i++)
+			addQuery += "?, ";
 	}
 }

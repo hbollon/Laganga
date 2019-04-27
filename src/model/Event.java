@@ -9,6 +9,8 @@ public class Event extends Entity {
 	// Propriétés du type d'entité
 	public static final String TABLE = "events";
 	public static final String SINGLE = "event";
+	public static final EntityFactory[] JOINED_ENTITIES = {Location.factory};
+	public static final String[] JOINED_IDS = {"location"};
 	
 	// Objet usine
 	public static EntityFactory factory;
@@ -22,10 +24,9 @@ public class Event extends Entity {
 	private String name;
 	private String type;
 	private int priority;
-	private Date date;
-	private Time begin;
-	private Time end;
-	//private Location location;
+	private Date begin;
+	private Date end;
+	private Location location;
 	
 	// Getteurs des attributs
 	public String getName() {
@@ -37,14 +38,14 @@ public class Event extends Entity {
 	public int getPriority() {
 		return priority;
 	}
-	public Date getDate() {
-		return date;
-	}
-	public Time getBegin() {
+	public Date getBegin() {
 		return begin;
 	}
-	public Time getEnd() {
-		return end;
+	public Date getEnd() {
+		return begin;
+	}
+	public Location getLocation() {
+		return location;
 	}
 	
 	// Setteurs des attributs
@@ -57,14 +58,14 @@ public class Event extends Entity {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public void setBegin(Time begin) {
+	public void setBegin(Date begin) {
 		this.begin = begin;
 	}
-	public void setEnd(Time end) {
+	public void setEnd(Date end) {
 		this.end = end;
+	}
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 	
 	// Constructeur
@@ -78,9 +79,9 @@ public class Event extends Entity {
 		name = res.getString(getPrefix()+"name");
 		type = res.getString(getPrefix()+"type");
 		priority = res.getInt(getPrefix()+"priority");
-		date = res.getDate(getPrefix()+"date");
-		begin = res.getTime(getPrefix()+"begin");
-		end = res.getTime(getPrefix()+"end");
+		begin = res.getDate(getPrefix()+"begin");
+		end = res.getDate(getPrefix()+"end");
+		location = (Location) Location.factory.getFromResultSet(res);
 	}
 	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {
@@ -89,9 +90,9 @@ public class Event extends Entity {
 		st.setString(i, name); i++;
 		st.setString(i, type); i++;
 		st.setInt(i, priority); i++;
-		st.setDate(i, date); i++;
-		st.setTime(i, begin); i++;
-		st.setTime(i, end); i++;
+		st.setDate(i, begin); i++;
+		st.setDate(i, end); i++;
+		st.setInt(i, location.getID()); i++;
 		
 		return i;
 	}
@@ -105,9 +106,9 @@ public class Event extends Entity {
 		fields += "`"+getPrefix()+"name` = ?, ";
 		fields += "`"+getPrefix()+"type` = ?, ";
 		fields += "`"+getPrefix()+"priority` = ?, ";
-		fields += "`"+getPrefix()+"date` = ?, ";
 		fields += "`"+getPrefix()+"begin` = ?, ";
-		fields += "`"+getPrefix()+"end` = ?";
+		fields += "`"+getPrefix()+"end` = ?, ";
+		fields += "`"+getPrefix()+"location` = ?";
 		
 		return fields;
 	}
@@ -120,9 +121,9 @@ public class Event extends Entity {
 		str += "\t- name: "+getName()+"\n";
 		str += "\t- type: "+getType()+"\n";
 		str += "\t- priority: "+getPriority()+"\n";
-		str += "\t- date: "+getDate()+"\n";
 		str += "\t- begin: "+getBegin()+"\n";
 		str += "\t- end: "+getEnd()+"\n";
+		str += "\t- location: "+getLocation()+"\n";
 		
 		return str;
 	}

@@ -2,6 +2,7 @@ package model;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public abstract class Entity {
 	// Objet usine
@@ -87,5 +88,36 @@ public abstract class Entity {
 	 * Supprime l'entrée de la base de données.
 	 */
 	public void delete() {
+	}
+	
+	
+	/*
+	 * Listes jointes
+	 */
+	
+	static protected ArrayList<Entity> toAdd(ArrayList<Entity> oldList, ArrayList<Entity> updatedList) {
+		ArrayList<Entity> toAddList = new ArrayList<Entity>();
+		
+		for (int i = 0; i < updatedList.size(); i++) {
+				Entity ent = updatedList.get(i);
+				
+				if (!oldList.contains(ent))
+					toAddList.add(ent);
+		}
+		
+		return toAddList;
+	}
+	
+	static protected ArrayList<Entity> toRemove(ArrayList<Entity> oldList, ArrayList<Entity> updatedList) {
+		ArrayList<Entity> toRemoveList = new ArrayList<Entity>();
+		
+		for (int i = 0; i < oldList.size(); i++) {
+				Entity ent = oldList.get(i);
+				
+				if (!updatedList.contains(ent))
+					toRemoveList.add(ent);
+		}
+		
+		return toRemoveList;
 	}
 }
