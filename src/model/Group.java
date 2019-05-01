@@ -5,17 +5,31 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Group extends Entity {
-	// Propriétés du type d'entité
-	public static final String TABLE = "groups";
-	public static final String SINGLE = "group";
-	public static final EntityFactory[] JOINED_ENTITIES = {User.factory};
-	public static final String[] JOINED_IDS = {"owner"};
-	
 	// Objet usine
 	public static EntityFactory factory;
 	static {
 		try {
-			factory = new EntityFactory("model.Group");
+			// Champs
+			ArrayList<String> fields = new ArrayList<String>();
+			
+			fields.add("name");
+			fields.add("owner");
+			
+			// Entités jointes
+			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
+			ArrayList<String> joinedFields = new ArrayList<String>();
+			
+			joinedEntities.add(User.factory); joinedFields.add("owner");
+			
+			// Création de l'objet
+			factory = new EntityFactory(
+					"model.Group",
+					"groups",
+					"group",
+					Entity.factory,
+					fields,
+					joinedEntities,
+					joinedFields);
 		} catch (Exception e) {}
 	}
 	
@@ -70,6 +84,7 @@ public class Group extends Entity {
 	/**
 	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
 	 */
+	/*
 	public String getUpdateFields() {
 		String fields = super.getUpdateFields();
 		
@@ -78,6 +93,7 @@ public class Group extends Entity {
 		
 		return fields;
 	}
+	*/
 	
 	/**
 	 * Récupère la liste des membres du groupe.

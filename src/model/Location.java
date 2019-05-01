@@ -2,6 +2,7 @@ package model;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  * Un Location représente un lieu dans lequel un évènement peut avoir lieu.
@@ -9,15 +10,23 @@ import java.sql.ResultSet;
  * @author Julien Valverdé
  */
 public class Location extends Entity {
-	// Propriétés du type d'entité
-	public static final String TABLE = "locations";
-	public static final String SINGLE = "location";
-	
 	// Objet usine
 	public static EntityFactory factory;
 	static {
 		try {
-			factory = new EntityFactory("model.Location");
+			// Champs
+			ArrayList<String> fields = new ArrayList<String>();
+			
+			fields.add("name");
+			fields.add("description");
+			
+			// Création de l'objet
+			factory = new EntityFactory(
+					"model.Location",
+					"locations",
+					"location",
+					Entity.factory,
+					fields);
 		} catch (Exception e) {}
 	}
 	
@@ -65,6 +74,7 @@ public class Location extends Entity {
 	/**
 	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
 	 */
+	/*
 	public String getUpdateFields() {
 		String fields = super.getUpdateFields();
 		
@@ -73,6 +83,7 @@ public class Location extends Entity {
 		
 		return fields;
 	}
+	*/
 	
 	/**
 	 * Retourne une représentation textuelle de l'évènement.

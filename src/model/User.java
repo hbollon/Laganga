@@ -17,13 +17,19 @@ public class User extends Entity {
 		try {
 			// Champs
 			ArrayList<String> fields = new ArrayList<String>();
-			fields.add("id");
+			
+			fields.add("firstName");
+			fields.add("lastName");
+			fields.add("email");
+			fields.add("password");
+			fields.add("birth");
 			
 			// Création de l'objet
 			factory = new EntityFactory(
 					"model.User",
 					"users",
 					"user",
+					Entity.factory,
 					fields);
 		} catch (Exception e) {}
 	}
@@ -96,6 +102,7 @@ public class User extends Entity {
 	/**
 	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
 	 */
+	/*
 	public ArrayList<String> getFields() {
 		ArrayList<String> fields = super.getUpdateFields();
 		fields.add("firstName");
@@ -106,6 +113,7 @@ public class User extends Entity {
 		
 		return fields;
 	}
+	*/
 	
 	/*
 	 * toString

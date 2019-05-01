@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public abstract class Entity {
+	
+	
 	// Objet usine
 	public static EntityFactory factory;
 	static {
@@ -30,6 +32,9 @@ public abstract class Entity {
 	private String single;
 	private String prefix;
 	
+	public EntityFactory getFactoryObject() {
+		return factoryObject;
+	}
 	public String getTable() {
 		return table;
 	}
@@ -51,13 +56,13 @@ public abstract class Entity {
 	 * Constructeur
 	 * Sauvegarde les propriétés du modèle à partir de l'usine
 	 */
-	public Entity(EntityFactory factory) throws Exception {
-		this.factory = factory;
+	public Entity(EntityFactory factoryObject) throws Exception {
+		this.factoryObject = factoryObject;
 		
 		// Stockage des propriétés de l'entité
-		table = factory.getTable();
-		single = factory.getSingle();
-		prefix = factory.getPrefix();
+		table = factoryObject.getTable();
+		single = factoryObject.getSingle();
+		prefix = factoryObject.getPrefix();
 	}
 	
 	public void save(ResultSet res) throws Exception {

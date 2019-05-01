@@ -23,6 +23,7 @@ public class EntityFactory {
 	
 	private String table; // Nom de la table associée à l'entité
 	private String single; // Appellation d'une entité seule
+	private String prefix; // Préfixe des champs
 	private EntityFactory parent; // Entité parente
 	private ArrayList<String> fields; // Champs
 	
@@ -42,7 +43,7 @@ public class EntityFactory {
 		return single;
 	}
 	public String getPrefix() {
-		return single+"_";
+		return prefix;
 	}
 	public EntityFactory getParent() {
 		return parent;
@@ -65,6 +66,7 @@ public class EntityFactory {
 		
 		this.table = table;
 		this.single = single;
+		this.prefix = single+"_";
 		this.parent = parent;
 		this.fields = getFieldsList(fields);
 		
@@ -89,8 +91,8 @@ public class EntityFactory {
 		ArrayList<String> list = new ArrayList<String>();
 		
 		// L'entité a un parent
-		if (getParent() != null)
-			list.addAll(getParent().getFields());
+		if (parent != null)
+			list.addAll(parent.getFields());
 		
 		list.addAll(fields);
 		return list;
@@ -98,7 +100,6 @@ public class EntityFactory {
 	
 	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws Exception {
-		System.out.println("Nouvelle entité : "+res.getInt(getPrefix()+"id"));
 		Entity entity = (Entity) classObject.getConstructor(EntityFactory.class).newInstance(this);
 		entity.save(res);
 		
