@@ -4,19 +4,38 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
+import java.util.ArrayList;
 
 public class Event extends Entity {
-	// Propriétés du type d'entité
-	public static final String TABLE = "events";
-	public static final String SINGLE = "event";
-	public static final EntityFactory[] JOINED_ENTITIES = {Location.factory};
-	public static final String[] JOINED_IDS = {"location"};
-	
 	// Objet usine
 	public static EntityFactory factory;
 	static {
 		try {
-			factory = new EntityFactory("model.Event");
+			// Champs
+			ArrayList<String> fields = new ArrayList<String>();
+			
+			fields.add("name");
+			fields.add("type");
+			fields.add("priority");
+			fields.add("begin");
+			fields.add("end");
+			fields.add("location");
+			
+			// Entités jointes
+			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
+			ArrayList<String> joinedFields = new ArrayList<String>();
+			
+			joinedEntities.add(Location.factory); joinedFields.add("location");
+			
+			// Création de l'objet
+			factory = new EntityFactory(
+					"model.Event",
+					"events",
+					"event",
+					Entity.factory,
+					fields,
+					joinedEntities,
+					joinedFields);
 		} catch (Exception e) {}
 	}
 	
@@ -98,17 +117,16 @@ public class Event extends Entity {
 	}
 	
 	/**
-	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
+	 * Renvoie la liste des champs.
 	 */
-	public String getUpdateFields() {
-		String fields = super.getUpdateFields();
-		
-		fields += "`"+getPrefix()+"name` = ?, ";
-		fields += "`"+getPrefix()+"type` = ?, ";
-		fields += "`"+getPrefix()+"priority` = ?, ";
-		fields += "`"+getPrefix()+"begin` = ?, ";
-		fields += "`"+getPrefix()+"end` = ?, ";
-		fields += "`"+getPrefix()+"location` = ?";
+	public ArrayList<String> getFields() {
+		ArrayList<String> fields = super.getFields();
+		fields.add("name");
+		fields.add("type");
+		fields.add("priority");
+		fields.add("begin");
+		fields.add("end");
+		fields.add("location");
 		
 		return fields;
 	}

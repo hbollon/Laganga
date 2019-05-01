@@ -6,7 +6,24 @@ import java.util.ArrayList;
 
 public abstract class Entity {
 	// Objet usine
-	private EntityFactory factory;
+	public static EntityFactory factory;
+	static {
+		try {
+			// Champs
+			ArrayList<String> fields = new ArrayList<String>();
+			fields.add("id");
+			
+			// Création de l'objet
+			factory = new EntityFactory(
+					"model.Entity",
+					"entities",
+					"entity",
+					fields);
+		} catch (Exception e) {}
+	}
+	
+	// Objet usine
+	private EntityFactory factoryObject;
 	
 	// Propriétés du type d'entité
 	private String table;
@@ -69,6 +86,7 @@ public abstract class Entity {
 	/**
 	 * Met à jour la base de données depuis les attributs de l'objet.
 	 */
+	/*
 	public void update() throws Exception {
 		PreparedStatement st = Database.database.getPreparedQuery(factory.getUpdateQuery(this));
 		
@@ -76,12 +94,13 @@ public abstract class Entity {
 		
 		Database.database.executePreparedQuery(st);
 	}
+	*/
 	
 	/**
 	 * Récupère la liste des champs à mettre à jour lors d'une opération update.
 	 */
-	public String getUpdateFields() {
-		return "";
+	public ArrayList<String> getFields() {
+		return new ArrayList<String>();
 	}
 	
 	/**

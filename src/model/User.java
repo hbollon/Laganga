@@ -3,6 +3,7 @@ package model;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  * Une Entity est une entrée de table.
@@ -10,15 +11,20 @@ import java.sql.ResultSet;
  * @author Julien Valverdé
  */
 public class User extends Entity {
-	// Propriétés du type d'entité
-	public static final String TABLE = "users";
-	public static final String SINGLE = "user";
-	
 	// Objet usine
 	public static EntityFactory factory;
 	static {
 		try {
-			factory = new EntityFactory("model.User");
+			// Champs
+			ArrayList<String> fields = new ArrayList<String>();
+			fields.add("id");
+			
+			// Création de l'objet
+			factory = new EntityFactory(
+					"model.User",
+					"users",
+					"user",
+					fields);
 		} catch (Exception e) {}
 	}
 	
@@ -90,14 +96,13 @@ public class User extends Entity {
 	/**
 	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
 	 */
-	public String getUpdateFields() {
-		String fields = super.getUpdateFields();
-		
-		fields += "`"+getPrefix()+"firstName` = ?, ";
-		fields += "`"+getPrefix()+"lastName` = ?, ";
-		fields += "`"+getPrefix()+"email` = ?, ";
-		fields += "`"+getPrefix()+"password` = ?, ";
-		fields += "`"+getPrefix()+"birth` = ?";
+	public ArrayList<String> getFields() {
+		ArrayList<String> fields = super.getUpdateFields();
+		fields.add("firstName");
+		fields.add("lastName");
+		fields.add("email");
+		fields.add("password");
+		fields.add("birth");
 		
 		return fields;
 	}

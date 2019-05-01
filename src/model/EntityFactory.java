@@ -14,18 +14,26 @@ import java.util.Map;
  * @author Julien Valverdé
  */
 public class EntityFactory {
-	private Class<?> entityClass; // Classe de l'entité
 	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
 	
-	private String table; // Table associée à l'entitée
-	private String single; // Appellation d'une entité seule
-	private EntityFactory[] joinedEntities; // Entités jointes
-	private String[] joinedIDs; // Entités jointes
-	private EntityFields fields; // Champs
+	/*
+	 * Attributs
+	 */
+	private Class<?> classObject; // Classe de l'entité
 	
-	// Getteurs
-	public Class<?> getModelClass() {
-		return entityClass;
+	private String table; // Nom de la table associée à l'entité
+	private String single; // Appellation d'une entité seule
+	private EntityFactory parent; // Entité parente
+	private ArrayList<String> fields; // Champs
+	
+	private ArrayList<EntityFactory> joinedEntities; // Entités jointes
+	private ArrayList<String> joinedFields;
+	
+	/*
+	 * Getteurs
+	 */
+	public Class<?> getClassObject() {
+		return classObject;
 	}
 	public String getTable() {
 		return table;
@@ -36,34 +44,62 @@ public class EntityFactory {
 	public String getPrefix() {
 		return single+"_";
 	}
-	public EntityFactory[] getJoinedEntities() {
-		return joinedEntities;
+	public EntityFactory getParent() {
+		return parent;
 	}
-	public String[] getJoinedIDs() {
-		return joinedIDs;
-	}
-	public EntityFields getFields() {
+	public ArrayList<String> getFields() {
 		return fields;
 	}
+	public ArrayList<EntityFactory> getJoinedEntities() {
+		return joinedEntities;
+	}
+	public ArrayList<String> getJoinedFields() {
+		return joinedFields;
+	}
 	
-	// Constructeur
-	public EntityFactory(String className) throws Exception {
-		entityClass = Class.forName(className); // Classe de l'entité
+	/*
+	 * Constructeurs
+	 */
+	public EntityFactory(String className, String table, String single, EntityFactory parent, ArrayList<String> fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
+		this.classObject = Class.forName(className);
 		
-		table = (String) entityClass.getDeclaredField("TABLE").get(null);
-		single = (String) entityClass.getDeclaredField("SINGLE").get(null);
+		this.table = table;
+		this.single = single;
+		this.parent = parent;
+		this.fields = getFieldsList(fields);
 		
-		try {
-			joinedEntities = (EntityFactory[]) entityClass.getDeclaredField("JOINED_ENTITIES").get(null);
-			joinedIDs = (String[]) entityClass.getDeclaredField("JOINED_IDS").get(null);
-		}
-		catch (Exception e) {}
+		this.joinedEntities = joinedEntities;
+		this.joinedFields = joinedFields;
+	}
+	public EntityFactory(String className, String table, String single, ArrayList<String> fields) throws ClassNotFoundException {
+		this(className, table, single, null, fields, null, null);
+	}
+	public EntityFactory(String className, String table, String single, EntityFactory parent, ArrayList<String> fields) throws ClassNotFoundException {
+		this(className, table, single, parent, fields, null, null);
+	}
+	public EntityFactory(String className, String table, String single, ArrayList<String> fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
+		this(className, table, single, null, fields, joinedEntities, joinedFields);
+	}
+	
+	/*
+	 * getFieldsList
+	 * Construit la liste des champs
+	 */
+	public ArrayList<String> getFieldsList(ArrayList<String> fields) {
+		ArrayList<String> list = new ArrayList<String>();
+		
+		// L'entité a un parent
+		if (getParent() != null)
+			list.addAll(getParent().getFields());
+		
+		list.addAll(fields);
+		return list;
 	}
 	
 	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws Exception {
 		System.out.println("Nouvelle entité : "+res.getInt(getPrefix()+"id"));
-		Entity entity = (Entity) entityClass.getConstructor(EntityFactory.class).newInstance(this);
+		Entity entity = (Entity) classObject.getConstructor(EntityFactory.class).newInstance(this);
 		entity.save(res);
 		
 		entities.put((int) entity.getID(), entity);
@@ -89,10 +125,10 @@ public class EntityFactory {
 	private String getSelectQuery(String clauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
 		
-		if (joinedEntities != null && joinedEntities.length > 0) {
-			for (int i = 0; i < joinedEntities.length; i++) {
-				EntityFactory joinedEnt = joinedEntities[i];				
-				query += "\nJOIN `"+joinedEnt.getTable()+"` ON `"+joinedEnt.getTable()+"`.`"+joinedEnt.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+joinedIDs[i]+"`";
+		if (joinedEntities != null && joinedEntities.size() > 0) {
+			for (int i = 0; i < joinedEntities.size(); i++) {
+				EntityFactory joinedEnt = joinedEntities.get(i);				
+				query += "\nJOIN `"+joinedEnt.getTable()+"` ON `"+joinedEnt.getTable()+"`.`"+joinedEnt.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+joinedFields.get(i)+"`";
 			}
 		}
 		
@@ -199,6 +235,7 @@ public class EntityFactory {
 	 * Construction des requêtes SQL
 	 */
 	
+	/*
 	public String getUpdateQuery(Entity ent) {
 		String query = "";
 		
@@ -208,4 +245,5 @@ public class EntityFactory {
 		
 		return query;
 	}
+	*/
 }
