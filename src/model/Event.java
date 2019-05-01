@@ -103,8 +103,8 @@ public class Event extends Entity {
 		location = (Location) Location.factory.getFromResultSet(res);
 	}
 	
-	protected int bindUpdateFields(PreparedStatement st) throws Exception {
-		int i = super.bindUpdateFields(st);
+	public static int bind(PreparedStatement st) throws Exception {
+		//int i = super.bindUpdateFields(st);
 		
 		st.setString(i, name); i++;
 		st.setString(i, type); i++;
@@ -114,21 +114,6 @@ public class Event extends Entity {
 		st.setInt(i, location.getID()); i++;
 		
 		return i;
-	}
-	
-	/**
-	 * Renvoie la liste des champs.
-	 */
-	public ArrayList<String> getFields() {
-		ArrayList<String> fields = super.getFields();
-		fields.add("name");
-		fields.add("type");
-		fields.add("priority");
-		fields.add("begin");
-		fields.add("end");
-		fields.add("location");
-		
-		return fields;
 	}
 	
 	/**
