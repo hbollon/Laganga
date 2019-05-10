@@ -9,6 +9,8 @@ import model.Entity;
 import model.Group;
 import model.User;
 
+import controller.OpenWinCreatEvent;
+
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
 	
@@ -59,7 +61,6 @@ public class MainWin extends JFrame {
 	 
 	public void initialize()
 	{
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());
@@ -70,6 +71,9 @@ public class MainWin extends JFrame {
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
+	    
+	    // Permet de changer le curseur lors d'une opération avec la BDD
+	    new CursorChanger(this);
 	}
 	
 	public void setTree() throws Exception
@@ -82,7 +86,7 @@ public class MainWin extends JFrame {
 		  jScrollTree.setViewportView(jTree);
 		  
 		for (int i = 0; i < usersList.size(); i++) {
-			usersNames.add(((String) usersList.get(i).get("firstName")) + " " + ((String) usersList.get(i).get("lastName")));
+			usersNames.add(((String) ((User) usersList.get(i)).getFirstName()) + " " + ((String) ((User) usersList.get(i)).getLastName()));
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
@@ -98,7 +102,7 @@ public class MainWin extends JFrame {
 		  jScrollTreeGroup.setViewportView(jTreeGroupe);
 		  
 		for (int i = 0; i < groupeList.size(); i++) {
-			groupeNames.add((String) groupeList.get(i).get("name"));
+			groupeNames.add(((Group) groupeList.get(i)).getName());
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
@@ -201,6 +205,8 @@ public class MainWin extends JFrame {
 		barMenu.add(edition);
 		barMenu.add(option);
 		barMenu.add(help);
+		
+		createEvent.addActionListener(new OpenWinCreatEvent());
 		
 		return barMenu;
 	}

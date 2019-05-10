@@ -1,6 +1,13 @@
 package model;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Observable;
 
 /**
  * Un objet Database permet d'initier une connexion vers une base de données MySQL à l'aide de la bibliothèque JDBC
@@ -9,27 +16,83 @@ import java.sql.*;
  * @author Julien Valverdé
  * @version 1.0
  */
-public class Database {
+@SuppressWarnings("deprecation")
+public class Database extends Observable {
 	// Instance principale de Database
-	public static Database database;
+	public static Database database = new Database();
+	
+	// Coordonnées de la base de données
+	private static final String HOST = "localhost";
+	private static final String DATABASE = "l2_gr2";
+	private static final String USER = "l2_gr2";
+	private static final String PASSWORD = "5KUavzaM";
+	
+	// États (pour les objets observeurs)
+	public static final int CONNECTION_SUCCESS = 1;
+	public static final int CONNECTION_FAILURE = 2;
+	public static final int QUERY_STARTED = 3;
+	public static final int QUERY_FINISHED = 4;
 	
 	// Objet de connexion
 	private Connection connection;
 	
 	/**
-	 * Constructeur de Database. Initie la connexion avec la base de données MySQL.
-	 * 
-	 * @param host Adresse du serveur MySQL.
-	 * @param database Nom de la base de données.
-	 * @param user Nom d'utilisateur.
-	 * @param password Mot de passe.
-	 * 
-	 * @throws ClassNotFoundException Le driver JDBC n'a pas pu être chargé.
-	 * @throws SQLException	 La connexion avec la base de données n'a pas pu être initiée.
+	 * Initialise la connexion à la base de données.
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
 	 */
-	public Database(String host, String database, String user, String password) throws ClassNotFoundException, SQLException {
-		Class.forName("org.mariadb.jdbc.Driver");		
-		connection = DriverManager.getConnection("jdbc:mysql://"+host+"/"+database, user, password);
+	public void connect() throws Exception {
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://"+HOST+"/"+DATABASE, USER, PASSWORD);
+		}
+		catch (Exception e) {
+			setChanged();
+			notifyObservers(CONNECTION_FAILURE);
+			
+			throw e;
+		}
+		
+		setChanged();
+		notifyObservers(CONNECTION_SUCCESS);
+	}
+	
+	/**
+	 * Retourne un objet de requête préparée (mais pas exécutée).
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public PreparedStatement getPreparedQuery(String query) throws SQLException {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		return st;
+	}
+	
+	/**
+	 * Exécute une requête préparée et retourne le résultat.
+	 * @param st
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet executePreparedQuery(PreparedStatement st) throws SQLException {
+		// Prévenir les observeurs qu'une requête a débuté
+		setChanged();
+		notifyObservers(QUERY_STARTED);
+		
+		// Exécution
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		// Prévenir les observeurs que la requête est finie
+		setChanged();
+		notifyObservers(QUERY_FINISHED);
+		
+		return res;
 	}
 	
 	/**
@@ -42,6 +105,10 @@ public class Database {
 	 * @throws SQLException
 	 */
 	public ResultSet execute(String query) throws SQLException {
+		// Prévenir les observeurs qu'une requête a débuté
+		setChanged();
+		notifyObservers(QUERY_STARTED);
+		
 		Statement st = connection.createStatement(
 				ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_UPDATABLE);
@@ -49,6 +116,10 @@ public class Database {
 		
 		ResultSet res = st.executeQuery(query);
 		res.beforeFirst();
+		
+		// Prévenir les observeurs que la requête est finie
+		setChanged();
+		notifyObservers(QUERY_FINISHED);
 		
 		return res;
 	}
@@ -81,6 +152,37 @@ public class Database {
 				}
 			}
 		}
+		
+		// Prévenir les observeurs qu'une requête a débuté
+		setChanged();
+		notifyObservers(QUERY_STARTED);
+		
+		// Exécution
+		ResultSet res = st.executeQuery();
+		res.beforeFirst();
+		
+		// Prévenir les observeurs que la requête est finie
+		setChanged();
+		notifyObservers(QUERY_FINISHED);
+		
+		return res;
+	}
+	
+	/**
+	 * 
+	 * @param query
+	 * @param ent
+	 * @return
+	 * @throws Exception
+	 */
+	public ResultSet prepareWithEntityAttributes(String query, Entity ent) throws Exception {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+		st.closeOnCompletion();
+		
+		ent.bindUpdateFields(st);
 		
 		ResultSet res = st.executeQuery();
 		res.beforeFirst();

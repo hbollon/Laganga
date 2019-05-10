@@ -1,26 +1,29 @@
 package controller;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
+
 import model.*;
 import view.*;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
-		// Connexion à la base de données
-		try {
-			System.out.println("Connexion en cours...");
-			Database.database = new Database("localhost", "l2_gr2", "l2_gr2", "5KUavzaM");
-			System.out.println("Connexion réussie !");
-		}
-		catch (Exception e) {
-			// Actions à effectuer si la connexion a échoué
-			System.out.println("Connexion à MySQL impossible !");
-			throw e;
-		}
+		// Désactivation de la décoration des fenêtres par Swing
+		JFrame.setDefaultLookAndFeelDecorated(false);
 		
-		// Initialisation de l'utilisateur local
-		LocalUser localUser = new LocalUser();
+		// Affichage du splash screen
+		new SplashWin();
 		
-		// Affichage de la fenêtre de connexion
-		LoginWin loginWindow = new LoginWin(localUser);
+		// Initialisation de la connexion à la base de données
+		TimeUnit.SECONDS.sleep(1);
+		Database.database.connect();
+		
+		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
+		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
+		
+		//System.out.println(User.factory.getByID(1));
+		Group group1 = (Group) Group.factory.getByID(1);
+		System.out.println(group1.getOwner());
 	}
 }

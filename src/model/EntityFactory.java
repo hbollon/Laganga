@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,8 @@ public class EntityFactory {
 	
 	private String table; // Table associée à l'entitée
 	private String single; // Appellation d'une entité seule
-	private EntityFactory[] joins; // Entités jointes
+	private EntityFactory[] joinedEntities; // Entités jointes
+	private String[] joinedIDs; // Entités jointes
 	private EntityFields fields; // Champs
 	
 	// Getteurs
@@ -34,8 +36,11 @@ public class EntityFactory {
 	public String getPrefix() {
 		return single+"_";
 	}
-	public EntityFactory[] getJoins() {
-		return joins;
+	public EntityFactory[] getJoinedEntities() {
+		return joinedEntities;
+	}
+	public String[] getJoinedIDs() {
+		return joinedIDs;
 	}
 	public EntityFields getFields() {
 		return fields;
@@ -43,25 +48,35 @@ public class EntityFactory {
 	
 	// Constructeur
 	public EntityFactory(String className) throws Exception {
-		entityClass = Class.forName(className); // Objet de la classe de l'entité
+		entityClass = Class.forName(className); // Classe de l'entité
 		
 		table = (String) entityClass.getDeclaredField("TABLE").get(null);
 		single = (String) entityClass.getDeclaredField("SINGLE").get(null);
-		fields = (EntityFields) entityClass.getDeclaredField("fields").get(null);
 		
 		try {
-			joins = (EntityFactory[]) entityClass.getDeclaredField("JOINS").get(null);
+			joinedEntities = (EntityFactory[]) entityClass.getDeclaredField("JOINED_ENTITIES").get(null);
+			joinedIDs = (String[]) entityClass.getDeclaredField("JOINED_IDS").get(null);
 		}
 		catch (Exception e) {}
 	}
 	
 	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws Exception {
-		Entity entity = (Entity) entityClass.getConstructor(ResultSet.class).newInstance(res);
+		System.out.println("Nouvelle entité : "+res.getInt(getPrefix()+"id"));
+		Entity entity = (Entity) entityClass.getConstructor(EntityFactory.class).newInstance(this);
+		entity.save(res);
 		
-		entities.put((int) entity.get("id"), entity);
+		entities.put((int) entity.getID(), entity);
 		
 		return entity;
+	}
+	
+	public void save(Entity ent, ResultSet res) throws Exception {
+		ent.save(res);
+	}
+	
+	public int bindUpdateFields(Entity ent, PreparedStatement st) throws Exception {
+		return ent.bindUpdateFields(st);
 	}
 	
 	/**
@@ -74,18 +89,17 @@ public class EntityFactory {
 	private String getSelectQuery(String clauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
 		
-		if (joins != null && joins.length > 0) {
-			for (int i = 0; i < joins.length; i++) {
-				String table = joins[i].getTable();
-				String row = joins[i].getPrefix()+"id";
-				
-				query += "\nJOIN `"+table+"` ON `"+table+"`.`"+row+"` = `"+getTable()+"`.`"+row+"`";
+		if (joinedEntities != null && joinedEntities.length > 0) {
+			for (int i = 0; i < joinedEntities.length; i++) {
+				EntityFactory joinedEnt = joinedEntities[i];				
+				query += "\nJOIN `"+joinedEnt.getTable()+"` ON `"+joinedEnt.getTable()+"`.`"+joinedEnt.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+joinedIDs[i]+"`";
 			}
 		}
 		
 		if (clauses == null)
 			clauses = "ORDER BY `"+getPrefix()+"id` DESC";
 		
+		System.out.println(query+"\n"+clauses);
 		return query+"\n"+clauses;
 	}
 	
@@ -93,8 +107,8 @@ public class EntityFactory {
 	 * getInstanceFromID
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
-	public Entity getEntityFromResultSet(ResultSet res) throws Exception {
-		Entity entity = entities.get(res.getInt(getPrefix()+"id"));
+	public Entity getFromResultSet(ResultSet res) throws Exception {
+		Entity entity = entities.get(res.getInt(getTable()+"."+getPrefix()+"id"));
 		if (entity == null)
 			entity = newEntity(res);
 		
@@ -111,8 +125,21 @@ public class EntityFactory {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		ResultSet res = Database.database.prepareAndExecute(getSelectQuery(clauses), values, types);
 		
-		while (res.next())
-			list.add(getEntityFromResultSet(res));
+		// ID de la dernière ligne traitée
+		int previousId = -1;
+		
+		// Parcours des lignes récupérées
+		while (res.next()) {
+			Entity ent = getFromResultSet(res); // Récupération/création de l'entité
+			
+			// On traite une nouvelle entité, l'enregistrer dans la liste
+			if (ent.getID() != previousId) {
+				list.add(ent);
+				previousId = ent.getID();
+			}
+			
+			ent.saveJoined(res); // Sauvegarde des champs joins
+		}
 		
 		return list;
 	}
@@ -146,10 +173,39 @@ public class EntityFactory {
 	 * 
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
-	public Entity getSingleByID(int id) throws Exception {
+	public Entity getByID(int id) throws Exception {
 		Object[] values = {id};
 		String[] types = {"int"};
 		
 		return getSingle("WHERE `"+getPrefix()+"id` = ?", values, types);
+	}
+	
+	
+	/*
+	 * Insertion
+	 */
+	
+	private String getInsertQuery() {
+		String query = "INSERT INTO `"+table+"`(";
+		
+		// Récupération des noms des champs
+		for (int i = 0; i < fields.size(); i++)
+			query += "`"+getPrefix()+fields.get(i)+"`, ";
+		
+		return query;
+	}
+	
+	/*
+	 * Construction des requêtes SQL
+	 */
+	
+	public String getUpdateQuery(Entity ent) {
+		String query = "";
+		
+		query += "UPDATE `"+getTable()+"`\n";
+		query += "SET "+ent.getUpdateFields()+"\n";
+		query += "WHERE `"+getPrefix()+"id` = ?";
+		
+		return query;
 	}
 }
