@@ -2,6 +2,7 @@ package model.entities;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -138,7 +139,6 @@ public class EntityFactory {
 		if (clauses == null)
 			clauses = "ORDER BY `"+getPrefix()+"id` DESC";
 		
-		System.out.println(query+"\n"+clauses);
 		return query+"\n"+clauses;
 	}
 	
@@ -160,9 +160,8 @@ public class EntityFactory {
 	 * 
 	 * Retourne les instances du modèle vérifiant la requête passée.
 	 */
-	public ArrayList<Entity> get(String clauses, Object[] values, String[] types) throws Exception {
+	private ArrayList<Entity> get(ResultSet res) throws SQLException, Exception {
 		ArrayList<Entity> list = new ArrayList<Entity>();
-		ResultSet res = Database.database.prepareAndExecute(getSelectQuery(clauses), values, types);
 		
 		// ID de la dernière ligne traitée
 		int previousId = -1;
@@ -182,27 +181,40 @@ public class EntityFactory {
 		
 		return list;
 	}
+	public ArrayList<Entity> get(String clauses) throws SQLException, Exception {
+		return get(Database.database.prepareAndExecute(getSelectQuery(clauses)));
+	}
+	public ArrayList<Entity> get(String clauses, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+		return get(Database.database.prepareAndExecute(getSelectQuery(clauses), fields, values));
+	}
 	
 	/*
 	 * getAll
 	 * Retourne une liste de tous les objets du modèle.
 	 */
 	public ArrayList<Entity> getAll() throws Exception {
-		return get(null, null, null);
+		return get((String) null);
 	}
 	
 	/**
 	 * 
 	 * @param id
 	 * @return
+	 * @throws SQLException 
 	 * @throws Exception
 	 */
-	public Entity getSingle(String clauses, Object[] values, String[] types) throws Exception {
-		ArrayList<Entity> list = get(clauses, values, types);
+	public Entity getSingle(String clauses, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+		ArrayList<Entity> list = get(clauses, fields, values);
 		
 		if (list.size() == 0)
 			return null;
+		return list.get(0);
+	}
+	public Entity getSingle(String clauses) throws SQLException, Exception {
+		ArrayList<Entity> list = get(clauses);
 		
+		if (list.size() == 0)
+			return null;
 		return list.get(0);
 	}
 	
@@ -213,10 +225,15 @@ public class EntityFactory {
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
 	public Entity getByID(int id) throws Exception {
-		Object[] values = {id};
-		String[] types = {"int"};
+		// Champs
+		FieldsList fields = new FieldsList();
+		fields.add("id", "int");
 		
-		return getSingle("WHERE `"+getPrefix()+"id` = ?", values, types);
+		// Valeurs
+		ArrayList<Object> values = new ArrayList<Object>();
+		values.add(id);
+		
+		return getSingle("WHERE `"+getPrefix()+"id` = ?", fields, values);
 	}
 	
 	
@@ -224,19 +241,22 @@ public class EntityFactory {
 	 * Insertion
 	 */
 	
-	private String getInsertQuery() {
-		String query = "INSERT INTO `"+table+"`(";
+	public String getInsertQuery() {
+		String query = "INSERT INTO `"+table+"`("+fields.toQueryString(prefix)+") VALUES(";
 		
-		// Nom des champs
+		// Liste des valeurs à binder
 		for (int i = 0; i < fields.size(); i++)
-			query += "`"+prefix+fields.get(i)+"`, ";
+			query += "?, ";
 		
-		// Suppression du ", " final
-		query = query.substring(query.length() - 2, query.length());
+		return query.substring(0, query.length() - 2)+")";
+	}
+	
+	// Insertion d'une nouvelle entité
+	public Entity insert(ArrayList<Object> values) throws SQLException, Exception {
+		ResultSet res = Database.database.prepareUpdateAndExecute(getInsertQuery(), fields, values);
 		
-		query += ") VALUES(";
-		
-		return query;
+		res.next();
+		return getByID(res.getInt(1));
 	}
 	
 	/*

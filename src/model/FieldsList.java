@@ -1,9 +1,10 @@
 package model;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import model.entities.Entity;
 
 public class FieldsList {
 	// Noms et types
@@ -11,7 +12,7 @@ public class FieldsList {
 	private HashMap<String, String> types = new HashMap<String, String>();
 	
 	// Récupération d'un champ
-	public String get(int index) {
+	public String getName(int index) {
 		return names.get(index);
 	}
 	
@@ -20,7 +21,7 @@ public class FieldsList {
 		return types.get(name);
 	}
 	public String getType(int index) {
-		return getType(get(index));
+		return getType(getName(index));
 	}
 	
 	// Ajout d'un champ
@@ -32,7 +33,7 @@ public class FieldsList {
 	// Ajout de multiple champs
 	public void addAll(FieldsList list) {
 		for (int i = 0; i < list.size(); i++)
-			add(list.get(i), list.getType(i));
+			add(list.getName(i), list.getType(i));
 	}
 	
 	// Suppression d'un champ
@@ -41,7 +42,7 @@ public class FieldsList {
 		types.remove(name);
 	}
 	public void remove(int index) {
-		remove(get(index));
+		remove(getName(index));
 	}
 	
 	// Taille de la liste
@@ -49,7 +50,7 @@ public class FieldsList {
 		return names.size();
 	}
 	
-	// Binder les valeurs d'un array à une requête préparée
+	// Binder les valeurs des champs à une requête préparée
 	public void bind(PreparedStatement st, ArrayList<Object> values) throws Exception {
 		// Si la taille de l'ArrayList des valeurs à binder est incorrecte
 		if (size() != values.size())
@@ -71,12 +72,26 @@ public class FieldsList {
 				case "String":
 					st.setString(i + 1, (String) value);
 					break;
-				case "Date":
-					st.setDate(i + 1, (Date) value);
-					break;
 				default:
-					throw new Exception("Le type enregistré pour le champ "+get(i)+" n'existe pas.");
+					if (value instanceof Entity)
+						st.setInt(i + 1, ((Entity) value).getID());
+					else
+						throw new Exception("Le type enregistré pour le champ "+getName(i)+" n'existe pas.");
 			}
 		}
+	}
+	
+	// Représentation sous forme de String
+	public String toString() {
+		return names.toString();
+	}
+	
+	// Formatage du nom des champs pour utilisation dans une requête
+	public String toQueryString(String prefix) {
+		String str = "";
+		for (int i = 0; i < size(); i++)
+			str += "`"+prefix+getName(i)+"`, ";
+		
+		return str.substring(0, str.length() - 2);
 	}
 }

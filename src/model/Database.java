@@ -1,15 +1,13 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Observable;
-
-import model.entities.Entity;
 
 /**
  * Un objet Database permet d'initier une connexion vers une base de données MySQL à l'aide de la bibliothèque JDBC
@@ -60,44 +58,6 @@ public class Database extends Observable {
 	}
 	
 	/**
-	 * Retourne un objet de requête préparée (mais pas exécutée).
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public PreparedStatement getPreparedQuery(String query) throws SQLException {
-		PreparedStatement st = connection.prepareStatement(
-				query,
-				ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_UPDATABLE);
-		st.closeOnCompletion();
-		
-		return st;
-	}
-	
-	/**
-	 * Exécute une requête préparée et retourne le résultat.
-	 * @param st
-	 * @return
-	 * @throws SQLException
-	 */
-	public ResultSet executePreparedQuery(PreparedStatement st) throws SQLException {
-		// Prévenir les observeurs qu'une requête a débuté
-		setChanged();
-		notifyObservers(QUERY_STARTED);
-		
-		// Exécution
-		ResultSet res = st.executeQuery();
-		res.beforeFirst();
-		
-		// Prévenir les observeurs que la requête est finie
-		setChanged();
-		notifyObservers(QUERY_FINISHED);
-		
-		return res;
-	}
-	
-	/**
 	 * Exécute une requête et retourne un objet ResultSet.
 	 * 
 	 * @param query Requête SQL.
@@ -126,35 +86,36 @@ public class Database extends Observable {
 		return res;
 	}
 	
-	/**
-	 * 
-	 * @param query
-	 * @param values
-	 * @param types
-	 * @return
-	 * @throws SQLException 
-	 */
-	public ResultSet prepareAndExecute(String query, Object[] values, String[] types) throws SQLException {
+	// Préparation d'une requête
+	public PreparedStatement prepare(String query) throws SQLException {
 		PreparedStatement st = connection.prepareStatement(
 				query,
-				ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_UPDATABLE);
+				ResultSet.TYPE_SCROLL_INSENSITIVE);
 		st.closeOnCompletion();
 		
-		// Application des paramètres (s'ils sont précisés)
-		if (values != null && types != null) {
-			for (int i = 0; i < values.length; i++) {
-				Object value = values[i];
-				
-				switch (types[i]) {
-					case "int": st.setInt(i + 1, (int) value); break;
-					case "boolean": st.setBoolean(i + 1, (boolean) value); break;
-					case "String": st.setString(i + 1, (String) value); break;
-					case "Date": st.setDate(i + 1, (Date) value); break;
-				}
-			}
-		}
+		return st;
+	}
+	public PreparedStatement prepare(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+		PreparedStatement st = prepare(query);
+		fields.bind(st, values);
 		
+		return st;
+	}
+	
+	// Préparation d'une requête INSERT/UPDATE/DELETE préparée
+	public PreparedStatement prepareUpdate(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+		PreparedStatement st = connection.prepareStatement(
+				query,
+				PreparedStatement.RETURN_GENERATED_KEYS);
+		st.closeOnCompletion();
+		
+		fields.bind(st, values);
+		
+		return st;
+	}
+	
+	// Exécution d'une requête préparée
+	public ResultSet execute(PreparedStatement st) throws SQLException {
 		// Prévenir les observeurs qu'une requête a débuté
 		setChanged();
 		notifyObservers(QUERY_STARTED);
@@ -170,25 +131,33 @@ public class Database extends Observable {
 		return res;
 	}
 	
-	/**
-	 * 
-	 * @param query
-	 * @param ent
-	 * @return
-	 * @throws Exception
-	 */
-	public ResultSet prepareWithEntityAttributes(String query, Entity ent) throws Exception {
-		PreparedStatement st = connection.prepareStatement(
-				query,
-				ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_UPDATABLE);
-		st.closeOnCompletion();
+	// Exécution d'une requête INSERT/UPDATE/DELETE préparée
+	public ResultSet executeUpdate(PreparedStatement st) throws SQLException {
+		// Prévenir les observeurs qu'une requête a débuté
+		setChanged();
+		notifyObservers(QUERY_STARTED);
 		
-		//ent.bindUpdateFields(st);
+		// Exécution
+		st.executeUpdate();
 		
-		ResultSet res = st.executeQuery();
+		ResultSet res = st.getGeneratedKeys();
 		res.beforeFirst();
 		
+		// Prévenir les observeurs que la requête est finie
+		setChanged();
+		notifyObservers(QUERY_FINISHED);
+		
 		return res;
+	}
+	
+	// Fonction 2 en 1 qui prépare et exécute
+	public ResultSet prepareAndExecute(String query) throws SQLException {
+		return execute(prepare(query));
+	}
+	public ResultSet prepareAndExecute(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+		return execute(prepare(query, fields, values));
+	}
+	public ResultSet prepareUpdateAndExecute(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+		return executeUpdate(prepareUpdate(query, fields, values));
 	}
 }

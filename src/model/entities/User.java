@@ -26,11 +26,13 @@ public class User extends Entity {
 			
 			// Création de l'objet
 			factory = new EntityFactory(
-					"model.User",
+					"model.entities.User",
 					"users",
 					"user",
 					fields);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			System.out.println("Initialisation de User impossible : "+e);
+		}
 	}
 	
 	// Attributs de l'entité

@@ -24,13 +24,15 @@ public class Group extends Entity {
 			
 			// Création de l'objet
 			factory = new EntityFactory(
-					"model.Group",
+					"model.entities.Group",
 					"groups",
 					"group",
 					fields,
 					joinedEntities,
 					joinedFields);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			System.out.println("Initialisation de Group impossible : "+e);
+		}
 	}
 	
 	// Attributs de l'entité
@@ -95,6 +97,11 @@ public class Group extends Entity {
 	}
 	*/
 	
+	private static FieldsList refreshMembersQueryFields = new FieldsList();
+	static {
+		refreshMembersQueryFields.add("id", "int");
+	}
+	
 	/**
 	 * Récupère la liste des membres du groupe.
 	 * @throws Exception 
@@ -108,10 +115,11 @@ public class Group extends Entity {
 		clauses += "JOIN `"+usersGroupsTable+"` ON `"+usersGroupsTable+"`.`"+usersPrefix+"id` = `"+usersTable+"`.`"+usersPrefix+"id`";
 		clauses += "WHERE `"+usersGroupsTable+"`.`"+getPrefix()+"id` = ?";
 		
-		Object[] values = {getID()};
-		String[] types = {"int"};
+		// Valeurs à binder
+		ArrayList<Object> values = new ArrayList<Object>();
+		values.add(getID());
 		
-		return User.factory.get(clauses, values, types);
+		return User.factory.get(clauses, refreshMembersQueryFields, values);
 	}
 	
 	private void updateMembers() throws Exception {

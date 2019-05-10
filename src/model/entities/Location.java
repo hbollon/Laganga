@@ -22,11 +22,13 @@ public class Location extends Entity {
 			
 			// Création de l'objet
 			factory = new EntityFactory(
-					"model.Location",
+					"model.entities.Location",
 					"locations",
 					"location",
 					fields);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			System.out.println("Initialisation de Location impossible : "+e);
+		}
 	}
 	
 	// Attributs de l'entité

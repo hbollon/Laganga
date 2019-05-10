@@ -16,9 +16,9 @@ public class Event extends Entity {
 			fields.add("name", "String");
 			fields.add("type", "String");
 			fields.add("priority", "int");
-			fields.add("begin", "Date");
-			fields.add("end", "Date");
-			fields.add("location", "int");
+			fields.add("begin", "String");
+			fields.add("end", "String");
+			fields.add("location", "Location");
 			
 			// Entités jointes
 			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
@@ -28,13 +28,15 @@ public class Event extends Entity {
 			
 			// Création de l'objet
 			factory = new EntityFactory(
-					"model.Event",
+					"model.entities.Event",
 					"events",
 					"event",
 					fields,
 					joinedEntities,
 					joinedFields);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			System.out.println("Initialisation de Event impossible : "+e);
+		}
 	}
 	
 	// Attributs de l'entité

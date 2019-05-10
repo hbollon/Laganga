@@ -1,6 +1,7 @@
 package model;
 
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Observable;
 
 @SuppressWarnings("deprecation")
@@ -8,18 +9,36 @@ public class Agenda extends Observable {
 	// Agenda principal
 	public static Agenda agenda = new Agenda();
 	
-	private Date weekDate; // Date du premier jour de la semaine
+	// Date du premier jour de la semaine
+	private Calendar weekBeginning;
 	
 	// Getteurs
-	public Date getWeekDate() {
-		return weekDate;
+	public Calendar getWeekBeginning() {
+		return weekBeginning;
 	}
 	
 	// Setteurs
-	public void setWeekDate(Date weekDate) {
-		this.weekDate = weekDate;
+	public void nextWeek() {
+		weekBeginning.add(Calendar.WEEK_OF_YEAR, 1);
+	}
+	public void previousWeek() {
+		weekBeginning.add(Calendar.WEEK_OF_YEAR, -1);
+	}
+	
+	// Constructeur
+	public Agenda() {
+		Calendar cal = new GregorianCalendar();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.clear(Calendar.MINUTE);
+		cal.clear(Calendar.SECOND);
+		cal.clear(Calendar.MILLISECOND);
+		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
 		
-		setChanged();
-		notifyObservers();
+		this.weekBeginning = cal;
+	}
+	
+	// Représentation sous forme de String
+	public String toString() {
+		return weekBeginning.get(Calendar.YEAR)+"-"+weekBeginning.get(Calendar.MONTH)+"-"+weekBeginning.get(Calendar.DAY_OF_MONTH)+" "+weekBeginning.get(Calendar.HOUR_OF_DAY)+":"+weekBeginning.get(Calendar.MINUTE)+":"+weekBeginning.get(Calendar.SECOND);
 	}
 }
