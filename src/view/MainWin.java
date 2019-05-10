@@ -11,6 +11,14 @@ import model.User;
 
 import controller.OpenWinCreatEvent;
 
+/**
+ * Classe MainWin, fenetre principale de notre programme
+ * 
+ * 
+ * @author hbollon
+ *
+ */
+
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
 	
@@ -18,8 +26,6 @@ public class MainWin extends JFrame {
 	private JPanel centerPanel = null;
 	private JPanel leftPanel = null;
 	private JPanel rightPanel = null;
-	private JPanel jContentPane = null;
-	private JPanel jContentPaneGroup = null;
 	private JTree jTree = null;
 	private JTree jTreeGroupe = null;
 	private JScrollPane jScrollTree = null;
@@ -29,7 +35,7 @@ public class MainWin extends JFrame {
 	private JMenu fichier = null;
 	private JMenu edition = null;
 	private JMenu option = null;
-	private JMenu aPropos = null;
+	private JMenu help = null;
 	private JMenuItem createEvent = null;
 	private JMenuItem deleteEvent = null;
 	private JMenuItem settings = null;
@@ -114,11 +120,11 @@ public class MainWin extends JFrame {
 		{
 			windowPanel = new JPanel(new BorderLayout());
 			centerPanel = new JPanel(new BorderLayout());
-			leftPanel = new JPanel(new BorderLayout());
+			leftPanel = new JPanel(new GridLayout(2, 1));
 			rightPanel = new JPanel(new BorderLayout());
 			
-			leftPanel.add(getJContentPane(), BorderLayout.SOUTH);
-			leftPanel.add(getJContentPaneGroupe(), BorderLayout.NORTH);
+			leftPanel.add(getJScrollPaneGroup());
+			leftPanel.add(getJScrollPane());
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
 			centerPanel.add(new MainWinCalendar(this));
 			windowPanel.add(leftPanel, BorderLayout.WEST);
@@ -127,30 +133,14 @@ public class MainWin extends JFrame {
 		}
 		return windowPanel;
 	}
-	 
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel(new BorderLayout());
-			jContentPane.add(getJScrollPane(), BorderLayout.SOUTH);
-		}
-		return jContentPane;
-	}
-	
-	private JPanel getJContentPaneGroupe() {
-		if (jContentPaneGroup == null) {
-			jContentPaneGroup = new JPanel(new BorderLayout());
-			jContentPaneGroup.add(getJScrollPaneGroup(), BorderLayout.NORTH);
-		}
-		return jContentPaneGroup;
-	}
-	
+	 	
 	private JScrollPane getJScrollPane()
 	{
 		if(jScrollTree == null)
 		{
 			jScrollTree = new JScrollPane();
 			jScrollTree.setViewportView(getJTree());
-			jScrollTree.setPreferredSize(new Dimension(240,450));
+			jScrollTree.setPreferredSize(new Dimension(200,450));
 		}
 		return jScrollTree;
 	}
@@ -161,7 +151,7 @@ public class MainWin extends JFrame {
 		{
 			jScrollTreeGroup = new JScrollPane();
 			jScrollTreeGroup.setViewportView(getJTreeGroupe());
-			jScrollTreeGroup.setPreferredSize(new Dimension(240,450));
+			jScrollTreeGroup.setPreferredSize(new Dimension(200,450));
 		}
 		return jScrollTreeGroup;
 	}
@@ -180,17 +170,17 @@ public class MainWin extends JFrame {
 	
 	private JMenuBar getMenu()
 	{
-		JMenuBar barMenu = new JMenuBar();
-		JMenu fichier = new JMenu("Fichier");
-		JMenu edition = new JMenu("Edition");
-		JMenu option = new JMenu("Options");
-		JMenu help = new JMenu("Help");
-		JMenuItem createEvent = new JMenuItem("Créer un nouvel évènement");
-		JMenuItem deleteEvent = new JMenuItem("Supprimer un évènement");
-		JMenuItem settings = new JMenuItem("Options");
-		JMenuItem close = new JMenuItem("Quitter");
-		JMenuItem helpItem = new JMenuItem("Aide");
-		JMenuItem credit = new JMenuItem("A propos");
+		barMenu = new JMenuBar();
+		fichier = new JMenu("Fichier");
+		edition = new JMenu("Edition");
+		option = new JMenu("Options");
+		help = new JMenu("Help");
+		createEvent = new JMenuItem("Créer un nouvel évènement");
+		deleteEvent = new JMenuItem("Supprimer un évènement");
+		settings = new JMenuItem("Options");
+		close = new JMenuItem("Quitter");
+		aide = new JMenuItem("Aide");
+		credit = new JMenuItem("A propos");
 		
 		fichier.add(createEvent);
 		fichier.add(deleteEvent);
@@ -198,7 +188,7 @@ public class MainWin extends JFrame {
 		
 		option.add(settings);
 		
-		help.add(helpItem);
+		help.add(aide);
 		help.add(credit);
 		
 		barMenu.add(fichier);
