@@ -3,7 +3,6 @@ package model;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 /**
  * Une Entity est une entrée de table.
@@ -108,7 +107,7 @@ public class User extends Entity {
 	 * Affiche l'instance sous forme textuelle
 	 */
 	public String toString() {
-		String str = "User no. "+getId()+":\n";
+		String str = "User no. "+getID()+":\n";
 		str += "\t- firstName: "+getFirstName()+"\n";
 		str += "\t- lastName: "+getLastName()+"\n";
 		str += "\t- email: "+getEmail()+"\n";

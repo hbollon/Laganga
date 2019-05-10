@@ -71,6 +71,9 @@ public class MainWin extends JFrame {
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
+	    
+	    // Permet de changer le curseur lors d'une opération avec la BDD
+	    new CursorChanger(this);
 	}
 	
 	public void setTree() throws Exception
@@ -99,7 +102,7 @@ public class MainWin extends JFrame {
 		  jScrollTreeGroup.setViewportView(jTreeGroupe);
 		  
 		for (int i = 0; i < groupeList.size(); i++) {
-			groupeNames.add((String) groupeList.get(i).get("name"));
+			groupeNames.add(((Group) groupeList.get(i)).getName());
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}

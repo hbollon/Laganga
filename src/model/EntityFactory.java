@@ -19,7 +19,8 @@ public class EntityFactory {
 	
 	private String table; // Table associée à l'entitée
 	private String single; // Appellation d'une entité seule
-	private EntityFactory[] joins; // Entités jointes
+	private EntityFactory[] joinedEntities; // Entités jointes
+	private String[] joinedIDs; // Entités jointes
 	private EntityFields fields; // Champs
 	
 	// Getteurs
@@ -35,8 +36,11 @@ public class EntityFactory {
 	public String getPrefix() {
 		return single+"_";
 	}
-	public EntityFactory[] getJoins() {
-		return joins;
+	public EntityFactory[] getJoinedEntities() {
+		return joinedEntities;
+	}
+	public String[] getJoinedIDs() {
+		return joinedIDs;
 	}
 	public EntityFields getFields() {
 		return fields;
@@ -50,17 +54,19 @@ public class EntityFactory {
 		single = (String) entityClass.getDeclaredField("SINGLE").get(null);
 		
 		try {
-			joins = (EntityFactory[]) entityClass.getDeclaredField("JOINS").get(null);
+			joinedEntities = (EntityFactory[]) entityClass.getDeclaredField("JOINED_ENTITIES").get(null);
+			joinedIDs = (String[]) entityClass.getDeclaredField("JOINED_IDS").get(null);
 		}
 		catch (Exception e) {}
 	}
 	
 	// Créateurs d'objets
 	private Entity newEntity(ResultSet res) throws Exception {
+		System.out.println("Nouvelle entité : "+res.getInt(getPrefix()+"id"));
 		Entity entity = (Entity) entityClass.getConstructor(EntityFactory.class).newInstance(this);
 		entity.save(res);
 		
-		entities.put((int) entity.getId(), entity);
+		entities.put((int) entity.getID(), entity);
 		
 		return entity;
 	}
@@ -83,18 +89,17 @@ public class EntityFactory {
 	private String getSelectQuery(String clauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
 		
-		if (joins != null && joins.length > 0) {
-			for (int i = 0; i < joins.length; i++) {
-				String table = joins[i].getTable();
-				String row = joins[i].getPrefix()+"id";
-				
-				query += "\nJOIN `"+table+"` ON `"+table+"`.`"+row+"` = `"+getTable()+"`.`"+row+"`";
+		if (joinedEntities != null && joinedEntities.length > 0) {
+			for (int i = 0; i < joinedEntities.length; i++) {
+				EntityFactory joinedEnt = joinedEntities[i];				
+				query += "\nJOIN `"+joinedEnt.getTable()+"` ON `"+joinedEnt.getTable()+"`.`"+joinedEnt.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+joinedIDs[i]+"`";
 			}
 		}
 		
 		if (clauses == null)
 			clauses = "ORDER BY `"+getPrefix()+"id` DESC";
 		
+		System.out.println(query+"\n"+clauses);
 		return query+"\n"+clauses;
 	}
 	
@@ -103,7 +108,7 @@ public class EntityFactory {
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
 	public Entity getFromResultSet(ResultSet res) throws Exception {
-		Entity entity = entities.get(res.getInt(getPrefix()+"id"));
+		Entity entity = entities.get(res.getInt(getTable()+"."+getPrefix()+"id"));
 		if (entity == null)
 			entity = newEntity(res);
 		
@@ -120,8 +125,21 @@ public class EntityFactory {
 		ArrayList<Entity> list = new ArrayList<Entity>();
 		ResultSet res = Database.database.prepareAndExecute(getSelectQuery(clauses), values, types);
 		
-		while (res.next())
-			list.add(getFromResultSet(res));
+		// ID de la dernière ligne traitée
+		int previousId = -1;
+		
+		// Parcours des lignes récupérées
+		while (res.next()) {
+			Entity ent = getFromResultSet(res); // Récupération/création de l'entité
+			
+			// On traite une nouvelle entité, l'enregistrer dans la liste
+			if (ent.getID() != previousId) {
+				list.add(ent);
+				previousId = ent.getID();
+			}
+			
+			ent.saveJoined(res); // Sauvegarde des champs joins
+		}
 		
 		return list;
 	}
@@ -155,7 +173,7 @@ public class EntityFactory {
 	 * 
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
-	public Entity getSingleByID(int id) throws Exception {
+	public Entity getByID(int id) throws Exception {
 		Object[] values = {id};
 		String[] types = {"int"};
 		

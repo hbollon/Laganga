@@ -7,7 +7,11 @@ import java.util.Observable;
  * 
  * @author Julien Valverdé
  */
+@SuppressWarnings("deprecation")
 public class LocalUser extends Observable {
+	// Objet principal
+	public static LocalUser localUser = new LocalUser();
+	
 	// États de connexion
 	public static final int SUCCESS = 0;
 	public static final int ERROR_ALREADY_LOGGED_IN = 1;
@@ -17,9 +21,6 @@ public class LocalUser extends Observable {
 	private User user;
 	public User getUser() {
 		return user;
-	}
-	
-	public LocalUser() {
 	}
 	
 	public boolean isLoggedIn() {

@@ -25,7 +25,7 @@ public abstract class Entity {
 	// Attributs de l'entité
 	private int id;
 	
-	public int getId() {
+	public int getID() {
 		return id;
 	}
 	
@@ -44,6 +44,10 @@ public abstract class Entity {
 	
 	public void save(ResultSet res) throws Exception {
 		id = res.getInt(getPrefix()+"id");
+	}
+	
+	public void saveJoined(ResultSet res) throws Exception {
+		System.out.println("Ajout des jointures : "+res.getInt(getPrefix()+"id"));
 	}
 	
 	protected int bindUpdateFields(PreparedStatement st) throws Exception {
