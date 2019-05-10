@@ -114,6 +114,11 @@ public class EntityFactory {
 		ent.save(res);
 	}
 	
+	// Création de la liste des valeurs des attributs
+	public ArrayList<Object> getFieldsValues(Entity ent) {
+		return ent.getFieldsValues();
+	}
+	
 	/**
 	 * Assemble une requête SQL pour récupérer des objets.
 	 * 

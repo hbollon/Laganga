@@ -2,6 +2,7 @@ package model.entities;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import model.FieldsList;
 
@@ -85,6 +86,18 @@ public class User extends Entity {
 		email = res.getString(getPrefix()+"email");
 		password = res.getString(getPrefix()+"password");
 		birth = res.getDate(getPrefix()+"birth");
+	}
+	
+	// Création de la liste des valeurs des attributs
+	public ArrayList<Object> getFieldsValues() {
+		ArrayList<Object> values = super.getFieldsValues();
+		values.add(firstName);
+		values.add(lastName);
+		values.add(email);
+		values.add(password);
+		values.add(birth);
+		
+		return values;
 	}
 	
 	/**

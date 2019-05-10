@@ -49,6 +49,11 @@ public abstract class Entity {
 		id = res.getInt(getPrefix()+"id");
 	}
 	
+	// Création de la liste des valeurs des attributs
+	public ArrayList<Object> getFieldsValues() {
+		return new ArrayList<Object>();
+	}
+	
 	/*
 	 * Opérations sur la base de données
 	 */
