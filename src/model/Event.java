@@ -103,19 +103,6 @@ public class Event extends Entity {
 		location = (Location) Location.factory.getFromResultSet(res);
 	}
 	
-	public static int bind(PreparedStatement st) throws Exception {
-		//int i = super.bindUpdateFields(st);
-		
-		st.setString(i, name); i++;
-		st.setString(i, type); i++;
-		st.setInt(i, priority); i++;
-		st.setDate(i, begin); i++;
-		st.setDate(i, end); i++;
-		st.setInt(i, location.getID()); i++;
-		
-		return i;
-	}
-	
 	/**
 	 * Retourne une représentation textuelle de l'évènement.
 	 */
