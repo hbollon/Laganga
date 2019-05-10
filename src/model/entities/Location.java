@@ -1,11 +1,9 @@
-package model;
+package model.entities;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
-import model.entities.Entity;
-import model.entities.EntityFactory;
+import model.FieldsList;
 
 /**
  * Un Location représente un lieu dans lequel un évènement peut avoir lieu.
@@ -18,17 +16,15 @@ public class Location extends Entity {
 	static {
 		try {
 			// Champs
-			ArrayList<String> fields = new ArrayList<String>();
-			
-			fields.add("name");
-			fields.add("description");
+			FieldsList fields = new FieldsList();
+			fields.add("name", "String");
+			fields.add("description", "String");
 			
 			// Création de l'objet
 			factory = new EntityFactory(
 					"model.Location",
 					"locations",
 					"location",
-					Entity.factory,
 					fields);
 		} catch (Exception e) {}
 	}

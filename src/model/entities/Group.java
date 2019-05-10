@@ -1,12 +1,10 @@
-package model;
+package model.entities;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import model.entities.Entity;
-import model.entities.EntityFactory;
-import model.entities.User;
+import model.FieldsList;
 
 public class Group extends Entity {
 	// Objet usine
@@ -14,10 +12,9 @@ public class Group extends Entity {
 	static {
 		try {
 			// Champs
-			ArrayList<String> fields = new ArrayList<String>();
-			
-			fields.add("name");
-			fields.add("owner");
+			FieldsList fields = new FieldsList();
+			fields.add("name", "String");
+			fields.add("owner", "int");
 			
 			// Entités jointes
 			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
@@ -30,7 +27,6 @@ public class Group extends Entity {
 					"model.Group",
 					"groups",
 					"group",
-					Entity.factory,
 					fields,
 					joinedEntities,
 					joinedFields);

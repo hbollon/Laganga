@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 
 import model.*;
+import model.entities.Event;
 import view.*;
 
 public abstract class Main {

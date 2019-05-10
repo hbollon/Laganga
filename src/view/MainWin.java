@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import model.Group;
 import model.entities.Entity;
+import model.entities.Group;
 import model.entities.User;
 import controller.OpenWinCreatEvent;
 

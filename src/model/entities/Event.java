@@ -1,13 +1,10 @@
-package model;
+package model.entities;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Time;
 import java.util.ArrayList;
 
-import model.entities.Entity;
-import model.entities.EntityFactory;
+import model.FieldsList;
 
 public class Event extends Entity {
 	// Objet usine
@@ -15,14 +12,13 @@ public class Event extends Entity {
 	static {
 		try {
 			// Champs
-			ArrayList<String> fields = new ArrayList<String>();
-			
-			fields.add("name");
-			fields.add("type");
-			fields.add("priority");
-			fields.add("begin");
-			fields.add("end");
-			fields.add("location");
+			FieldsList fields = new FieldsList();
+			fields.add("name", "String");
+			fields.add("type", "String");
+			fields.add("priority", "int");
+			fields.add("begin", "Date");
+			fields.add("end", "Date");
+			fields.add("location", "int");
 			
 			// Entités jointes
 			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
@@ -35,7 +31,6 @@ public class Event extends Entity {
 					"model.Event",
 					"events",
 					"event",
-					Entity.factory,
 					fields,
 					joinedEntities,
 					joinedFields);
@@ -64,7 +59,7 @@ public class Event extends Entity {
 		return begin;
 	}
 	public Date getEnd() {
-		return begin;
+		return end;
 	}
 	public Location getLocation() {
 		return location;
