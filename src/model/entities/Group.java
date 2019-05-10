@@ -1,6 +1,5 @@
 package model.entities;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -72,15 +71,6 @@ public class Group extends Entity {
 		
 		// Récupération de la liste des membres du groupe
 		members = refreshMembers();
-	}
-	
-	protected int bindUpdateFields(PreparedStatement st) throws Exception {
-		int i = super.bindUpdateFields(st);
-		
-		st.setString(i, name); i++;
-		st.setInt(i, owner.getID()); i++;
-		
-		return i;
 	}
 	
 	/**

@@ -1,6 +1,5 @@
 package model.entities;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -115,10 +114,6 @@ public class EntityFactory {
 		ent.save(res);
 	}
 	
-	public int bindUpdateFields(Entity ent, PreparedStatement st) throws Exception {
-		return ent.bindUpdateFields(st);
-	}
-	
 	/**
 	 * Assemble une requête SQL pour récupérer des objets.
 	 * 
@@ -176,7 +171,7 @@ public class EntityFactory {
 				previousId = ent.getID();
 			}
 			
-			ent.saveJoined(res); // Sauvegarde des champs joins
+			//ent.saveJoined(res); // Sauvegarde des champs joins
 		}
 		
 		return list;
@@ -256,7 +251,7 @@ public class EntityFactory {
 		ResultSet res = Database.database.prepareUpdateAndExecute(getInsertQuery(), fields, values);
 		
 		res.next();
-		return getByID(res.getInt(1));
+		return getByID(res.getInt(1)); // Renvoi de l'entité nouvellement crée
 	}
 	
 	/*

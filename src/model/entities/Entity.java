@@ -1,6 +1,5 @@
 package model.entities;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -50,14 +49,6 @@ public abstract class Entity {
 		id = res.getInt(getPrefix()+"id");
 	}
 	
-	public void saveJoined(ResultSet res) throws Exception {
-		//System.out.println("Ajout des jointures : "+res.getInt(getPrefix()+"id"));
-	}
-	
-	protected int bindUpdateFields(PreparedStatement st) throws Exception {
-		return 1;
-	}
-	
 	/*
 	 * Opérations sur la base de données
 	 */
@@ -79,14 +70,6 @@ public abstract class Entity {
 		int i = factory.bindUpdateFields(this, st);
 		
 		Database.database.executePreparedQuery(st);
-	}
-	*/
-	
-	/**
-	 * Récupère la liste des champs à mettre à jour lors d'une opération update.
-	 */
-	public ArrayList<String> getFields() {
-		return new ArrayList<String>();
 	}
 	
 	/**

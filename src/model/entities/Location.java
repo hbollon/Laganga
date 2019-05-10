@@ -1,6 +1,5 @@
 package model.entities;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import model.FieldsList;
@@ -61,15 +60,6 @@ public class Location extends Entity {
 		
 		name = res.getString(getPrefix()+"name");
 		description = res.getString(getPrefix()+"description");
-	}
-	
-	protected int bindUpdateFields(PreparedStatement st) throws Exception {
-		int i = super.bindUpdateFields(st);
-		
-		st.setString(i, name); i++;
-		st.setString(i, description); i++;
-		
-		return i;
 	}
 	
 	/**

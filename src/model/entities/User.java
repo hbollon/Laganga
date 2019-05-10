@@ -1,7 +1,6 @@
 package model.entities;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import model.FieldsList;
@@ -86,18 +85,6 @@ public class User extends Entity {
 		email = res.getString(getPrefix()+"email");
 		password = res.getString(getPrefix()+"password");
 		birth = res.getDate(getPrefix()+"birth");
-	}
-	
-	protected int bindUpdateFields(PreparedStatement st) throws Exception {
-		int i = super.bindUpdateFields(st);
-		
-		st.setString(i, firstName); i++;
-		st.setString(i, lastName); i++;
-		st.setString(i, email); i++;
-		st.setString(i, password); i++;
-		st.setDate(i, birth); i++;
-		
-		return i;
 	}
 	
 	/**
