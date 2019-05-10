@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import model.Entity;
-import model.Group;
+//import model.Group;
 import model.User;
 
 import controller.OpenWinCreatEvent;
@@ -56,7 +56,7 @@ public class MainWin extends JFrame {
 		super();
 		initialize();
 		setTree();
-		setTreeGroupe();
+		//setTreeGroupe();
 	}
 	 
 	public void initialize()
@@ -92,7 +92,7 @@ public class MainWin extends JFrame {
 		}
 	}
 	
-	public void setTreeGroupe() throws Exception
+	/*public void setTreeGroupe() throws Exception
 	{
 		ArrayList<Entity> groupeList = Group.factory.getAll();
 		ArrayList<String> groupeNames = new ArrayList<String>();
@@ -106,7 +106,7 @@ public class MainWin extends JFrame {
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
-	}
+	}*/
 	
 	private JPanel getWindowPane()
 	{
