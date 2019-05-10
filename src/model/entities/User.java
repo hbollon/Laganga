@@ -1,9 +1,10 @@
-package model;
+package model.entities;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+
+import model.FieldsList;
 
 /**
  * Une Entity est une entrée de table.
@@ -16,20 +17,18 @@ public class User extends Entity {
 	static {
 		try {
 			// Champs
-			ArrayList<String> fields = new ArrayList<String>();
-			
-			fields.add("firstName");
-			fields.add("lastName");
-			fields.add("email");
-			fields.add("password");
-			fields.add("birth");
+			FieldsList fields = new FieldsList();
+			fields.add("firstName", "String");
+			fields.add("lastName", "String");
+			fields.add("email", "String");
+			fields.add("password", "String");
+			fields.add("birth", "Date");
 			
 			// Création de l'objet
 			factory = new EntityFactory(
 					"model.User",
 					"users",
 					"user",
-					Entity.factory,
 					fields);
 		} catch (Exception e) {}
 	}

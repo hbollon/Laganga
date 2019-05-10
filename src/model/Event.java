@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.Time;
 import java.util.ArrayList;
 
+import model.entities.Entity;
+import model.entities.EntityFactory;
+
 public class Event extends Entity {
 	// Objet usine
 	public static EntityFactory factory;

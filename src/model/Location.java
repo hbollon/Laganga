@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import model.entities.Entity;
+import model.entities.EntityFactory;
+
 /**
  * Un Location représente un lieu dans lequel un évènement peut avoir lieu.
  * 

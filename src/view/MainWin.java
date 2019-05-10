@@ -5,10 +5,9 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import model.Entity;
 import model.Group;
-import model.User;
-
+import model.entities.Entity;
+import model.entities.User;
 import controller.OpenWinCreatEvent;
 
 public class MainWin extends JFrame { 

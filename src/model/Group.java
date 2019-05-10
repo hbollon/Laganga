@@ -4,6 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import model.entities.Entity;
+import model.entities.EntityFactory;
+import model.entities.User;
+
 public class Group extends Entity {
 	// Objet usine
 	public static EntityFactory factory;

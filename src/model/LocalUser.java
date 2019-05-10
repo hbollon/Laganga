@@ -2,6 +2,8 @@ package model;
 
 import java.util.Observable;
 
+import model.entities.User;
+
 /**
  * Le LocalUser représente l'utilisateur connecté (ou non) localement
  * 

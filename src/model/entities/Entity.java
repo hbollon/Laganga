@@ -1,29 +1,10 @@
-package model;
+package model.entities;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public abstract class Entity {
-	
-	
-	// Objet usine
-	public static EntityFactory factory;
-	static {
-		try {
-			// Champs
-			ArrayList<String> fields = new ArrayList<String>();
-			fields.add("id");
-			
-			// Création de l'objet
-			factory = new EntityFactory(
-					"model.Entity",
-					"entities",
-					"entity",
-					fields);
-		} catch (Exception e) {}
-	}
-	
 	// Objet usine
 	private EntityFactory factoryObject;
 	

@@ -1,10 +1,12 @@
-package model;
+package model.entities;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
+import model.Database;
+import model.FieldsList;
 
 /**
  * Un ModelFactory est associé à une table de la base de données et à une classe du modèle (ex: users/User).
@@ -14,7 +16,7 @@ import java.util.Map;
  * @author Julien Valverdé
  */
 public class EntityFactory {
-	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
+	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
 	
 	/*
 	 * Attributs
@@ -25,7 +27,7 @@ public class EntityFactory {
 	private String single; // Appellation d'une entité seule
 	private String prefix; // Préfixe des champs
 	private EntityFactory parent; // Entité parente
-	private ArrayList<String> fields; // Champs
+	private FieldsList fields; // Champs
 	
 	private ArrayList<EntityFactory> joinedEntities; // Entités jointes
 	private ArrayList<String> joinedFields;
@@ -48,7 +50,7 @@ public class EntityFactory {
 	public EntityFactory getParent() {
 		return parent;
 	}
-	public ArrayList<String> getFields() {
+	public FieldsList getFields() {
 		return fields;
 	}
 	public ArrayList<EntityFactory> getJoinedEntities() {
@@ -61,7 +63,7 @@ public class EntityFactory {
 	/*
 	 * Constructeurs
 	 */
-	public EntityFactory(String className, String table, String single, EntityFactory parent, ArrayList<String> fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
+	public EntityFactory(String className, String table, String single, EntityFactory parent, FieldsList fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
 		this.classObject = Class.forName(className);
 		
 		this.table = table;
@@ -73,13 +75,13 @@ public class EntityFactory {
 		this.joinedEntities = joinedEntities;
 		this.joinedFields = joinedFields;
 	}
-	public EntityFactory(String className, String table, String single, ArrayList<String> fields) throws ClassNotFoundException {
+	public EntityFactory(String className, String table, String single, FieldsList fields) throws ClassNotFoundException {
 		this(className, table, single, null, fields, null, null);
 	}
-	public EntityFactory(String className, String table, String single, EntityFactory parent, ArrayList<String> fields) throws ClassNotFoundException {
+	public EntityFactory(String className, String table, String single, EntityFactory parent, FieldsList fields) throws ClassNotFoundException {
 		this(className, table, single, parent, fields, null, null);
 	}
-	public EntityFactory(String className, String table, String single, ArrayList<String> fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
+	public EntityFactory(String className, String table, String single, FieldsList fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
 		this(className, table, single, null, fields, joinedEntities, joinedFields);
 	}
 	
@@ -87,8 +89,8 @@ public class EntityFactory {
 	 * getFieldsList
 	 * Construit la liste des champs
 	 */
-	public ArrayList<String> getFieldsList(ArrayList<String> fields) {
-		ArrayList<String> list = new ArrayList<String>();
+	public FieldsList getFieldsList(FieldsList fields) {
+		FieldsList list = new FieldsList();
 		
 		// L'entité a un parent
 		if (parent != null)
@@ -225,9 +227,14 @@ public class EntityFactory {
 	private String getInsertQuery() {
 		String query = "INSERT INTO `"+table+"`(";
 		
-		// Récupération des noms des champs
+		// Nom des champs
 		for (int i = 0; i < fields.size(); i++)
-			query += "`"+getPrefix()+fields.get(i)+"`, ";
+			query += "`"+prefix+fields.get(i)+"`, ";
+		
+		// Suppression du ", " final
+		query = query.substring(query.length() - 2, query.length());
+		
+		query += ") VALUES(";
 		
 		return query;
 	}

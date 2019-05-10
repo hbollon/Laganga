@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Observable;
 
+import model.entities.Entity;
+
 /**
  * Un objet Database permet d'initier une connexion vers une base de données MySQL à l'aide de la bibliothèque JDBC
  * et d'y effectuer des requêtes.
@@ -182,7 +184,7 @@ public class Database extends Observable {
 				ResultSet.CONCUR_UPDATABLE);
 		st.closeOnCompletion();
 		
-		ent.bindUpdateFields(st);
+		//ent.bindUpdateFields(st);
 		
 		ResultSet res = st.executeQuery();
 		res.beforeFirst();
