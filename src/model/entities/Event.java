@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +22,8 @@ public class Event extends Entity {
 		fields.add("name", "String");
 		fields.add("type", "String");
 		fields.add("priority", "int");
-		fields.add("begin", "String");
-		fields.add("end", "String");
+		fields.add("begin", "DateTime");
+		fields.add("end", "DateTime");
 		fields.add("location", "Location");
 		
 		factory.setFieldsList(fields);
@@ -44,11 +45,11 @@ public class Event extends Entity {
 	public int getPriority() {
 		return (int) getFieldsValues().get("priority");
 	}
-	public String getBegin() {
-		return (String) getFieldsValues().get("begin");
+	public Calendar getBegin() {
+		return (Calendar) getFieldsValues().get("begin");
 	}
-	public String getEnd() {
-		return (String) getFieldsValues().get("end");
+	public Calendar getEnd() {
+		return (Calendar) getFieldsValues().get("end");
 	}
 	public Location getLocation() {
 		return (Location) getFieldsValues().get("location");
@@ -64,10 +65,10 @@ public class Event extends Entity {
 	public void setPriority(int priority) {
 		getFieldsValues().put("priority", priority);
 	}
-	public void setBegin(String begin) {
+	public void setBegin(Calendar begin) {
 		getFieldsValues().put("begin", begin);
 	}
-	public void setEnd(String end) {
+	public void setEnd(Calendar end) {
 		getFieldsValues().put("end", end);
 	}
 	public void setLocation(Location location) {
@@ -82,8 +83,8 @@ public class Event extends Entity {
 		str += "\t- name: "+getName()+"\n";
 		str += "\t- type: "+getType()+"\n";
 		str += "\t- priority: "+getPriority()+"\n";
-		str += "\t- begin: "+getBegin()+"\n";
-		str += "\t- end: "+getEnd()+"\n";
+		str += "\t- begin: "+getBegin().getTime()+"\n";
+		str += "\t- end: "+getEnd().getTime()+"\n";
 		str += "\t- location: "+getLocation()+"\n";
 		
 		return str;

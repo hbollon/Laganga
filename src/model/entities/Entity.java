@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.Database;
 import model.FieldsList;
 
 public abstract class Entity {
@@ -51,9 +52,30 @@ public abstract class Entity {
 		fieldsValues = getFactory().getFieldsList().save(res, getFactory());
 	}
 	
+	
 	/*
 	 * Opérations sur la base de données
 	 */
+	
+	// Update
+	public void update() throws SQLException, Exception {
+		FieldsList fields = getFactory().getFieldsList().clone();
+		
+		String query = getFactory().getUpdateQuery(fields);
+		
+		fields.add("id", "int"); // On binde un champ ID à la fin pour la clause WHERE
+		Database.database.prepareUpdateAndExecute(query, fields, fieldsValues);
+	}
+	
+	// Delete
+	private static FieldsList deleteQueryFields = new FieldsList();
+	static {
+		deleteQueryFields.add("id", "int");
+	}
+	
+	public void delete() throws SQLException, Exception {
+		Database.database.prepareUpdateAndExecute(getFactory().getDeleteQuery(), deleteQueryFields, fieldsValues);
+	}
 	
 	/**
 	 * Met à jour les attributs de l'objet depuis la base de données.
@@ -73,13 +95,6 @@ public abstract class Entity {
 		
 		Database.database.executePreparedQuery(st);
 	}
-	
-	/**
-	 * Supprime l'entrée de la base de données.
-	 */
-	public void delete() {
-	}
-	
 	
 	/*
 	 * Listes jointes

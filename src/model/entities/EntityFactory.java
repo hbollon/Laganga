@@ -248,15 +248,19 @@ public class EntityFactory {
 	 * Construction des requêtes SQL
 	 */
 	
-	/*
-	public String getUpdateQuery(Entity ent) {
+	// Update
+	public String getUpdateQuery(FieldsList fields) {
 		String query = "";
 		
-		query += "UPDATE `"+getTable()+"`\n";
-		query += "SET "+ent.getUpdateFields()+"\n";
-		query += "WHERE `"+getPrefix()+"id` = ?";
+		query += "UPDATE `"+table+"`\n";
+		query += "SET "+fields.toUpdateQueryString(prefix)+"\n";
+		query += "WHERE `"+prefix+"id` = ?";
 		
 		return query;
 	}
-	*/
+	
+	// Delete
+	public String getDeleteQuery() {
+		return "DELETE FROM `"+table+"` WHERE `"+prefix+"id` = ?";
+	}
 }

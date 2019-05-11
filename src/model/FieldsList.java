@@ -3,7 +3,11 @@ package model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +19,10 @@ public class FieldsList {
 	// Noms et types
 	private List<String> names = new ArrayList<String>();
 	private Map<String, String> types = new HashMap<String, String>();
+	
+	// Objets pour parser les dates et heures
+	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	// Récupération d'un champ
 	public String getName(int index) {
@@ -81,8 +89,11 @@ public class FieldsList {
 				case "String":
 					st.setString(i + 1, (String) value);
 					break;
-				case "Calendar":
-					st.setString(i + 1, (String) value);
+				case "Date":
+					st.setString(i + 1, (String) dateFormat.format(((Calendar) value).getTime()));
+					break;
+				case "DateTime":
+					st.setString(i + 1, (String) dateTimeFormat.format(((Calendar) value).getTime()));
 					break;
 				default:
 					if (value instanceof Entity)
@@ -98,6 +109,8 @@ public class FieldsList {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
 		for (int i = 0; i < size(); i++) {
+			Calendar cal;
+			
 			String name = getName(i);
 			String field = factory.getTable()+"."+factory.getPrefix()+name; // Nom complet du champ à récupérer
 			
@@ -114,8 +127,19 @@ public class FieldsList {
 				case "String":
 					values.put(name, res.getString(field));
 					break;
-				case "Calendar":
-					values.put(name, res.getString(field));
+				case "Date":
+					// Conversion de la date en objet Calendar
+					cal = new GregorianCalendar();
+					cal.setTime(dateFormat.parse(res.getString(field)));
+					
+					values.put(name, cal);
+					break;
+				case "DateTime":
+					// Conversion de l'heure/date en objet Calendar
+					cal = new GregorianCalendar();
+					cal.setTime(dateTimeFormat.parse(res.getString(field)));
+					
+					values.put(name, cal);
 					break;
 				default:
 					EntityFactory joined = factory.getJoinedEntities().get(name);
@@ -139,6 +163,15 @@ public class FieldsList {
 		String str = "";
 		for (int i = 0; i < size(); i++)
 			str += "`"+prefix+getName(i)+"`, ";
+		
+		return str.substring(0, str.length() - 2);
+	}
+	
+	// Formatage du nom des champs pour utilisation dans une requête UPDATE
+	public String toUpdateQueryString(String prefix) {
+		String str = "";
+		for (int i = 0; i < size(); i++)
+			str += "`"+prefix+getName(i)+"` = ?, ";
 		
 		return str.substring(0, str.length() - 2);
 	}

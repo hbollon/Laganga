@@ -43,20 +43,6 @@ public class Location extends Entity {
 	}
 	
 	/**
-	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
-	 */
-	/*
-	public String getUpdateFields() {
-		String fields = super.getUpdateFields();
-		
-		fields += "`"+getPrefix()+"name` = ? ";
-		fields += "`"+getPrefix()+"description` = ?";
-		
-		return fields;
-	}
-	*/
-	
-	/**
 	 * Retourne une représentation textuelle de l'évènement.
 	 */
 	public String toString() {

@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.Calendar;
+
 import model.FieldsList;
 
 /**
@@ -24,7 +26,7 @@ public class User extends Entity {
 		fields.add("lastName", "String");
 		fields.add("email", "String");
 		fields.add("password", "String");
-		fields.add("birth", "Calendar");
+		fields.add("birth", "Date");
 		
 		factory.setFieldsList(fields);
 	}
@@ -42,8 +44,8 @@ public class User extends Entity {
 	public String getPassword() {
 		return (String) getFieldsValues().get("password");
 	}
-	public String getBirth() {
-		return (String) getFieldsValues().get("birth");
+	public Calendar getBirth() {
+		return (Calendar) getFieldsValues().get("birth");
 	}
 	
 	// Setteurs
@@ -59,7 +61,7 @@ public class User extends Entity {
 	public void setPassword(String password) {
 		getFieldsValues().put("password", password);
 	}
-	public void setBirth(String birth) {
+	public void setBirth(Calendar birth) {
 		getFieldsValues().put("birth", birth);
 	}
 	
@@ -72,7 +74,7 @@ public class User extends Entity {
 		str += "\t- firstName: "+getFirstName()+"\n";
 		str += "\t- lastName: "+getLastName()+"\n";
 		str += "\t- email: "+getEmail()+"\n";
-		str += "\t- birth: "+getBirth()+"\n";
+		str += "\t- birth: "+getBirth().getTime()+"\n";
 		
 		return str;
 	}
