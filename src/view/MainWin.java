@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.util.List;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -77,8 +78,8 @@ public class MainWin extends JFrame {
 	
 	public void setTree() throws Exception
 	{
-		ArrayList<Entity> usersList = User.factory.getAll();
-		ArrayList<String> usersNames = new ArrayList<String>();
+		List<Entity> usersList = User.factory.getAll();
+		List<String> usersNames = new ArrayList<String>();
 		
 		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Users");
 		  jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -93,8 +94,8 @@ public class MainWin extends JFrame {
 	
 	public void setTreeGroupe() throws Exception
 	{
-		ArrayList<Entity> groupeList = Group.factory.getAll();
-		ArrayList<String> groupeNames = new ArrayList<String>();
+		List<Entity> groupeList = Group.factory.getAll();
+		List<String> groupeNames = new ArrayList<String>();
 		
 		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Groupe");
 		  jTreeGroupe.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));

@@ -1,9 +1,5 @@
 package model.entities;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-
 import model.FieldsList;
 
 /**
@@ -12,109 +8,60 @@ import model.FieldsList;
  * @author Julien Valverdé
  */
 public class User extends Entity {
-	// Objet usine
-	public static EntityFactory factory;
+	/*
+	 * Objet usine
+	 */
+	public static EntityFactory factory = new EntityFactory();
 	static {
-		try {
-			// Champs
-			FieldsList fields = new FieldsList();
-			fields.add("firstName", "String");
-			fields.add("lastName", "String");
-			fields.add("email", "String");
-			fields.add("password", "String");
-			fields.add("birth", "Date");
-			
-			// Création de l'objet
-			factory = new EntityFactory(
-					"model.entities.User",
-					"users",
-					"user",
-					fields);
-		} catch (Exception e) {
-			System.out.println("Initialisation de User impossible : "+e);
-		}
+		factory.setClassName("model.entities.User");
+		factory.setTable("users");
+		factory.setSingle("user");
+		factory.setParent(Entity.factory);
+		
+		// Champs
+		FieldsList fields = new FieldsList();
+		fields.add("firstName", "String");
+		fields.add("lastName", "String");
+		fields.add("email", "String");
+		fields.add("password", "String");
+		fields.add("birth", "Calendar");
+		
+		factory.setFieldsList(fields);
 	}
 	
-	// Attributs de l'entité
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String password;
-	private Date birth;
-	
+	// Getteurs
 	public String getFirstName() {
-		return firstName;
+		return (String) getFieldsValues().get("firstName");
 	}
 	public String getLastName() {
-		return lastName;
+		return (String) getFieldsValues().get("lastName");
 	}
 	public String getEmail() {
-		return email;
+		return (String) getFieldsValues().get("email");
 	}
 	public String getPassword() {
-		return password;
+		return (String) getFieldsValues().get("password");
 	}
-	public Date getBirth() {
-		return birth;
+	public String getBirth() {
+		return (String) getFieldsValues().get("birth");
 	}
 	
+	// Setteurs
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		getFieldsValues().put("firstName", firstName);
 	}
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		getFieldsValues().put("lastName", lastName);
 	}
 	public void setEmail(String email) {
-		this.email = email;
+		getFieldsValues().put("email", email);
 	}
 	public void setPassword(String password) {
-		this.password = password;
+		getFieldsValues().put("password", password);
 	}
-	public void setBirth(Date birth) {
-		this.birth = birth;
+	public void setBirth(String birth) {
+		getFieldsValues().put("birth", birth);
 	}
-	
-	public User(EntityFactory factory) throws Exception {
-		super(factory);
-	}
-	
-	public void save(ResultSet res) throws Exception {
-		super.save(res);
-		
-		firstName = res.getString(getPrefix()+"firstName");
-		lastName = res.getString(getPrefix()+"lastName");
-		email = res.getString(getPrefix()+"email");
-		password = res.getString(getPrefix()+"password");
-		birth = res.getDate(getPrefix()+"birth");
-	}
-	
-	// Création de la liste des valeurs des attributs
-	public ArrayList<Object> getFieldsValues() {
-		ArrayList<Object> values = super.getFieldsValues();
-		values.add(firstName);
-		values.add(lastName);
-		values.add(email);
-		values.add(password);
-		values.add(birth);
-		
-		return values;
-	}
-	
-	/**
-	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
-	 */
-	/*
-	public ArrayList<String> getFields() {
-		ArrayList<String> fields = super.getUpdateFields();
-		fields.add("firstName");
-		fields.add("lastName");
-		fields.add("email");
-		fields.add("password");
-		fields.add("birth");
-		
-		return fields;
-	}
-	*/
 	
 	/*
 	 * toString

@@ -1,57 +1,54 @@
 package model.entities;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import model.FieldsList;
 
 public abstract class Entity {
-	// Objet usine
+	/*
+	 * Objet usine
+	 */
+	public static EntityFactory factory = new EntityFactory();
+	static {
+		factory.setClassName("model.entities.Entity");
+		
+		// Champs
+		FieldsList fields = new FieldsList();
+		fields.add("id", "int");
+		
+		factory.setFieldsList(fields);
+	}
+	
+	// Objet usine de l'instance
 	private EntityFactory factoryObject;
 	
-	// Propriétés du type d'entité
-	private String table;
-	private String single;
-	private String prefix;
+	// Valeurs des champs
+	private Map<String, Object> fieldsValues = new HashMap<String, Object>();
 	
-	public EntityFactory getFactoryObject() {
+	// Getteurs
+	public EntityFactory getFactory() {
 		return factoryObject;
 	}
-	public String getTable() {
-		return table;
+	protected Map<String, Object> getFieldsValues() {
+		return fieldsValues;
 	}
-	public String getSingle() {
-		return single;
-	}
-	public String getPrefix() {
-		return prefix;
-	}
-	
-	// Attributs de l'entité
-	private int id;
-	
 	public int getID() {
-		return id;
+		return (int) fieldsValues.get("id");
 	}
 	
-	/*
-	 * Constructeur
-	 * Sauvegarde les propriétés du modèle à partir de l'usine
-	 */
-	public Entity(EntityFactory factoryObject) throws Exception {
+	// Setteurs
+	public void setFactory(EntityFactory factoryObject) {
 		this.factoryObject = factoryObject;
-		
-		// Stockage des propriétés de l'entité
-		table = factoryObject.getTable();
-		single = factoryObject.getSingle();
-		prefix = factoryObject.getPrefix();
 	}
 	
-	public void save(ResultSet res) throws Exception {
-		id = res.getInt(getPrefix()+"id");
-	}
-	
-	// Création de la liste des valeurs des attributs
-	public ArrayList<Object> getFieldsValues() {
-		return new ArrayList<Object>();
+	// Sauvegarder les valeurs depuis un ResultSet
+	public void save(ResultSet res) throws SQLException, Exception {
+		fieldsValues = getFactory().getFieldsList().save(res, getFactory());
 	}
 	
 	/*
@@ -88,8 +85,8 @@ public abstract class Entity {
 	 * Listes jointes
 	 */
 	
-	static protected ArrayList<Entity> toAdd(ArrayList<Entity> oldList, ArrayList<Entity> updatedList) {
-		ArrayList<Entity> toAddList = new ArrayList<Entity>();
+	static protected List<Entity> toAdd(List<Entity> oldList, List<Entity> updatedList) {
+		List<Entity> toAddList = new ArrayList<Entity>();
 		
 		for (int i = 0; i < updatedList.size(); i++) {
 				Entity ent = updatedList.get(i);
@@ -101,8 +98,8 @@ public abstract class Entity {
 		return toAddList;
 	}
 	
-	static protected ArrayList<Entity> toRemove(ArrayList<Entity> oldList, ArrayList<Entity> updatedList) {
-		ArrayList<Entity> toRemoveList = new ArrayList<Entity>();
+	static protected List<Entity> toRemove(List<Entity> oldList, List<Entity> updatedList) {
+		List<Entity> toRemoveList = new ArrayList<Entity>();
 		
 		for (int i = 0; i < oldList.size(); i++) {
 				Entity ent = oldList.get(i);

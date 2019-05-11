@@ -1,12 +1,15 @@
 package model;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import model.entities.Entity;
+import model.entities.EntityFactory;
 
 public class FieldsList {
 	// Noms et types
@@ -52,6 +55,14 @@ public class FieldsList {
 		return names.size();
 	}
 	
+	// Cloner la liste
+	public FieldsList clone() {
+		FieldsList clone = new FieldsList();
+		clone.addAll(this);
+		
+		return clone;
+	}
+	
 	// Binder les valeurs des champs à une requête préparée
 	public void bind(PreparedStatement st, Map<String, Object> values) throws Exception {
 		for (int i = 0; i < size(); i++) {
@@ -70,6 +81,9 @@ public class FieldsList {
 				case "String":
 					st.setString(i + 1, (String) value);
 					break;
+				case "Calendar":
+					st.setString(i + 1, (String) value);
+					break;
 				default:
 					if (value instanceof Entity)
 						st.setInt(i + 1, ((Entity) value).getID());
@@ -77,6 +91,42 @@ public class FieldsList {
 						throw new Exception("Le type enregistré pour le champ "+getName(i)+" n'existe pas.");
 			}
 		}
+	}
+	
+	// Sauvegarder les valeurs des champs à partir du résultat d'une requête
+	public Map<String, Object> save(ResultSet res, EntityFactory factory) throws SQLException, Exception {
+		Map<String, Object> values = new HashMap<String, Object>();
+		
+		for (int i = 0; i < size(); i++) {
+			String name = getName(i);
+			String field = factory.getTable()+"."+factory.getPrefix()+name; // Nom complet du champ à récupérer
+			
+			switch (getType(i)) {
+				case "int":
+					values.put(name, res.getInt(field));
+					break;
+				case "float":
+					values.put(name, res.getFloat(field));
+					break;
+				case "boolean":
+					values.put(name, res.getBoolean(field));
+					break;
+				case "String":
+					values.put(name, res.getString(field));
+					break;
+				case "Calendar":
+					values.put(name, res.getString(field));
+					break;
+				default:
+					EntityFactory joined = factory.getJoinedEntities().get(name);
+					
+					// Si le champ courant comprend une jointure
+					if (joined != null)
+						values.put(name, joined.getFromResultSet(res));
+			}
+		}
+		
+		return values;
 	}
 	
 	// Représentation sous forme de String

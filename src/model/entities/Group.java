@@ -1,78 +1,56 @@
 package model.entities;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.FieldsList;
 
 public class Group extends Entity {
-	// Objet usine
-	public static EntityFactory factory;
+	/*
+	 * Objet usine
+	 */
+	public static EntityFactory factory = new EntityFactory();
 	static {
-		try {
-			// Champs
-			FieldsList fields = new FieldsList();
-			fields.add("name", "String");
-			fields.add("owner", "int");
-			
-			// Entités jointes
-			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
-			ArrayList<String> joinedFields = new ArrayList<String>();
-			
-			joinedEntities.add(User.factory); joinedFields.add("owner");
-			
-			// Création de l'objet
-			factory = new EntityFactory(
-					"model.entities.Group",
-					"groups",
-					"group",
-					fields,
-					joinedEntities,
-					joinedFields);
-		} catch (Exception e) {
-			System.out.println("Initialisation de Group impossible : "+e);
-		}
+		factory.setClassName("model.entities.Group");
+		factory.setTable("groups");
+		factory.setSingle("group");
+		factory.setParent(Entity.factory);
+		
+		// Champs
+		FieldsList fields = new FieldsList();
+		fields.add("name", "String");
+		fields.add("owner", "User");
+		
+		factory.setFieldsList(fields);
+		
+		// Entités jointes
+		Map<String, EntityFactory> joinedEntities = new HashMap<String, EntityFactory>();
+		joinedEntities.put("owner", User.factory);
+		
+		factory.setJoinedEntities(joinedEntities);
 	}
 	
-	// Attributs de l'entité
-	private String name;
-	private User owner;
-	private ArrayList<Entity> members;
+	// Liste des membres
+	private List<Entity> members;
 	
 	// Getteurs des attributs
 	public String getName() {
-		return name;
+		return (String) getFieldsValues().get("name");
 	}
 	public User getOwner() {
-		return owner;
+		return (User) getFieldsValues().get("owner");
 	}
-	public ArrayList<Entity> getMembers() {
+	public List<Entity> getMembers() {
 		return members;
 	}
 	
 	// Setteurs des attributs
 	public void setName(String name) {
-		this.name = name;
+		getFieldsValues().put("name", name);
 	}
 	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-	
-	// Constructeur
-	public Group(EntityFactory factory) throws Exception {
-		super(factory);
-	}
-	
-	public void save(ResultSet res) throws Exception {
-		super.save(res);
-		
-		name = res.getString(getPrefix()+"name");
-		owner = (User) User.factory.getFromResultSet(res);
-		
-		// Récupération de la liste des membres du groupe
-		members = refreshMembers();
+		getFieldsValues().put("owner", owner);
 	}
 	
 	/**
@@ -98,14 +76,14 @@ public class Group extends Entity {
 	 * Récupère la liste des membres du groupe.
 	 * @throws Exception 
 	 */
-	private ArrayList<Entity> refreshMembers() throws Exception {
+	private List<Entity> refreshMembers() throws Exception {
 		String usersTable = User.factory.getTable();
 		String usersPrefix = User.factory.getPrefix();
-		String usersGroupsTable = usersTable+"_"+getTable();
+		String usersGroupsTable = usersTable+"_"+getFactory().getTable();
 		
 		String clauses = "";
 		clauses += "JOIN `"+usersGroupsTable+"` ON `"+usersGroupsTable+"`.`"+usersPrefix+"id` = `"+usersTable+"`.`"+usersPrefix+"id`";
-		clauses += "WHERE `"+usersGroupsTable+"`.`"+getPrefix()+"id` = ?";
+		clauses += "WHERE `"+usersGroupsTable+"`.`"+getFactory().getPrefix()+"id` = ?";
 		
 		// Valeurs à binder
 		Map<String, Object> values = new HashMap<String, Object>();
@@ -115,17 +93,17 @@ public class Group extends Entity {
 	}
 	
 	private void updateMembers() throws Exception {
-		ArrayList<Entity> oldList = refreshMembers();
-		ArrayList<Entity> updatedList = getMembers();
+		List<Entity> oldList = refreshMembers();
+		List<Entity> updatedList = getMembers();
 		
-		ArrayList<Entity> toRemoveList = toRemove(oldList, updatedList);
+		List<Entity> toRemoveList = toRemove(oldList, updatedList);
 		
 		/*
 		 * Requête d'ajout des nouveaux membres
 		 */
-		ArrayList<Entity> toAddList = toAdd(oldList, updatedList);
+		List<Entity> toAddList = toAdd(oldList, updatedList);
 		
-		String usersGroupsTable = User.factory.getTable()+"_"+getTable();
+		String usersGroupsTable = User.factory.getTable()+"_"+getFactory().getTable();
 		String addQuery = "INSERT INTO `"+usersGroupsTable+"` VALUES(";
 		
 		for (int i = 0; i < toAddList.size(); i++)

@@ -1,7 +1,5 @@
 package model.entities;
 
-import java.sql.ResultSet;
-
 import model.FieldsList;
 
 /**
@@ -10,56 +8,38 @@ import model.FieldsList;
  * @author Julien Valverdé
  */
 public class Location extends Entity {
-	// Objet usine
-	public static EntityFactory factory;
+	/*
+	 * Objet usine
+	 */
+	public static EntityFactory factory = new EntityFactory();
 	static {
-		try {
-			// Champs
-			FieldsList fields = new FieldsList();
-			fields.add("name", "String");
-			fields.add("description", "String");
-			
-			// Création de l'objet
-			factory = new EntityFactory(
-					"model.entities.Location",
-					"locations",
-					"location",
-					fields);
-		} catch (Exception e) {
-			System.out.println("Initialisation de Location impossible : "+e);
-		}
+		factory.setClassName("model.entities.Location");
+		factory.setTable("locations");
+		factory.setSingle("location");
+		factory.setParent(Entity.factory);
+		
+		// Champs
+		FieldsList fields = new FieldsList();
+		fields.add("name", "String");
+		fields.add("description", "String");
+		
+		factory.setFieldsList(fields);
 	}
-	
-	// Attributs de l'entité
-	private String name;
-	private String description;
 	
 	// Getteurs des attributs
 	public String getName() {
-		return name;
+		return (String) getFieldsValues().get("name");
 	}
 	public String getDescription() {
-		return description;
+		return (String) getFieldsValues().get("description");
 	}
 	
 	// Setteurs des attributs
 	public void setName(String name) {
-		this.name = name;
+		getFieldsValues().put("name", name);
 	}
 	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	// Constructeur
-	public Location(EntityFactory factory) throws Exception {
-		super(factory);
-	}
-	
-	public void save(ResultSet res) throws Exception {
-		super.save(res);
-		
-		name = res.getString(getPrefix()+"name");
-		description = res.getString(getPrefix()+"description");
+		getFieldsValues().put("description", description);
 	}
 	
 	/**

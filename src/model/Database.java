@@ -126,7 +126,7 @@ public class Database extends Observable {
 	}
 	public ResultSet prepareAndExecute(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		return execute(prepare(query, fields, values));
-	}
+	}	
 	public ResultSet prepareUpdateAndExecute(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		return executeUpdate(prepareUpdate(query, fields, values));
 	}

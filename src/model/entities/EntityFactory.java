@@ -1,9 +1,11 @@
 package model.entities;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.Database;
@@ -17,7 +19,8 @@ import model.FieldsList;
  * @author Julien Valverdé
  */
 public class EntityFactory {
-	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
+	// Liste des objets instanciés
+	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>();
 	
 	/*
 	 * Attributs
@@ -28,10 +31,9 @@ public class EntityFactory {
 	private String single; // Appellation d'une entité seule
 	private String prefix; // Préfixe des champs
 	private EntityFactory parent; // Entité parente
-	private FieldsList fields; // Champs
+	private FieldsList fieldsList; // Liste des champs
 	
-	private ArrayList<EntityFactory> joinedEntities; // Entités jointes
-	private ArrayList<String> joinedFields;
+	private Map<String, EntityFactory> joinedEntities; // Entités jointes (<Nom du champ, Usine de l'entité à joindre>)
 	
 	/*
 	 * Getteurs
@@ -51,73 +53,56 @@ public class EntityFactory {
 	public EntityFactory getParent() {
 		return parent;
 	}
-	public FieldsList getFields() {
-		return fields;
+	public FieldsList getFieldsList() {
+		return fieldsList;
 	}
-	public ArrayList<EntityFactory> getJoinedEntities() {
+	public Map<String, EntityFactory> getJoinedEntities() {
 		return joinedEntities;
 	}
-	public ArrayList<String> getJoinedFields() {
-		return joinedFields;
-	}
 	
 	/*
-	 * Constructeurs
+	 * Setteurs
 	 */
-	public EntityFactory(String className, String table, String single, EntityFactory parent, FieldsList fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
-		this.classObject = Class.forName(className);
-		
+	public void setClassName(String className) {
+		try {
+			classObject = Class.forName(className);
+		}
+		catch (ClassNotFoundException e) {
+			System.err.println("Impossible d'initialiser l'usine de "+className+" : "+e);
+		}
+	}
+	public void setTable(String table) {
 		this.table = table;
+	}
+	public void setSingle(String single) {
 		this.single = single;
 		this.prefix = single+"_";
+	}
+	public void setParent(EntityFactory parent) {
 		this.parent = parent;
-		this.fields = getFieldsList(fields);
-		
-		this.joinedEntities = joinedEntities;
-		this.joinedFields = joinedFields;
 	}
-	public EntityFactory(String className, String table, String single, FieldsList fields) throws ClassNotFoundException {
-		this(className, table, single, null, fields, null, null);
-	}
-	public EntityFactory(String className, String table, String single, EntityFactory parent, FieldsList fields) throws ClassNotFoundException {
-		this(className, table, single, parent, fields, null, null);
-	}
-	public EntityFactory(String className, String table, String single, FieldsList fields, ArrayList<EntityFactory> joinedEntities, ArrayList<String> joinedFields) throws ClassNotFoundException {
-		this(className, table, single, null, fields, joinedEntities, joinedFields);
-	}
-	
-	/*
-	 * getFieldsList
-	 * Construit la liste des champs
-	 */
-	public FieldsList getFieldsList(FieldsList fields) {
-		FieldsList list = new FieldsList();
+	public void setFieldsList(FieldsList fields) {
+		fieldsList = new FieldsList();
 		
 		// L'entité a un parent
 		if (parent != null)
-			list.addAll(parent.getFields());
+			fieldsList.addAll(parent.getFieldsList());
 		
-		list.addAll(fields);
-		return list;
+		fieldsList.addAll(fields);
+	}
+	public void setJoinedEntities(Map<String, EntityFactory> joinedEntities) {
+		this.joinedEntities = joinedEntities;
 	}
 	
-	// Créateurs d'objets
-	private Entity newEntity(ResultSet res) throws Exception {
-		Entity entity = (Entity) classObject.getConstructor(EntityFactory.class).newInstance(this);
+	// Création d'une nouvelle entité instanciée
+	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, SQLException, Exception {
+		Entity entity = (Entity) classObject.getConstructor().newInstance();
+		entity.setFactory(this);
 		entity.save(res);
 		
-		entities.put((int) entity.getID(), entity);
+		entities.put(entity.getID(), entity);
 		
 		return entity;
-	}
-	
-	public void save(Entity ent, ResultSet res) throws Exception {
-		ent.save(res);
-	}
-	
-	// Création de la liste des valeurs des attributs
-	public ArrayList<Object> getFieldsValues(Entity ent) {
-		return ent.getFieldsValues();
 	}
 	
 	/**
@@ -130,11 +115,13 @@ public class EntityFactory {
 	private String getSelectQuery(String clauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
 		
-		if (joinedEntities != null && joinedEntities.size() > 0) {
-			for (int i = 0; i < joinedEntities.size(); i++) {
-				EntityFactory joinedEnt = joinedEntities.get(i);				
-				query += "\nJOIN `"+joinedEnt.getTable()+"` ON `"+joinedEnt.getTable()+"`.`"+joinedEnt.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+joinedFields.get(i)+"`";
-			}
+		// Parcourir tous les champs pour trouver les jointures
+		for (int i = 0; i < fieldsList.size(); i++) {
+			EntityFactory joined = joinedEntities.get(fieldsList.getName(i));
+			
+			// Ce champ comprend une jointure
+			if (joined != null)
+				query += "\nJOIN `"+joined.getTable()+"` ON `"+joined.getTable()+"`.`"+joined.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+fieldsList.getName(i)+"`";
 		}
 		
 		if (clauses == null)
@@ -161,8 +148,8 @@ public class EntityFactory {
 	 * 
 	 * Retourne les instances du modèle vérifiant la requête passée.
 	 */
-	private ArrayList<Entity> get(ResultSet res) throws SQLException, Exception {
-		ArrayList<Entity> list = new ArrayList<Entity>();
+	private List<Entity> get(ResultSet res) throws SQLException, Exception {
+		List<Entity> list = new ArrayList<Entity>();
 		
 		// ID de la dernière ligne traitée
 		int previousId = -1;
@@ -182,10 +169,10 @@ public class EntityFactory {
 		
 		return list;
 	}
-	public ArrayList<Entity> get(String clauses) throws SQLException, Exception {
+	public List<Entity> get(String clauses) throws SQLException, Exception {
 		return get(Database.database.prepareAndExecute(getSelectQuery(clauses)));
 	}
-	public ArrayList<Entity> get(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
+	public List<Entity> get(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		return get(Database.database.prepareAndExecute(getSelectQuery(clauses), fields, values));
 	}
 	
@@ -193,26 +180,19 @@ public class EntityFactory {
 	 * getAll
 	 * Retourne une liste de tous les objets du modèle.
 	 */
-	public ArrayList<Entity> getAll() throws Exception {
+	public List<Entity> getAll() throws Exception {
 		return get((String) null);
 	}
 	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws SQLException 
-	 * @throws Exception
-	 */
 	public Entity getSingle(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
-		ArrayList<Entity> list = get(clauses, fields, values);
+		List<Entity> list = get(clauses, fields, values);
 		
 		if (list.size() == 0)
 			return null;
 		return list.get(0);
 	}
 	public Entity getSingle(String clauses) throws SQLException, Exception {
-		ArrayList<Entity> list = get(clauses);
+		List<Entity> list = get(clauses);
 		
 		if (list.size() == 0)
 			return null;
@@ -223,6 +203,7 @@ public class EntityFactory {
 	static {
 		getByIDQueryFields.add("id", "int");
 	}
+	
 	/*
 	 * getByID
 	 * 	id : ID de la ligne du modèle à retourner
@@ -242,7 +223,7 @@ public class EntityFactory {
 	 * Insertion
 	 */
 	
-	public String getInsertQuery() {
+	public String getInsertQuery(FieldsList fields) {
 		String query = "INSERT INTO `"+table+"`("+fields.toQueryString(prefix)+") VALUES(";
 		
 		// Liste des valeurs à binder
@@ -254,7 +235,10 @@ public class EntityFactory {
 	
 	// Insertion d'une nouvelle entité
 	public Entity insert(Map<String, Object> values) throws SQLException, Exception {
-		ResultSet res = Database.database.prepareUpdateAndExecute(getInsertQuery(), fields, values);
+		FieldsList fields = fieldsList.clone();
+		fields.remove("id"); // On ne veut pas insérer l'ID manuellement, c'est la BDD qui le choisit
+		
+		ResultSet res = Database.database.prepareUpdateAndExecute(getInsertQuery(fields), fields, values);
 		
 		res.next();
 		return getByID(res.getInt(1)); // Renvoi de l'entité nouvellement crée

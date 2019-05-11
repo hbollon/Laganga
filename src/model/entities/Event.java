@@ -1,106 +1,77 @@
 package model.entities;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.FieldsList;
 
 public class Event extends Entity {
-	// Objet usine
-	public static EntityFactory factory;
+	/*
+	 * Objet usine
+	 */
+	public static EntityFactory factory = new EntityFactory();
 	static {
-		try {
-			// Champs
-			FieldsList fields = new FieldsList();
-			fields.add("name", "String");
-			fields.add("type", "String");
-			fields.add("priority", "int");
-			fields.add("begin", "String");
-			fields.add("end", "String");
-			fields.add("location", "Location");
-			
-			// Entités jointes
-			ArrayList<EntityFactory> joinedEntities = new ArrayList<EntityFactory>();
-			ArrayList<String> joinedFields = new ArrayList<String>();
-			
-			joinedEntities.add(Location.factory); joinedFields.add("location");
-			
-			// Création de l'objet
-			factory = new EntityFactory(
-					"model.entities.Event",
-					"events",
-					"event",
-					fields,
-					joinedEntities,
-					joinedFields);
-		} catch (Exception e) {
-			System.out.println("Initialisation de Event impossible : "+e);
-		}
+		factory.setClassName("model.entities.Event");
+		factory.setTable("events");
+		factory.setSingle("event");
+		factory.setParent(Entity.factory);
+		
+		// Champs
+		FieldsList fields = new FieldsList();
+		fields.add("name", "String");
+		fields.add("type", "String");
+		fields.add("priority", "int");
+		fields.add("begin", "String");
+		fields.add("end", "String");
+		fields.add("location", "Location");
+		
+		factory.setFieldsList(fields);
+		
+		// Entités jointes
+		Map<String, EntityFactory> joinedEntities = new HashMap<String, EntityFactory>();
+		joinedEntities.put("location", Location.factory);
+		
+		factory.setJoinedEntities(joinedEntities);
 	}
-	
-	// Attributs de l'entité
-	private String name;
-	private String type;
-	private int priority;
-	private Date begin;
-	private Date end;
-	private Location location;
 	
 	// Getteurs des attributs
 	public String getName() {
-		return name;
+		return (String) getFieldsValues().get("name");
 	}
 	public String getType() {
-		return type;
+		return (String) getFieldsValues().get("type");
 	}
 	public int getPriority() {
-		return priority;
+		return (int) getFieldsValues().get("priority");
 	}
-	public Date getBegin() {
-		return begin;
+	public String getBegin() {
+		return (String) getFieldsValues().get("begin");
 	}
-	public Date getEnd() {
-		return end;
+	public String getEnd() {
+		return (String) getFieldsValues().get("end");
 	}
 	public Location getLocation() {
-		return location;
+		return (Location) getFieldsValues().get("location");
 	}
 	
 	// Setteurs des attributs
 	public void setName(String name) {
-		this.name = name;
+		getFieldsValues().put("name", name);
 	}
 	public void setType(String type) {
-		this.type = type;
+		getFieldsValues().put("type", type);
 	}
 	public void setPriority(int priority) {
-		this.priority = priority;
+		getFieldsValues().put("priority", priority);
 	}
-	public void setBegin(Date begin) {
-		this.begin = begin;
+	public void setBegin(String begin) {
+		getFieldsValues().put("begin", begin);
 	}
-	public void setEnd(Date end) {
-		this.end = end;
+	public void setEnd(String end) {
+		getFieldsValues().put("end", end);
 	}
 	public void setLocation(Location location) {
-		this.location = location;
-	}
-	
-	// Constructeur
-	public Event(EntityFactory factory) throws Exception {
-		super(factory);
-	}
-	
-	public void save(ResultSet res) throws Exception {
-		super.save(res);
-		
-		name = res.getString(getPrefix()+"name");
-		type = res.getString(getPrefix()+"type");
-		priority = res.getInt(getPrefix()+"priority");
-		begin = res.getDate(getPrefix()+"begin");
-		end = res.getDate(getPrefix()+"end");
-		location = (Location) Location.factory.getFromResultSet(res);
+		getFieldsValues().put("location", location);
 	}
 	
 	/**
