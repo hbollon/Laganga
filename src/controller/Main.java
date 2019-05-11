@@ -4,8 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 
-import model.*;
-import view.*;
+import model.Database;
+import model.LocalUser;
+import view.SplashWin;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
@@ -19,11 +20,21 @@ public abstract class Main {
 		TimeUnit.SECONDS.sleep(1);
 		Database.database.connect();
 		
+		// Tests insertion
+		//System.out.println(Event.factory.getAll());
+		
+		/*
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("firstName", "Damien");
+		values.put("lastName", "De Cuck");
+		values.put("email", "damien@cuckworld.fr");
+		values.put("password", "jeej");
+		values.put("birth", "1969-3-21");
+		
+		System.out.println(User.factory.insert(values));
+		*/
+		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
-		
-		//System.out.println(User.factory.getByID(1));
-		Group group1 = (Group) Group.factory.getByID(1);
-		System.out.println(group1.getOwner());
 	}
 }
