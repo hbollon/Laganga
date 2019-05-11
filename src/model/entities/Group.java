@@ -53,20 +53,6 @@ public class Group extends Entity {
 		getFieldsValues().put("owner", owner);
 	}
 	
-	/**
-	 * Renvoie la liste des champs à mettre à jour lors d'une opération update.
-	 */
-	/*
-	public String getUpdateFields() {
-		String fields = super.getUpdateFields();
-		
-		fields += "`"+getPrefix()+"name` = ?, ";
-		fields += "`"+getPrefix()+"owner` = ? ";
-		
-		return fields;
-	}
-	*/
-	
 	private static FieldsList refreshMembersQueryFields = new FieldsList();
 	static {
 		refreshMembersQueryFields.add("id", "int");
