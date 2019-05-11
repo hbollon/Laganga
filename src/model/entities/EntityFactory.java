@@ -33,7 +33,7 @@ public class EntityFactory {
 	private EntityFactory parent; // Entité parente
 	private FieldsList fieldsList; // Liste des champs
 	
-	private Map<String, EntityFactory> joinedEntities; // Entités jointes (<Nom du champ, Usine de l'entité à joindre>)
+	private Map<String, EntityFactory> joinedEntities = new HashMap<String, EntityFactory>(); // Entités jointes (<Nom du champ, Usine de l'entité à joindre>)
 	
 	/*
 	 * Getteurs
