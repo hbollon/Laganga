@@ -1,9 +1,13 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
+
+import com.toedter.calendar.JCalendar;
 
 import model.Entity;
 //import model.Group;
@@ -43,6 +47,8 @@ public class MainWin extends JFrame {
 	private JMenuItem aide = null;
 	private JMenuItem credit = null;
 	
+	private static MainWinCalendar winCalendar;
+	
 	private JTree getJTree() {
 		if (jTree == null) {
 			jTree = new JTree();
@@ -67,6 +73,7 @@ public class MainWin extends JFrame {
 	 
 	public void initialize()
 	{
+		winCalendar = new MainWinCalendar(this);
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());
@@ -126,7 +133,7 @@ public class MainWin extends JFrame {
 			leftPanel.add(getJScrollPaneGroup());
 			leftPanel.add(getJScrollPane());
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
-			centerPanel.add(new MainWinCalendar(this));
+			centerPanel.add(winCalendar);
 			windowPanel.add(leftPanel, BorderLayout.WEST);
 			windowPanel.add(centerPanel, BorderLayout.CENTER);
 			windowPanel.add(rightPanel, BorderLayout.EAST);
@@ -199,5 +206,10 @@ public class MainWin extends JFrame {
 		createEvent.addActionListener(new OpenWinCreatEvent());
 		
 		return barMenu;
+	}
+	
+	public static void callAddEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
+	{
+		winCalendar.getCalendarP().addEventMois(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
 	}
 }
