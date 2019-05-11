@@ -2,6 +2,8 @@ package model.entities;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.FieldsList;
 
@@ -106,8 +108,8 @@ public class Group extends Entity {
 		clauses += "WHERE `"+usersGroupsTable+"`.`"+getPrefix()+"id` = ?";
 		
 		// Valeurs à binder
-		ArrayList<Object> values = new ArrayList<Object>();
-		values.add(getID());
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("id", getID());
 		
 		return User.factory.get(clauses, refreshMembersQueryFields, values);
 	}

@@ -1,6 +1,7 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 
 import model.entities.User;
@@ -53,8 +54,8 @@ public class LocalUser extends Observable {
 		
 		else {
 			// Récupération de l'utilisateur à partir de l'email donné
-			ArrayList<Object> values = new ArrayList<Object>();
-			values.add(email);
+			Map<String, Object> values = new HashMap<String, Object>();
+			values.put("email", email);
 			
 			User user = (User) User.factory.getSingle("WHERE `user_email` = ?", loginQueryFields, values);
 			

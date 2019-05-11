@@ -5,8 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.Observable;
 
 /**
@@ -57,35 +56,6 @@ public class Database extends Observable {
 		notifyObservers(CONNECTION_SUCCESS);
 	}
 	
-	/**
-	 * Exécute une requête et retourne un objet ResultSet.
-	 * 
-	 * @param query Requête SQL.
-	 * 
-	 * @return ResultSet contenant les lignes retournées par la requête.
-	 * 
-	 * @throws SQLException
-	 */
-	public ResultSet execute(String query) throws SQLException {
-		// Prévenir les observeurs qu'une requête a débuté
-		setChanged();
-		notifyObservers(QUERY_STARTED);
-		
-		Statement st = connection.createStatement(
-				ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_UPDATABLE);
-		st.closeOnCompletion();
-		
-		ResultSet res = st.executeQuery(query);
-		res.beforeFirst();
-		
-		// Prévenir les observeurs que la requête est finie
-		setChanged();
-		notifyObservers(QUERY_FINISHED);
-		
-		return res;
-	}
-	
 	// Préparation d'une requête
 	public PreparedStatement prepare(String query) throws SQLException {
 		PreparedStatement st = connection.prepareStatement(
@@ -95,7 +65,7 @@ public class Database extends Observable {
 		
 		return st;
 	}
-	public PreparedStatement prepare(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+	public PreparedStatement prepare(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		PreparedStatement st = prepare(query);
 		fields.bind(st, values);
 		
@@ -103,7 +73,7 @@ public class Database extends Observable {
 	}
 	
 	// Préparation d'une requête INSERT/UPDATE/DELETE préparée
-	public PreparedStatement prepareUpdate(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+	public PreparedStatement prepareUpdate(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		PreparedStatement st = connection.prepareStatement(
 				query,
 				PreparedStatement.RETURN_GENERATED_KEYS);
@@ -154,10 +124,10 @@ public class Database extends Observable {
 	public ResultSet prepareAndExecute(String query) throws SQLException {
 		return execute(prepare(query));
 	}
-	public ResultSet prepareAndExecute(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+	public ResultSet prepareAndExecute(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		return execute(prepare(query, fields, values));
 	}
-	public ResultSet prepareUpdateAndExecute(String query, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+	public ResultSet prepareUpdateAndExecute(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		return executeUpdate(prepareUpdate(query, fields, values));
 	}
 }

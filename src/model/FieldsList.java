@@ -3,13 +3,15 @@ package model;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import model.entities.Entity;
 
 public class FieldsList {
 	// Noms et types
-	private ArrayList<String> names = new ArrayList<String>();
-	private HashMap<String, String> types = new HashMap<String, String>();
+	private List<String> names = new ArrayList<String>();
+	private Map<String, String> types = new HashMap<String, String>();
 	
 	// Récupération d'un champ
 	public String getName(int index) {
@@ -51,13 +53,9 @@ public class FieldsList {
 	}
 	
 	// Binder les valeurs des champs à une requête préparée
-	public void bind(PreparedStatement st, ArrayList<Object> values) throws Exception {
-		// Si la taille de l'ArrayList des valeurs à binder est incorrecte
-		if (size() != values.size())
-			throw new Exception("La liste des valeurs doit faire la même taille que la liste des champs.");
-		
+	public void bind(PreparedStatement st, Map<String, Object> values) throws Exception {
 		for (int i = 0; i < size(); i++) {
-			Object value = values.get(i);
+			Object value = values.get(getName(i));
 			
 			switch (getType(i)) {
 				case "int":

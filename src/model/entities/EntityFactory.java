@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import model.Database;
 import model.FieldsList;
@@ -16,7 +17,7 @@ import model.FieldsList;
  * @author Julien Valverdé
  */
 public class EntityFactory {
-	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
+	private Map<Integer, Entity> entities = new HashMap<Integer, Entity>(); // Liste des objets
 	
 	/*
 	 * Attributs
@@ -184,7 +185,7 @@ public class EntityFactory {
 	public ArrayList<Entity> get(String clauses) throws SQLException, Exception {
 		return get(Database.database.prepareAndExecute(getSelectQuery(clauses)));
 	}
-	public ArrayList<Entity> get(String clauses, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+	public ArrayList<Entity> get(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		return get(Database.database.prepareAndExecute(getSelectQuery(clauses), fields, values));
 	}
 	
@@ -203,7 +204,7 @@ public class EntityFactory {
 	 * @throws SQLException 
 	 * @throws Exception
 	 */
-	public Entity getSingle(String clauses, FieldsList fields, ArrayList<Object> values) throws SQLException, Exception {
+	public Entity getSingle(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
 		ArrayList<Entity> list = get(clauses, fields, values);
 		
 		if (list.size() == 0)
@@ -218,6 +219,10 @@ public class EntityFactory {
 		return list.get(0);
 	}
 	
+	private static FieldsList getByIDQueryFields = new FieldsList();
+	static {
+		getByIDQueryFields.add("id", "int");
+	}
 	/*
 	 * getByID
 	 * 	id : ID de la ligne du modèle à retourner
@@ -225,15 +230,11 @@ public class EntityFactory {
 	 * Retourne l'objet du modèle correspondant à l'ID indiqué.
 	 */
 	public Entity getByID(int id) throws Exception {
-		// Champs
-		FieldsList fields = new FieldsList();
-		fields.add("id", "int");
-		
 		// Valeurs
-		ArrayList<Object> values = new ArrayList<Object>();
-		values.add(id);
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("id", id);
 		
-		return getSingle("WHERE `"+getPrefix()+"id` = ?", fields, values);
+		return getSingle("WHERE `"+getPrefix()+"id` = ?", getByIDQueryFields, values);
 	}
 	
 	
@@ -252,7 +253,7 @@ public class EntityFactory {
 	}
 	
 	// Insertion d'une nouvelle entité
-	public Entity insert(ArrayList<Object> values) throws SQLException, Exception {
+	public Entity insert(Map<String, Object> values) throws SQLException, Exception {
 		ResultSet res = Database.database.prepareUpdateAndExecute(getInsertQuery(), fields, values);
 		
 		res.next();
