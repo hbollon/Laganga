@@ -102,11 +102,11 @@ public class EntityFactory {
 	// Création d'une nouvelle entité instanciée
 	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, SQLException, Exception {
 		Entity entity = (Entity) classObject.getConstructor().newInstance();
+		entities.put(res.getInt(getTable()+"."+getPrefix()+"id"), entity);
+		
 		entity.setFactory(this);
 		entity.save(res);
-		
-		entities.put(entity.getID(), entity);
-		
+				
 		return entity;
 	}
 	
@@ -122,11 +122,12 @@ public class EntityFactory {
 		
 		// Parcourir tous les champs pour trouver les jointures
 		for (int i = 0; i < fieldsList.size(); i++) {
-			EntityFactory joined = joinedEntities.get(fieldsList.getName(i));
+			String field = fieldsList.getName(i);
+			EntityFactory joined = joinedEntities.get(field);
 			
 			// Ce champ comprend une jointure
 			if (joined != null)
-				query += "\nJOIN `"+joined.getTable()+"` ON `"+joined.getTable()+"`.`"+joined.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+fieldsList.getName(i)+"`";
+				query += "\n"+getJoinClause(joined, field);
 		}
 		
 		if (clauses == null)
@@ -141,6 +142,7 @@ public class EntityFactory {
 	 */
 	public Entity getFromResultSet(ResultSet res) throws Exception {
 		Entity entity = entities.get(res.getInt(getTable()+"."+getPrefix()+"id"));
+		
 		if (entity == null)
 			entity = newEntity(res);
 		
@@ -249,9 +251,15 @@ public class EntityFactory {
 		return getByID(res.getInt(1)); // Renvoi de l'entité nouvellement crée
 	}
 	
+	
 	/*
 	 * Construction des requêtes SQL
 	 */
+	
+	// Clause de jointure
+	public String getJoinClause(EntityFactory joined, String field) {
+		return "JOIN `"+joined.getTable()+"` ON `"+joined.getTable()+"`.`"+joined.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+field+"`";
+	}
 	
 	// Update
 	public String getUpdateQuery(FieldsList fields) {

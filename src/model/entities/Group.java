@@ -1,5 +1,8 @@
 package model.entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +23,7 @@ public class Group extends Entity {
 		// Champs
 		FieldsList fields = new FieldsList();
 		fields.add("name", "String");
-		fields.add("owner", "User");
+		fields.add("owner", "model.entities.User");
 		
 		factory.setFieldsList(fields);
 		
@@ -31,8 +34,8 @@ public class Group extends Entity {
 		factory.setJoinedEntities(joinedEntities);
 	}
 	
-	// Liste des membres
-	private List<Entity> members;
+	// Liste des appartenances au groupe
+	private List<Entity> memberships = new ArrayList<Entity>();
 	
 	// Getteurs des attributs
 	public String getName() {
@@ -40,9 +43,6 @@ public class Group extends Entity {
 	}
 	public User getOwner() {
 		return (User) getFieldsValues().get("owner");
-	}
-	public List<Entity> getMembers() {
-		return members;
 	}
 	
 	// Setteurs des attributs
@@ -53,46 +53,90 @@ public class Group extends Entity {
 		getFieldsValues().put("owner", owner);
 	}
 	
-	private static FieldsList refreshMembersQueryFields = new FieldsList();
-	static {
-		refreshMembersQueryFields.add("id", "int");
-	}
-	
 	/**
 	 * Récupère la liste des membres du groupe.
+	 * @throws SQLException 
 	 * @throws Exception 
 	 */
-	private List<Entity> refreshMembers() throws Exception {
-		String usersTable = User.factory.getTable();
-		String usersPrefix = User.factory.getPrefix();
-		String usersGroupsTable = usersTable+"_"+getFactory().getTable();
-		
-		String clauses = "";
-		clauses += "JOIN `"+usersGroupsTable+"` ON `"+usersGroupsTable+"`.`"+usersPrefix+"id` = `"+usersTable+"`.`"+usersPrefix+"id`";
-		clauses += "WHERE `"+usersGroupsTable+"`.`"+getFactory().getPrefix()+"id` = ?";
-		
-		// Valeurs à binder
-		Map<String, Object> values = new HashMap<String, Object>();
-		values.put("id", getID());
-		
-		return User.factory.get(clauses, refreshMembersQueryFields, values);
+	public void save(ResultSet res) throws SQLException, Exception {
+		super.save(res);
+		refreshMemberships();
 	}
 	
-	private void updateMembers() throws Exception {
-		List<Entity> oldList = refreshMembers();
-		List<Entity> updatedList = getMembers();
+	
+	/*
+	 * Gestion des membres du groupe
+	 */
+	
+	// Rafraîchir la liste des appartenances au groupe
+	private static FieldsList refreshMembershipsQueryFields = new FieldsList();
+	static {
+		refreshMembershipsQueryFields.add("id", "int");
+	}
+	public void refreshMemberships() throws SQLException, Exception {
+		memberships.clear();
+		memberships.addAll(GroupMembership.factory.get("WHERE `"+GroupMembership.factory.getPrefix()+"group` = ?", refreshMembershipsQueryFields, getFieldsValues()));
+	}
+	
+	// Récupérer l'objet d'appartenance au groupe à partir d'un utilisateur (s'il est bien membre, dans le cas contraire la fonction renvoie null)
+	public GroupMembership getMembership(User user) {
+		for (int i = 0; i < memberships.size(); i++) {
+			GroupMembership membership = (GroupMembership) memberships.get(i);
+			
+			if (membership.getUser() == user)
+				return membership;
+		}
 		
-		List<Entity> toRemoveList = toRemove(oldList, updatedList);
+		return null;
+	}
+	
+	// L'utilisateur est-il membre du groupe ?
+	public boolean isMember(User user) {
+		return (getMembership(user) != null);
+	}
+	
+	// Liste des membres
+	public List<User> getMembersList() {
+		List<User> list = new ArrayList<User>();
 		
-		/*
-		 * Requête d'ajout des nouveaux membres
-		 */
-		List<Entity> toAddList = toAdd(oldList, updatedList);
+		for (int i = 0; i < memberships.size(); i++)
+			list.add(((GroupMembership) memberships.get(i)).getUser());
 		
-		String usersGroupsTable = User.factory.getTable()+"_"+getFactory().getTable();
-		String addQuery = "INSERT INTO `"+usersGroupsTable+"` VALUES(";
+		return list;
+	}
+	
+	// Ajouter un membre
+	public boolean addMember(User user) throws SQLException, Exception {
+		// Si l'utilisateur est déjà membre du groupe, tout arrêter et retourner false
+		if (isMember(user))
+			return false;
 		
-		for (int i = 0; i < toAddList.size(); i++)
-			addQuery += "?, ";
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("user", user);
+		values.put("group", this);
+		
+		GroupMembership.factory.insert(values);
+		refreshMemberships();
+		
+		// Ajout réussi, retourner true
+		return true;
+	}
+	
+	// Supprimer un membre
+	public boolean removeMember(User user) throws SQLException, Exception {
+		// Si l'utilisateur est le propriétaire du groupe, tout arrêter et retourner false
+		if (user == getOwner())
+			return false;
+		
+		GroupMembership membership = getMembership(user);
+		// Si l'utilisateur n'est pas membre du groupe, tout arrêter et retourner false
+		if (membership == null)
+			return false;
+		
+		membership.delete();
+		refreshMemberships();
+		
+		// Suppression réussie, retourner true
+		return true;
 	}
 }

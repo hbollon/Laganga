@@ -24,7 +24,7 @@ public class Event extends Entity {
 		fields.add("priority", "int");
 		fields.add("begin", "DateTime");
 		fields.add("end", "DateTime");
-		fields.add("location", "Location");
+		fields.add("location", "model.entities.Location");
 		
 		factory.setFieldsList(fields);
 		

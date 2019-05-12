@@ -130,6 +130,6 @@ public abstract class Entity {
 	 * Représentation sous forme de chaine de caractères
 	 */
 	public String toString() {
-		return getFactory().getClassName()+": "+getFactory().getFieldsList().valuesToString(fieldsValues);
+		return getFactory().getClassName()+getFactory().getFieldsList().valuesToString(fieldsValues);
 	}
 }
