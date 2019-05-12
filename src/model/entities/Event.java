@@ -74,19 +74,4 @@ public class Event extends Entity {
 	public void setLocation(Location location) {
 		getFieldsValues().put("location", location);
 	}
-	
-	/**
-	 * Retourne une représentation textuelle de l'évènement.
-	 */
-	public String toString() {
-		String str = "Event no. "+getID()+":\n";
-		str += "\t- name: "+getName()+"\n";
-		str += "\t- type: "+getType()+"\n";
-		str += "\t- priority: "+getPriority()+"\n";
-		str += "\t- begin: "+getBegin().getTime()+"\n";
-		str += "\t- end: "+getEnd().getTime()+"\n";
-		str += "\t- location: "+getLocation()+"\n";
-		
-		return str;
-	}
 }

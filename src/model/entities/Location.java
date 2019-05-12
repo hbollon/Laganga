@@ -41,15 +41,4 @@ public class Location extends Entity {
 	public void setDescription(String description) {
 		getFieldsValues().put("description", description);
 	}
-	
-	/**
-	 * Retourne une représentation textuelle de l'évènement.
-	 */
-	public String toString() {
-		String str = "Location no. "+getID()+":\n";
-		str += "\t- name: "+getName()+"\n";
-		str += "\t- description: "+getDescription()+"\n";
-		
-		return str;
-	}
 }

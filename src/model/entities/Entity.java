@@ -125,4 +125,11 @@ public abstract class Entity {
 		
 		return toRemoveList;
 	}
+	
+	/*
+	 * Représentation sous forme de chaine de caractères
+	 */
+	public String toString() {
+		return getFactory().getClassName()+": "+getFactory().getFieldsList().valuesToString(fieldsValues);
+	}
 }

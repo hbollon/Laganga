@@ -64,18 +64,4 @@ public class User extends Entity {
 	public void setBirth(Calendar birth) {
 		getFieldsValues().put("birth", birth);
 	}
-	
-	/*
-	 * toString
-	 * Affiche l'instance sous forme textuelle
-	 */
-	public String toString() {
-		String str = "User no. "+getID()+":\n";
-		str += "\t- firstName: "+getFirstName()+"\n";
-		str += "\t- lastName: "+getLastName()+"\n";
-		str += "\t- email: "+getEmail()+"\n";
-		str += "\t- birth: "+getBirth().getTime()+"\n";
-		
-		return str;
-	}
 }

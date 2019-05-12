@@ -25,6 +25,7 @@ public class EntityFactory {
 	/*
 	 * Attributs
 	 */
+	private String className;
 	private Class<?> classObject; // Classe de l'entité
 	
 	private String table; // Nom de la table associée à l'entité
@@ -38,6 +39,9 @@ public class EntityFactory {
 	/*
 	 * Getteurs
 	 */
+	public String getClassName() {
+		return className;
+	}
 	public Class<?> getClassObject() {
 		return classObject;
 	}
@@ -66,6 +70,7 @@ public class EntityFactory {
 	public void setClassName(String className) {
 		try {
 			classObject = Class.forName(className);
+			this.className = className;
 		}
 		catch (ClassNotFoundException e) {
 			System.err.println("Impossible d'initialiser l'usine de "+className+" : "+e);
@@ -224,7 +229,7 @@ public class EntityFactory {
 	 */
 	
 	public String getInsertQuery(FieldsList fields) {
-		String query = "INSERT INTO `"+table+"`("+fields.toQueryString(prefix)+") VALUES(";
+		String query = "INSERT INTO `"+table+"`("+fields.toInsertQueryString(prefix)+") VALUES(";
 		
 		// Liste des valeurs à binder
 		for (int i = 0; i < fields.size(); i++)

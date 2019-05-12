@@ -153,13 +153,44 @@ public class FieldsList {
 		return values;
 	}
 	
+	
+	/*
+	 * Fonctions de formatage pour les chaines de caractère
+	 */
+	
 	// Représentation sous forme de String
 	public String toString() {
 		return names.toString();
 	}
 	
-	// Formatage du nom des champs pour utilisation dans une requête
-	public String toQueryString(String prefix) {
+	// Formatage de la valeur des champs pour utilisation dans un toString
+	public String valuesToString(Map<String, Object> values) {
+		String str = "[";
+		
+		for (int i = 0; i < size(); i++) {
+			Object value = values.get(getName(i));
+			
+			switch (getType(i)) {
+				case "Date":
+				case "DateTime":
+					str += ((Calendar) value).getTime().toString();
+					break;
+				
+				default:
+					if (value instanceof Entity)
+						str += "("+((Entity) value).getFactory().getClassName()+") "+((Entity) value).getID();
+					else
+						str += value.toString();
+			}
+			
+			str += ", ";
+		}
+		
+		return str.substring(0, str.length() - 2)+"]";
+	}
+	
+	// Formatage du nom des champs pour utilisation dans une requête INSERT
+	public String toInsertQueryString(String prefix) {
 		String str = "";
 		for (int i = 0; i < size(); i++)
 			str += "`"+prefix+getName(i)+"`, ";
