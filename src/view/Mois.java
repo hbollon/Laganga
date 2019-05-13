@@ -27,8 +27,8 @@ import model.EventCalendar;
  *
  */
 
+@SuppressWarnings("deprecation")
 public class Mois extends JPanel implements Observer {
-		
 	private Calendar calendar = null;
 	private static final long serialVersionUID = 1L;
 	
@@ -117,14 +117,12 @@ public class Mois extends JPanel implements Observer {
 	        newEvent.setStartTime(new DateTime(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin, 00));
 	        newEvent.setEndTime(new DateTime(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd, 00));
 	        
-	        calendar.getSchedule().getItems().add(newEvent); 
+	        calendar.getSchedule().getItems().add(newEvent);
 		}
 	}
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
 		
 	}
 }

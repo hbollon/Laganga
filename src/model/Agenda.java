@@ -16,7 +16,6 @@ public class Agenda extends Observable {
 	/*
 	 * Attributs
 	 */
-	
 	private User user; // Utilisateur dont il faut afficher les évènement auxquels il participe
 	private List<Entity> events; // Liste des évènements
 	
