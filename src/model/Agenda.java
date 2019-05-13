@@ -1,44 +1,48 @@
 package model;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Observable;
+
+import model.entities.Entity;
+import model.entities.Event;
 
 @SuppressWarnings("deprecation")
 public class Agenda extends Observable {
 	// Agenda principal
 	public static Agenda agenda = new Agenda();
 	
-	// Date du premier jour de la semaine
-	private Calendar weekBeginning;
 	
-	// Getteurs
-	public Calendar getWeekBeginning() {
-		return weekBeginning;
+	/*
+	 * Attributs
+	 */
+	
+	// Liste des évènements
+	private List<Entity> events;
+	
+	
+	/*
+	 * Getteurs
+	 */
+	
+	public List<Entity> getEvents() {
+		return events;
 	}
 	
-	// Setteurs
-	public void nextWeek() {
-		weekBeginning.add(Calendar.WEEK_OF_YEAR, 1);
-	}
-	public void previousWeek() {
-		weekBeginning.add(Calendar.WEEK_OF_YEAR, -1);
+	
+	/*
+	 * Récupération des évènements
+	 */
+	
+	// Récupérer les évènements donc l'utilisateur courant participe
+	private List<Entity> fetchEvents() throws Exception {
+		return Event.factory.getAll();
 	}
 	
-	// Constructeur
-	public Agenda() {
-		Calendar cal = new GregorianCalendar();
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.clear(Calendar.MINUTE);
-		cal.clear(Calendar.SECOND);
-		cal.clear(Calendar.MILLISECOND);
-		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+	// Mettre à jour l'agenda et prévenir les observeurs
+	public void refresh() throws Exception {
+		fetchEvents();
 		
-		this.weekBeginning = cal;
-	}
-	
-	// Représentation sous forme de String
-	public String toString() {
-		return weekBeginning.get(Calendar.YEAR)+"-"+weekBeginning.get(Calendar.MONTH)+"-"+weekBeginning.get(Calendar.DAY_OF_MONTH)+" "+weekBeginning.get(Calendar.HOUR_OF_DAY)+":"+weekBeginning.get(Calendar.MINUTE)+":"+weekBeginning.get(Calendar.SECOND);
+		setChanged();
+		notifyObservers();
 	}
 }
