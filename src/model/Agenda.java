@@ -1,44 +1,70 @@
 package model;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Observable;
+
+import model.entities.Entity;
+import model.entities.Event;
+import model.entities.User;
 
 @SuppressWarnings("deprecation")
 public class Agenda extends Observable {
 	// Agenda principal
 	public static Agenda agenda = new Agenda();
 	
-	// Date du premier jour de la semaine
-	private Calendar weekBeginning;
 	
-	// Getteurs
-	public Calendar getWeekBeginning() {
-		return weekBeginning;
+	/*
+	 * Attributs
+	 */
+	
+	private User user; // Utilisateur dont il faut afficher les évènement auxquels il participe
+	private List<Entity> events; // Liste des évènements
+	
+	
+	/*
+	 * Getteurs
+	 */
+	public User getUser() {
+		return user;
+	}
+	public List<Entity> getEvents() {
+		return events;
 	}
 	
-	// Setteurs
-	public void nextWeek() {
-		weekBeginning.add(Calendar.WEEK_OF_YEAR, 1);
-	}
-	public void previousWeek() {
-		weekBeginning.add(Calendar.WEEK_OF_YEAR, -1);
+	
+	/*
+	 * Setteurs
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
-	// Constructeur
+	
+	/*
+	 * Constructeurs
+	 */
+	public Agenda(User user) {
+		this.user = user;
+	}
 	public Agenda() {
-		Calendar cal = new GregorianCalendar();
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.clear(Calendar.MINUTE);
-		cal.clear(Calendar.SECOND);
-		cal.clear(Calendar.MILLISECOND);
-		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-		
-		this.weekBeginning = cal;
+		this(LocalUser.localUser.getUser());
 	}
 	
-	// Représentation sous forme de String
-	public String toString() {
-		return weekBeginning.get(Calendar.YEAR)+"-"+weekBeginning.get(Calendar.MONTH)+"-"+weekBeginning.get(Calendar.DAY_OF_MONTH)+" "+weekBeginning.get(Calendar.HOUR_OF_DAY)+":"+weekBeginning.get(Calendar.MINUTE)+":"+weekBeginning.get(Calendar.SECOND);
+	
+	/*
+	 * Récupération des évènements
+	 */
+	
+	// Récupérer les évènements donc l'utilisateur courant participe
+	private List<Entity> fetchEvents() throws Exception {
+		return Event.factory.getAll();
+	}
+	
+	// Mettre à jour l'agenda et prévenir les observers
+	public void refresh() throws Exception {
+		fetchEvents();
+		
+		setChanged();
+		notifyObservers();
 	}
 }
