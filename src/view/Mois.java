@@ -3,9 +3,13 @@ package view;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Dimension2D;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.EnumSet;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,6 +23,8 @@ import com.mindfusion.scheduling.*;
 import com.toedter.calendar.JCalendar;
 
 import model.EventCalendar;
+import model.entities.Event;
+import model.entities.Location;
 
 /**
  * Classe Mois héritant de JPanel permettant d'afficher une instance de Calendar contenue dans un JPanel
@@ -105,12 +111,34 @@ public class Mois extends JPanel implements Observer {
 	public void addEventMois(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
 			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
 	{
+		Map<String, Object> values = new HashMap<String, Object>();
+		LocalDate dateB = dateBegin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate dateE = dateEnd.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		values.put("name", name);
+		values.put("type", desc);
+		values.put("priority", 1);
+		values.put("begin", new GregorianCalendar(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin));
+		values.put("end", new GregorianCalendar(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd));
+		try {
+			values.put("location", Location.factory.getByID(2));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			Event.factory.insert(values);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if(calendar != null)
 		{
 			EventCalendar newEvent = new EventCalendar();
-			
-			LocalDate dateB = dateBegin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			LocalDate dateE = dateEnd.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			
 	        newEvent.setHeaderText(name);
 	        newEvent.setDescriptionText(desc);
@@ -118,6 +146,7 @@ public class Mois extends JPanel implements Observer {
 	        newEvent.setEndTime(new DateTime(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd, 00));
 	        
 	        calendar.getSchedule().getItems().add(newEvent); 
+	        
 		}
 	}
 
