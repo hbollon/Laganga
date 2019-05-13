@@ -1,13 +1,21 @@
 package model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
+
+import model.entities.User;
 
 /**
  * Le LocalUser représente l'utilisateur connecté (ou non) localement
  * 
  * @author Julien Valverdé
  */
+@SuppressWarnings("deprecation")
 public class LocalUser extends Observable {
+	// Objet principal
+	public static LocalUser localUser = new LocalUser();
+	
 	// États de connexion
 	public static final int SUCCESS = 0;
 	public static final int ERROR_ALREADY_LOGGED_IN = 1;
@@ -19,11 +27,14 @@ public class LocalUser extends Observable {
 		return user;
 	}
 	
-	public LocalUser() {
-	}
-	
 	public boolean isLoggedIn() {
 		return (user != null);
+	}
+	
+	// Champs à binder pour la requête de connexion
+	private static FieldsList loginQueryFields = new FieldsList();
+	static {
+		loginQueryFields.add("email", "String");
 	}
 	
 	/**
@@ -43,10 +54,10 @@ public class LocalUser extends Observable {
 		
 		else {
 			// Récupération de l'utilisateur à partir de l'email donné
-			Object[] values = {email};
-			String[] types = {"String"};
+			Map<String, Object> values = new HashMap<String, Object>();
+			values.put("email", email);
 			
-			User user = (User) User.factory.getSingle("WHERE `user_email` = ?", values, types);
+			User user = (User) User.factory.getSingle("WHERE `user_email` = ?", loginQueryFields, values);
 			
 			// Cet utilisateur n'existe pas
 			if (user == null)

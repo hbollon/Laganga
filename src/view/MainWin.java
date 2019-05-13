@@ -1,14 +1,14 @@
 package view;
 
 import java.awt.*;
+import java.util.List;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
-import model.Entity;
-import model.User;
-
 import controller.OpenWinCreatEvent;
+import model.entities.Entity;
+import model.entities.User;
 
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
@@ -55,7 +55,7 @@ public class MainWin extends JFrame {
 		super();
 		initialize();
 		setTree();
-		setTreeGroupe();
+		//setTreeGroupe();
 	}
 	 
 	public void initialize()
@@ -70,12 +70,15 @@ public class MainWin extends JFrame {
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
+	    
+	    // Permet de changer le curseur lors d'une opération avec la BDD
+	    new CursorChanger(this);
 	}
 	
 	public void setTree() throws Exception
 	{
-		ArrayList<Entity> usersList = User.factory.getAll();
-		ArrayList<String> usersNames = new ArrayList<String>();
+		List<Entity> usersList = User.factory.getAll();
+		List<String> usersNames = new ArrayList<String>();
 		
 		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Users");
 		  jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -88,23 +91,21 @@ public class MainWin extends JFrame {
 		}
 	}
 	
-	public void setTreeGroupe() throws Exception
+	/*public void setTreeGroupe() throws Exception
 	{
-		//ArrayList<Entity> groupeList = Group.factory.getAll();
-		ArrayList<String> groupeNames = new ArrayList<String>();
+		List<Entity> groupeList = Group.factory.getAll();
+		List<String> groupeNames = new ArrayList<String>();
 		
 		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Groupe");
 		  jTreeGroupe.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
 		  jScrollTreeGroup.setViewportView(jTreeGroupe);
 		  
-		/*
 		for (int i = 0; i < groupeList.size(); i++) {
-			groupeNames.add((String) groupeList.get(i).get("name"));
+			groupeNames.add(((Group) groupeList.get(i)).getName());
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
-		*/
-	}
+	}*/
 	
 	private JPanel getWindowPane()
 	{
