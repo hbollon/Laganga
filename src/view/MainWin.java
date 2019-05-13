@@ -102,11 +102,6 @@ public class MainWin extends JFrame {
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
-		
-		TreeModel model = jTree.getModel();
-		Object[] getNode = 
-		TreePath tPath = new TreePath(getNode);
-		jTree.setSelectionPath(tPath);
 	}
 	
 	public void setTreeGroupe() throws Exception
