@@ -1,12 +1,11 @@
 package model;
 
-import org.w3c.dom.Element;
-
 import com.mindfusion.common.DateTime;
 import com.mindfusion.scheduling.model.Appointment;
 import com.mindfusion.scheduling.model.Contact;
 import com.mindfusion.scheduling.model.Resource;
-import com.mindfusion.scheduling.model.XmlSerializationContext;
+
+import model.entities.Group;
 
 /**
  * Classe permettant de créé un objet évènement pour l'interface graphique

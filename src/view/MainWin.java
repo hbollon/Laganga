@@ -1,27 +1,17 @@
 package view;
 
 import java.awt.*;
-<<<<<<< HEAD
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-=======
 import java.util.List;
->>>>>>> dev
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.tree.*;
 
-<<<<<<< HEAD
 import com.toedter.calendar.JCalendar;
 
-import model.Entity;
-//import model.Group;
-import model.User;
-
-=======
->>>>>>> dev
 import controller.OpenWinCreatEvent;
 import model.entities.Entity;
+import model.entities.Group;
 import model.entities.User;
 
 /**
@@ -77,7 +67,7 @@ public class MainWin extends JFrame {
 		super();
 		initialize();
 		setTree();
-		//setTreeGroupe();
+		setTreeGroupe();
 	}
 	 
 	public void initialize()
@@ -112,9 +102,14 @@ public class MainWin extends JFrame {
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
+		
+		TreeModel model = jTree.getModel();
+		Object[] getNode = 
+		TreePath tPath = new TreePath(getNode);
+		jTree.setSelectionPath(tPath);
 	}
 	
-	/*public void setTreeGroupe() throws Exception
+	public void setTreeGroupe() throws Exception
 	{
 		List<Entity> groupeList = Group.factory.getAll();
 		List<String> groupeNames = new ArrayList<String>();
@@ -128,7 +123,7 @@ public class MainWin extends JFrame {
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
-	}*/
+	}
 	
 	private JPanel getWindowPane()
 	{

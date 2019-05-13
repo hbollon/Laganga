@@ -6,6 +6,8 @@ import java.awt.geom.Dimension2D;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.EnumSet;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.*;
 
@@ -25,7 +27,7 @@ import model.EventCalendar;
  *
  */
 
-public class Mois extends JPanel {
+public class Mois extends JPanel implements Observer {
 		
 	private Calendar calendar = null;
 	private static final long serialVersionUID = 1L;
@@ -117,5 +119,11 @@ public class Mois extends JPanel {
 	        
 	        calendar.getSchedule().getItems().add(newEvent); 
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }
