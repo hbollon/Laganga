@@ -10,6 +10,7 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,14 +32,14 @@ public class WinCreatEvent extends JFrame implements Observer {
 		super();
 		
 		this.setTitle("Création événement");
-	    this.setSize(1000, 500);
+	    this.setSize(1000, 700);
 		this.setBackground(Color.white);
 		this.setLayout(new BorderLayout());
 		
 		this.add(status, BorderLayout.NORTH);
 		
 		//Panel au centre de la fenêtre
-		JPanel newEvent = new JPanel(new GridLayout(4,2));
+		JPanel newEvent = new JPanel(new GridLayout(5,2));
 		
 		//Panel pour le nom de l'événement
 		JPanel name = new JPanel(new GridLayout(1,2));
@@ -89,12 +90,19 @@ public class WinCreatEvent extends JFrame implements Observer {
 		description.add(labelDescription);
 		description.add(textDescription);
 		
+		//CheckBox pour si les detailles de l'événement est visible ou non
+		JPanel eventVisible = new JPanel(new GridLayout(1,2));
+		JLabel labelVisible = new JLabel("Descrition de l'événement caché : ");
+		JCheckBox checkVisible = new JCheckBox();
+		eventVisible.add(labelVisible);
+		eventVisible.add(checkVisible);
+		
 		newEvent.add(name);
 		newEvent.add(dateBegin);
 		newEvent.add(dateEnd);
 		newEvent.add(description);
+		newEvent.add(eventVisible);
 		
-		this.add(newEvent, BorderLayout.CENTER);
 		
 		//Panel bouton
 		JPanel buttonPane = new JPanel();
@@ -102,12 +110,14 @@ public class WinCreatEvent extends JFrame implements Observer {
 		JButton ajoutEvent = new JButton("Ajouter l'événement");
 		buttonPane.add(annuleEvent);
 		buttonPane.add(ajoutEvent);
-		this.add(buttonPane, BorderLayout.SOUTH);
 
 	    this.setLocationRelativeTo(null);
-	    this.setVisible(true);
 	    
 	    annuleEvent.addActionListener(new AnnuleEvent(this));
+	    
+	    this.add(newEvent, BorderLayout.CENTER);
+	    this.add(buttonPane, BorderLayout.SOUTH);
+	    this.setVisible(true);
 	    this.addWindowListener(new CloseWindow(this));
 	}
 
