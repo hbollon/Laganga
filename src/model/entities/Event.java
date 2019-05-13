@@ -74,4 +74,9 @@ public class Event extends Entity {
 	public void setLocation(Location location) {
 		getFieldsValues().put("location", location);
 	}
+	
+	
+	/*
+	 * Wrappers d'opérations sur la BDD
+	 */
 }

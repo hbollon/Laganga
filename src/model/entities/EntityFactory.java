@@ -176,11 +176,11 @@ public class EntityFactory {
 		
 		return list;
 	}
-	public List<Entity> get(String clauses) throws SQLException, Exception {
-		return get(Database.database.prepareAndExecute(getSelectQuery(clauses)));
+	public List<Entity> get(String query) throws SQLException, Exception {
+		return get(Database.database.prepareAndExecute(getSelectQuery(query)));
 	}
-	public List<Entity> get(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
-		return get(Database.database.prepareAndExecute(getSelectQuery(clauses), fields, values));
+	public List<Entity> get(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
+		return get(Database.database.prepareAndExecute(getSelectQuery(query), fields, values));
 	}
 	
 	/*
@@ -191,15 +191,15 @@ public class EntityFactory {
 		return get((String) null);
 	}
 	
-	public Entity getSingle(String clauses, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
-		List<Entity> list = get(clauses, fields, values);
+	public Entity getSingle(String query, FieldsList fields, Map<String, Object> values) throws SQLException, Exception {
+		List<Entity> list = get(query, fields, values);
 		
 		if (list.size() == 0)
 			return null;
 		return list.get(0);
 	}
-	public Entity getSingle(String clauses) throws SQLException, Exception {
-		List<Entity> list = get(clauses);
+	public Entity getSingle(String query) throws SQLException, Exception {
+		List<Entity> list = get(query);
 		
 		if (list.size() == 0)
 			return null;

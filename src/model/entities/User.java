@@ -1,6 +1,8 @@
 package model.entities;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import model.FieldsList;
 
@@ -63,5 +65,26 @@ public class User extends Entity {
 	}
 	public void setBirth(Calendar birth) {
 		getFieldsValues().put("birth", birth);
+	}
+	
+	
+	/*
+	 * Fonctions liées aux évènements
+	 */
+	
+	// Obtenir la liste des évènements auxquels l'utilisateur participe
+	public List<Entity> getAttendedEvents(Calendar from, Calendar to) throws Exception {
+		List<Entity> events = new ArrayList<Entity>();
+		List<Entity> allEvents = Event.factory.getAll();
+		
+		return events;
+	}
+	public List<Entity> getAttendedEvents() throws Exception {
+		return getAttendedEvents(null, null);
+	}
+	
+	// L'utilisateur peut-il participer à cet évènement ?
+	public boolean canAttend(Event event) {
+		return true;
 	}
 }
