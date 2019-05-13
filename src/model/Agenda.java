@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import model.entities.Entity;
 import model.entities.Event;
+import model.entities.User;
 
 @SuppressWarnings("deprecation")
 public class Agenda extends Observable {
@@ -16,16 +17,37 @@ public class Agenda extends Observable {
 	 * Attributs
 	 */
 	
-	// Liste des évènements
-	private List<Entity> events;
+	private User user; // Utilisateur dont il faut afficher les évènement auxquels il participe
+	private List<Entity> events; // Liste des évènements
 	
 	
 	/*
 	 * Getteurs
 	 */
-	
+	public User getUser() {
+		return user;
+	}
 	public List<Entity> getEvents() {
 		return events;
+	}
+	
+	
+	/*
+	 * Setteurs
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
+	/*
+	 * Constructeurs
+	 */
+	public Agenda(User user) {
+		this.user = user;
+	}
+	public Agenda() {
+		this(LocalUser.localUser.getUser());
 	}
 	
 	
@@ -38,7 +60,7 @@ public class Agenda extends Observable {
 		return Event.factory.getAll();
 	}
 	
-	// Mettre à jour l'agenda et prévenir les observeurs
+	// Mettre à jour l'agenda et prévenir les observers
 	public void refresh() throws Exception {
 		fetchEvents();
 		
