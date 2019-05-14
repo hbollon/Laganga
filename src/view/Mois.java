@@ -6,6 +6,8 @@ import java.awt.geom.Dimension2D;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import com.mindfusion.scheduling.*;
 import com.toedter.calendar.JCalendar;
 
 import model.EventCalendar;
+import model.entities.Entity;
 import model.entities.Event;
 import model.entities.Location;
 
@@ -153,6 +156,14 @@ public class Mois extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
+		List<Entity> listeEvent = (List<Entity>)arg;
+		for(int i = 0; i < listeEvent.size(); i++)
+		{
+			Event ev = (Event)listeEvent.get(i);
+			JCalendar dateBegin = new JCalendar(ev.getBegin().getTime());
+			JCalendar dateEnd = new JCalendar(ev.getEnd().getTime());
+			addEventMois(ev.getName(), ev.getType(), dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE));
+		}
 		
 		
 	}

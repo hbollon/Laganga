@@ -24,12 +24,6 @@ public class MainWinCalendar extends JTabbedPane {
 		this.addTab("Année", annee);		
 	}
 	
-	public void addEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
-			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
-	{
-		mois.addEventMois(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
-	}
-	
 	public Mois getCalendarP()
 	{
 		return mois;
