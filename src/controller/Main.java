@@ -6,7 +6,8 @@ import javax.swing.JFrame;
 
 import model.Database;
 import model.LocalUser;
-import view.SplashWin;
+import model.entities.Group;
+import view.WinGestionGroup;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
@@ -14,7 +15,7 @@ public abstract class Main {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		
 		// Affichage du splash screen
-		new SplashWin();
+		//new SplashWin();
 		
 		// Initialisation de la connexion à la base de données
 		TimeUnit.SECONDS.sleep(1);
@@ -37,5 +38,8 @@ public abstract class Main {
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
+		//LocalUser.localUser.login("test@test.fr", "gneugneu adolf");
+		
+		new WinGestionGroup((Group) Group.factory.getByID(1));
 	}
 }
