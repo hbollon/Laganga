@@ -24,6 +24,7 @@ import com.mindfusion.drawing.Pens;
 import com.mindfusion.scheduling.*;
 import com.toedter.calendar.JCalendar;
 
+import model.Agenda;
 import model.EventCalendar;
 import model.entities.Entity;
 import model.entities.Event;
@@ -63,7 +64,13 @@ public class Mois extends JPanel implements Observer {
 				calendarItemClicked(e);
 			}
 		});
-				
+		try {
+			Agenda.agenda.addObserver(this);
+			Agenda.agenda.refresh();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		this.add(calendar, BorderLayout.CENTER);
 	}
 	
@@ -156,7 +163,8 @@ public class Mois extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		List<Entity> listeEvent = (List<Entity>)arg;
+		Agenda agenda = (Agenda)o;
+		List<Entity> listeEvent= agenda.getEvents();
 		for(int i = 0; i < listeEvent.size(); i++)
 		{
 			Event ev = (Event)listeEvent.get(i);
