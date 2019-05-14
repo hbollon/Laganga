@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +42,15 @@ public class Event extends Entity {
 		factory.setJoinedEntities(joinedEntities);
 	}
 	
+	
+	/*
+	 * Attributs
+	 */
+	private List<Entity> userParticipations; // Participations des utilisateurs
+	private List<Entity> groupParticipations; // Participations des groupes
+	private List<Entity> participants; // Utilisateurs participants
+	
+	
 	// Getteurs des attributs
 	public String getName() {
 		return (String) getFieldsValues().get("name");
@@ -59,6 +69,9 @@ public class Event extends Entity {
 	}
 	public Location getLocation() {
 		return (Location) getFieldsValues().get("location");
+	}
+	public List<Entity> getParticipants() {
+		return participants;
 	}
 	
 	// Setteurs des attributs
@@ -79,6 +92,17 @@ public class Event extends Entity {
 	}
 	public void setLocation(Location location) {
 		getFieldsValues().put("location", location);
+	}
+	
+	
+	/*
+	 * Méthodes d'entité
+	 */
+	
+	// Sauvegarder les champs depuis la BDD
+	public void save(ResultSet res) throws SQLException, Exception {
+		super.save(res);
+		refreshParticipations();
 	}
 	
 	
@@ -129,6 +153,37 @@ public class Event extends Entity {
 	 * Gestion des participants
 	 */
 	
+	// Rafraîchir les listes des participations
+	private static FieldsList refreshParticipationsQueryFields = new FieldsList();
+	static {
+		refreshParticipationsQueryFields.add("id", "int");
+	}
+	public void refreshParticipations() throws SQLException, Exception {
+		userParticipations = EventUserParticipation.factory.get("WHERE `"+EventUserParticipation.factory.getPrefix()+"event` = ?", refreshParticipationsQueryFields, getFieldsValues());
+		groupParticipations = EventGroupParticipation.factory.get("WHERE `"+EventGroupParticipation.factory.getPrefix()+"event` = ?", refreshParticipationsQueryFields, getFieldsValues());
+		participants = buildParticipantsList();
+	}
+	
+	// Récupérer la liste des participants (directs + membres des groupes participants)
+	public List<Entity> buildParticipantsList() {
+		List<Entity> participants = new ArrayList<Entity>();
+		
+		// Participations directes
+		for (int i = 0; i < userParticipations.size(); i++)
+			participants.add(((EventUserParticipation) userParticipations.get(i)).getUser());
+		
+		// Participations des groupes
+		for (int i = 0; i < groupParticipations.size(); i++) {
+			Group group = ((EventGroupParticipation) groupParticipations.get(i)).getGroup();
+			List<Entity> groupMembers = group.getMembers();
+			
+			for (int j = 0; j < groupMembers.size(); j++)
+				participants.add(groupMembers.get(j));
+		}
+		
+		return participants;
+	}
+	
 	// Est-ce que les participants passés (utilisateurs et membres des groupes) sont libres à cette plage horaire ?
 	public static List<Entity> getBusyParticipants(List<Entity> users, List<Entity> groups, Calendar from, Calendar to) throws Exception {
 		List<Entity> participants = new ArrayList<Entity>(); // Liste de tous les participants (individuels + membres des groupes)
@@ -138,7 +193,7 @@ public class Event extends Entity {
 		
 		// Ajout des participants membres des groupes
 		for (int i = 0; i < groups.size(); i++) {
-			List<Entity> members = ((Group) groups.get(i)).getMembersList();
+			List<Entity> members = ((Group) groups.get(i)).getMembers();
 			
 			// Parcourir les membres du groupe
 			for (int j = 0; j < members.size(); j++) {

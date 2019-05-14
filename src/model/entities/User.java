@@ -113,6 +113,6 @@ public class User extends Entity {
 	
 	// Est-ce que l'utilisateur participe à l'évènement ?
 	public boolean isAttending(Event event) {
-		return true;
+		return (event.getParticipants().contains(this));
 	}
 }

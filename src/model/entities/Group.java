@@ -100,7 +100,7 @@ public class Group extends Entity {
 	}
 	
 	// Obtenir la liste des membres
-	public List<Entity> getMembersList() {
+	public List<Entity> getMembers() {
 		List<Entity> list = new ArrayList<Entity>();
 		
 		for (int i = 0; i < memberships.size(); i++)
