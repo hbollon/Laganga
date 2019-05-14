@@ -25,16 +25,18 @@ public abstract class Main {
 		Database.database.connect();
 		
 		User user = (User) User.factory.getByID(1);
+		Event event1657 = (Event) Event.factory.getByID(1657);
 		
-		Event event13 = (Event) Event.factory.getByID(13);
-		Event event14 = (Event) Event.factory.getByID(14);
+		System.out.println(user.isAttending(event1657));
 		
 		//System.out.println(user.canAttend(event13));
+		/*
 		Calendar from = new GregorianCalendar(2019, 4, 21, 9, 59);
 		Calendar to = new GregorianCalendar(2019, 4, 21, 12, 0);
 		System.out.println(from.getTime());
 		System.out.println(to.getTime());
 		System.out.println(user.getAttendedEvents(from, to));
+		*/
 		
 		/*
 		Exemple insertion d'event
