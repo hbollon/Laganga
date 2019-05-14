@@ -106,7 +106,7 @@ public class EntityFactory {
 		
 		entity.setFactory(this);
 		entity.save(res);
-				
+		
 		return entity;
 	}
 	

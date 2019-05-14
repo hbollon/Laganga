@@ -33,7 +33,10 @@ public class User extends Entity {
 		factory.setFieldsList(fields);
 	}
 	
-	// Getteurs
+	
+	/*
+	 * Getteurs
+	 */
 	public String getFirstName() {
 		return (String) getFieldsValues().get("firstName");
 	}
@@ -50,7 +53,10 @@ public class User extends Entity {
 		return (Calendar) getFieldsValues().get("birth");
 	}
 	
-	// Setteurs
+	
+	/*
+	 * Setteurs
+	 */
 	public void setFirstName(String firstName) {
 		getFieldsValues().put("firstName", firstName);
 	}
@@ -69,13 +75,21 @@ public class User extends Entity {
 	
 	
 	/*
-	 * Fonctions liées aux évènements
+	 * Méthodes liées aux évènements
 	 */
 	
-	// Obtenir la liste des évènements auxquels l'utilisateur participe
+	// Obtenir la liste des évènements auxquels l'utilisateur participe (dans une certaine plage horaire si précisée)
 	public List<Entity> getAttendedEvents(Calendar from, Calendar to) throws Exception {
-		List<Entity> events = new ArrayList<Entity>();
-		List<Entity> allEvents = Event.factory.getAll();
+		List<Entity> events = new ArrayList<Entity>(); // Liste des évènements auxquels l'utilisateur participe (à remplir)
+		List<Entity> allEvents = Event.factory.getAll(); // Liste des tous les évènements
+		
+		for (int i = 0; i < allEvents.size(); i++) {
+			Event event = (Event) allEvents.get(i);
+			
+			// Si l'utilisateur participe à l'évènement et que ledit évènement chevauche la plage horaire [from, to] (si définie)
+			if (isAttending(event) && ((from == null || to == null) || event.isOverlapping(from, to)))
+				events.add(event);
+		}
 		
 		return events;
 	}
@@ -83,8 +97,22 @@ public class User extends Entity {
 		return getAttendedEvents(null, null);
 	}
 	
-	// L'utilisateur peut-il participer à cet évènement ?
-	public boolean canAttend(Event event) {
+	// Est-ce que l'utilisateur participe à un évènement dans la plage horaire indiquée ?
+	public boolean isBusy(Calendar from, Calendar to) throws Exception {
+		List<Entity> allEvents = Event.factory.getAll();
+		
+		for (int i = 0; i < allEvents.size(); i++) {
+			Event event = (Event) allEvents.get(i);
+			
+			if (isAttending(event) && event.isOverlapping(from, to))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	// Est-ce que l'utilisateur participe à l'évènement ?
+	public boolean isAttending(Event event) {
 		return true;
 	}
 }

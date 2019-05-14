@@ -1,11 +1,15 @@
 package controller;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 
 import model.Database;
 import model.LocalUser;
+import model.entities.Event;
+import model.entities.User;
 import view.SplashWin;
 
 public abstract class Main {
@@ -14,11 +18,23 @@ public abstract class Main {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		
 		// Affichage du splash screen
-		new SplashWin();
+		//new SplashWin();
 		
 		// Initialisation de la connexion à la base de données
 		TimeUnit.SECONDS.sleep(1);
 		Database.database.connect();
+		
+		User user = (User) User.factory.getByID(1);
+		
+		Event event13 = (Event) Event.factory.getByID(13);
+		Event event14 = (Event) Event.factory.getByID(14);
+		
+		//System.out.println(user.canAttend(event13));
+		Calendar from = new GregorianCalendar(2019, 4, 21, 9, 59);
+		Calendar to = new GregorianCalendar(2019, 4, 21, 12, 0);
+		System.out.println(from.getTime());
+		System.out.println(to.getTime());
+		System.out.println(user.getAttendedEvents(from, to));
 		
 		/*
 		Exemple insertion d'event
