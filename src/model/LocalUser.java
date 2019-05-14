@@ -1,6 +1,10 @@
 package model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
+
+import model.entities.User;
 
 /**
  * Le LocalUser représente l'utilisateur connecté (ou non) localement
@@ -27,6 +31,12 @@ public class LocalUser extends Observable {
 		return (user != null);
 	}
 	
+	// Champs à binder pour la requête de connexion
+	private static FieldsList loginQueryFields = new FieldsList();
+	static {
+		loginQueryFields.add("email", "String");
+	}
+	
 	/**
 	 * Permet de connecter un utilisateur localement
 	 * 
@@ -44,10 +54,10 @@ public class LocalUser extends Observable {
 		
 		else {
 			// Récupération de l'utilisateur à partir de l'email donné
-			Object[] values = {email};
-			String[] types = {"String"};
+			Map<String, Object> values = new HashMap<String, Object>();
+			values.put("email", email);
 			
-			User user = (User) User.factory.getSingle("WHERE `user_email` = ?", values, types);
+			User user = (User) User.factory.getSingle("WHERE `user_email` = ?", loginQueryFields, values);
 			
 			// Cet utilisateur n'existe pas
 			if (user == null)

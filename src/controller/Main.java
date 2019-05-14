@@ -4,8 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 
-import model.*;
-import view.*;
+import model.Database;
+import model.LocalUser;
+import view.SplashWin;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
@@ -21,9 +22,5 @@ public abstract class Main {
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
-		
-		//System.out.println(User.factory.getByID(1));
-		Group group1 = (Group) Group.factory.getByID(1);
-		System.out.println(group1.getOwner());
 	}
 }
