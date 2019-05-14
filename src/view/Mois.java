@@ -163,8 +163,7 @@ public class Mois extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		Agenda agenda = (Agenda)o;
-		List<Entity> listeEvent= agenda.getEvents();
+		List<Entity> listeEvent= Agenda.agenda.getEvents();
 		for(int i = 0; i < listeEvent.size(); i++)
 		{
 			Event ev = (Event)listeEvent.get(i);
