@@ -162,10 +162,11 @@ public class Mois extends JPanel implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		List<Entity> listeEvent= Agenda.agenda.getEvents();
+		
 		for(int i = 0; i < listeEvent.size(); i++)
 		{
+			System.out.println((Event) listeEvent.get(i));
 			Event ev = (Event)listeEvent.get(i);
 			JCalendar dateBegin = new JCalendar(ev.getBegin().getTime());
 			JCalendar dateEnd = new JCalendar(ev.getEnd().getTime());
