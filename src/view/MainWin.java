@@ -211,7 +211,7 @@ public class MainWin extends JFrame {
 	
 	public static void callAddEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
 	{
-		winCalendar.getCalendarP().addEventMois(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+		winCalendar.getCalendarP().addEventBD(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
 	}
 
 }

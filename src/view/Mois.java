@@ -118,7 +118,7 @@ public class Mois extends JPanel implements Observer {
 		}
 	}
 	
-	public void addEventMois(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
+	public void addEventBD(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
 			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
 	{
 		Map<String, Object> values = new HashMap<String, Object>();
@@ -127,8 +127,8 @@ public class Mois extends JPanel implements Observer {
 		values.put("name", name);
 		values.put("type", desc);
 		values.put("priority", 1);
-		values.put("begin", new GregorianCalendar(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin));
-		values.put("end", new GregorianCalendar(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd));
+		values.put("begin", new GregorianCalendar(dateB.getYear(), dateB.getMonthValue() - 1, dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin));
+		values.put("end", new GregorianCalendar(dateE.getYear(), dateE.getMonthValue() - 1, dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd));
 		try {
 			values.put("location", Location.factory.getByID(2));
 		} catch (Exception e) {
@@ -146,6 +146,14 @@ public class Mois extends JPanel implements Observer {
 			e.printStackTrace();
 		}
 		
+		addEventCalendar(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+	}
+	
+	public void addEventCalendar(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
+			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
+	{
+		LocalDate dateB = dateBegin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate dateE = dateEnd.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if(calendar != null)
 		{
 			EventCalendar newEvent = new EventCalendar();
@@ -159,6 +167,8 @@ public class Mois extends JPanel implements Observer {
 	        
 		}
 	}
+	
+	
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -170,7 +180,7 @@ public class Mois extends JPanel implements Observer {
 			Event ev = (Event)listeEvent.get(i);
 			JCalendar dateBegin = new JCalendar(ev.getBegin().getTime());
 			JCalendar dateEnd = new JCalendar(ev.getEnd().getTime());
-			addEventMois(ev.getName(), ev.getType(), dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE));
+			addEventCalendar(ev.getName(), ev.getType(), dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE));
 		}
 		
 		
