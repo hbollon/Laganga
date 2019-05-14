@@ -62,7 +62,7 @@ public class Agenda extends Observable {
 	
 	// Mettre à jour l'agenda et prévenir les observers
 	public void refresh() throws Exception {
-		fetchEvents();
+		events = fetchEvents();
 		
 		setChanged();
 		notifyObservers();
