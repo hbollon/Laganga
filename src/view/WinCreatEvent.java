@@ -107,40 +107,43 @@ public class WinCreatEvent extends JFrame implements Observer {
 		JPanel description = new JPanel(new GridLayout(1,2));
 		JLabel labelDescription = new JLabel("Description de l'énévement : ");
 		textDescription = new JTextArea();
-		textDescription.setPreferredSize(new Dimension(400, 50));
+		textDescription.setPreferredSize(new Dimension(400, 40));
 		description.add(labelDescription);
 		description.add(textDescription);
 		
 		//panel membres participant aux evenements
 		JPanel participants = new JPanel(new GridLayout(1,2));
+		participants.setPreferredSize(new Dimension(800, 130));
 		JLabel labelParticipants = new JLabel("Membres parcipants à l'événement : ");
 		
 		JPanel panMembres = new JPanel(new GridLayout(1,2));
-		JPanel search = new JPanel(new GridLayout(2,1));
+		JPanel search = new JPanel(new BorderLayout());
 		
 		JPanel barreRecherche = new JPanel(new FlowLayout());
-		JTextField text = new JTextField();
-		text.setPreferredSize(new Dimension(150, 30));
-		JButton image = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)));
+		JTextField text = new JTextField("Rechercher membre");
+		JButton image = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
 		barreRecherche.add(text);
 		barreRecherche.add(image);
 		
-		JScrollPane liste = new JScrollPane();
-		DefaultMutableTreeNode membres = new DefaultMutableTreeNode("Membres");
-		List<Entity> members = User.factory.getAll();
-		for(int i = 0; i < members.size(); i++) {
-			User member = (User) members.get(i);
-			membres.add(new DefaultMutableTreeNode(member.getFirstName() + " " + member.getLastName()));
+		DefaultMutableTreeNode allUsersTree = new DefaultMutableTreeNode("Membres");
+		List<Entity> allUsers = User.factory.getAll();
+		for(int i = 0; i < allUsers.size(); i++) {
+			User member = (User) allUsers.get(i);
+			allUsersTree.add(new DefaultMutableTreeNode(member.getFirstName() + " " + member.getLastName()));
 		}
-		JTree listeMembres = new JTree(membres);
-		liste.add(listeMembres);
+		JTree listeMembres = new JTree(allUsersTree);
+		JScrollPane liste = new JScrollPane(listeMembres);
 		
-		search.add(barreRecherche);
-		search.add(liste);
+		search.add(barreRecherche, BorderLayout.NORTH);
+		search.add(liste, BorderLayout.CENTER);
 		
-		JTextArea listeParticipant = new JTextArea();
+		DefaultMutableTreeNode allparticipantsTree = new DefaultMutableTreeNode("Membres participants");
+		allparticipantsTree.add(new DefaultMutableTreeNode("Rachid Ben mha dit 'La salope' "));
+		JTree listeMembresParticipantsTree = new JTree(allparticipantsTree);
+		JScrollPane listeMembresParticipants = new JScrollPane(listeMembresParticipantsTree);
+		
 		panMembres.add(search);
-		panMembres.add(listeParticipant);
+		panMembres.add(listeMembresParticipants);
 		
 		participants.add(labelParticipants);
 		participants.add(panMembres);
