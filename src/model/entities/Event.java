@@ -53,7 +53,7 @@ public class Event extends Entity {
 	
 	private List<User> attendingUsers = new ArrayList<User>(); // Utilisateurs individuels participants
 	private List<Group> attendingGroups = new ArrayList<Group>(); // Groupes participants
-	private List<User> allParticipants; // Tous les utilisateurs participants (individuellement ou par appartenance à un groupe)
+	private List<User> participants; // Tous les utilisateurs participants (individuellement ou par appartenance à un groupe)
 	
 	
 	// Getteurs des attributs
@@ -84,8 +84,8 @@ public class Event extends Entity {
 	public List<Group> attendingGroups() {
 		return attendingGroups;
 	}
-	public List<User> getAllParticipants() {
-		return allParticipants;
+	public List<User> getParticipants() {
+		return participants;
 	}
 	
 	// Setteurs des attributs
@@ -213,7 +213,7 @@ public class Event extends Entity {
 		
 		refreshAttendingUsersList();
 		refreshAttendingGroupsList();
-		refreshAllParticipantsList();
+		refreshParticipantsList();
 	}
 	
 	// Rafraîchir la liste des utilisateurs participant individuellement
@@ -233,12 +233,12 @@ public class Event extends Entity {
 	}
 	
 	// Rafraîchir la liste de tous les utilisateurs participant (individuellement + membres des groupes participants)
-	public void refreshAllParticipantsList() {
-		allParticipants.clear();
-		allParticipants.addAll(attendingUsers);
+	public void refreshParticipantsList() {
+		participants.clear();
+		participants.addAll(attendingUsers);
 		
 		for (int i = 0; i < attendingGroups.size(); i++)
-			allParticipants.addAll(attendingGroups.get(i).getMembers());
+			participants.addAll(attendingGroups.get(i).getMembers());
 	}
 	
 	/*
