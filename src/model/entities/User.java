@@ -87,7 +87,7 @@ public class User extends Entity {
 			Event event = (Event) allEvents.get(i);
 			
 			// Si l'utilisateur participe à l'évènement et que ledit évènement chevauche la plage horaire [from, to] (si définie)
-			if (isAttending(event) && ((from == null || to == null) || event.isOverlapping(from, to)))
+			if (isAttendingEvent(event) && ((from == null || to == null) || event.isOverlapping(from, to)))
 				events.add(event);
 		}
 		
@@ -104,15 +104,29 @@ public class User extends Entity {
 		for (int i = 0; i < allEvents.size(); i++) {
 			Event event = (Event) allEvents.get(i);
 			
-			if (isAttending(event) && event.isOverlapping(from, to))
+			if (isAttendingEvent(event) && event.isOverlapping(from, to))
 				return true;
 		}
 		
 		return false;
 	}
 	
+	// Est-ce que l'utilisateur peut-il participer à l'évènement ?
+	public boolean canAttendEvent(Event eventToAttend) throws Exception {
+		List<Entity> events = Event.getOverlapping(eventToAttend);
+		
+		for (int i = 0; i < events.size(); i++) {
+			Event event = (Event) events.get(i);
+			
+			if (isAttendingEvent(event) && event.getPriority() >= eventToAttend.getPriority())
+				return false;
+		}
+		
+		return true;
+	}
+	
 	// Est-ce que l'utilisateur participe à l'évènement ?
-	public boolean isAttending(Event event) {
+	public boolean isAttendingEvent(Event event) {
 		return (event.getParticipants().contains(this));
 	}
 }

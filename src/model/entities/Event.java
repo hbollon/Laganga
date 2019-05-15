@@ -120,11 +120,6 @@ public class Event extends Entity {
 	
 	// Ajouter un nouvel évènement
 	public static Event insert(String name, String type, int priority, Calendar begin, Calendar end, Location location, User creator, List<Entity> users, List<Entity> groups) throws ParticipantsBusyException, SQLException, Exception {
-		// Si certains participants prennent déjà part à un évènement dans cette plage horaire, lever une exception
-		List<Entity> busyParticipants = getBusyParticipants(users, groups, begin, end);
-		if (busyParticipants.size() > 0)
-			throw new ParticipantsBusyException(busyParticipants);
-		
 		// Insertion dans la BDD
 		Map<String, Object> values = new HashMap<String, Object>();
 		values.put("name", name);
@@ -135,10 +130,46 @@ public class Event extends Entity {
 		values.put("location", location);
 		values.put("creator", creator);
 		
-		return (Event) Event.factory.insert(values);
+		Event event = (Event) Event.factory.insert(values);
+		
+		// Si certains participants prennent déjà part à un évènement dans cette plage horaire, lever une exception
+		/*
+		List<Entity> busyParticipants = getBusyParticipants(users, groups, begin, end);
+		if (busyParticipants.size() > 0)
+			throw new ParticipantsBusyException(busyParticipants);
+		*/
+		
+		return event;
 	}
 	public static Event insert(String name, String type, int priority, Calendar begin, Calendar end, Location location, User creator) throws SQLException, Exception {
 		return insert(name, type, priority, begin, end, location, creator, EMPTY_ENTITY_LIST, EMPTY_ENTITY_LIST);
+	}
+	
+	// Obtenir les évènements chevauchant une certaine plage horaire (ou évènement)
+	private static FieldsList getOverlappingQueryFields = new FieldsList();
+	static {
+		getOverlappingQueryFields.add("from", "DateTime");
+		getOverlappingQueryFields.add("to", "DateTime");
+		getOverlappingQueryFields.add("from", "DateTime");
+		getOverlappingQueryFields.add("to", "DateTime");
+	}
+	public static List<Entity> getOverlapping(Calendar from, Calendar to) throws SQLException, Exception {
+		String prefix = factory.getPrefix();
+		
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("from", from);
+		values.put("to", to);
+		
+		return factory.get(
+				"WHERE NOT ("+
+						"(? <= `"+prefix+"begin` AND ? <= `"+prefix+"begin`) OR "+
+						"(`"+prefix+"end` <= ? AND `"+prefix+"end` <= ?)"+
+				")",
+				getOverlappingQueryFields,
+				values);
+	}
+	public static List<Entity> getOverlapping(Event event) throws SQLException, Exception {
+		return getOverlapping(event.getBegin(), event.getEnd());
 	}
 	
 	
