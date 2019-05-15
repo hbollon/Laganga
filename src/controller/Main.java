@@ -21,6 +21,6 @@ public abstract class Main {
 		Database.database.connect();
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
-		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
+		LocalUser.localUser.login("simon.bernoud@gmail.com", "bernoud");
 	}
 }

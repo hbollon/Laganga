@@ -43,8 +43,10 @@ public class MainWin extends JFrame {
 	private JMenu help = null;
 	private JMenuItem createEvent = null;
 	private JMenuItem deleteEvent = null;
+	private JMenuItem createGroupe = null;
+	private JMenuItem delateGroupe = null;
+	private JMenuItem editGroupe = null;
 	private JMenuItem settings = null;
-	private JMenuItem close = null;
 	private JMenuItem aide = null;
 	private JMenuItem credit = null;
 	
@@ -179,20 +181,25 @@ public class MainWin extends JFrame {
 	private JMenuBar getMenu()
 	{
 		barMenu = new JMenuBar();
-		fichier = new JMenu("Fichier");
-		edition = new JMenu("Edition");
+		fichier = new JMenu("Evénements");
+		edition = new JMenu("Groupes");
 		option = new JMenu("Options");
 		help = new JMenu("Help");
 		createEvent = new JMenuItem("Créer un nouvel évènement");
 		deleteEvent = new JMenuItem("Supprimer un évènement");
+		createGroupe = new JMenuItem("Créer un nouveau groupe");
+		delateGroupe = new JMenuItem("Supprimer un groupe");
+		editGroupe = new JMenuItem("Modifier un groupe existant");
 		settings = new JMenuItem("Options");
-		close = new JMenuItem("Quitter");
 		aide = new JMenuItem("Aide");
 		credit = new JMenuItem("A propos");
 		
 		fichier.add(createEvent);
 		fichier.add(deleteEvent);
-		fichier.add(close);
+		
+		edition.add(createGroupe);
+		edition.add(delateGroupe);
+		edition.add(editGroupe);
 		
 		option.add(settings);
 		
