@@ -145,8 +145,10 @@ public class FieldsList {
 					EntityFactory joined = factory.getJoinedEntities().get(name);
 					
 					// Si le champ courant comprend une jointure
-					if (joined != null)
+					if (joined != null) {
+						System.out.println(name+" "+joined.getTable());
 						values.put(name, joined.getFromResultSet(res));
+					}
 			}
 		}
 		

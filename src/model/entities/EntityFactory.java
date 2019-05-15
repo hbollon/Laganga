@@ -141,6 +141,7 @@ public class EntityFactory {
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
 	public Entity getFromResultSet(ResultSet res) throws Exception {
+		System.out.println(getTable());
 		Entity entity = entities.get(res.getInt(getTable()+"."+getPrefix()+"id"));
 		
 		if (entity == null)

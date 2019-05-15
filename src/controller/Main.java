@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import model.Database;
 import model.LocalUser;
 import model.entities.Event;
+import model.entities.Group;
 import model.entities.User;
 import view.SplashWin;
 
@@ -24,10 +25,10 @@ public abstract class Main {
 		TimeUnit.SECONDS.sleep(1);
 		Database.database.connect();
 		
-		User user = (User) User.factory.getByID(1);
+		//User user = (User) User.factory.getByID(1);
 		Event event1657 = (Event) Event.factory.getByID(1657);
 		
-		System.out.println(user.isAttending(event1657));
+		//System.out.println(user.isAttending(event1657));
 		
 		//System.out.println(user.canAttend(event13));
 		/*
