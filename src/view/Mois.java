@@ -37,8 +37,8 @@ import model.entities.Location;
  *
  */
 
+@SuppressWarnings("deprecation")
 public class Mois extends JPanel implements Observer {
-		
 	private Calendar calendar = null;
 	private static final long serialVersionUID = 1L;
 	
@@ -163,13 +163,10 @@ public class Mois extends JPanel implements Observer {
 	        newEvent.setStartTime(new DateTime(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin, 00));
 	        newEvent.setEndTime(new DateTime(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd, 00));
 	        
-	        calendar.getSchedule().getItems().add(newEvent); 
-	        
+	        calendar.getSchedule().getItems().add(newEvent);
 		}
 	}
 	
-	
-
 	@Override
 	public void update(Observable o, Object arg) {
 		List<Entity> listeEvent= Agenda.agenda.getEvents();
@@ -182,7 +179,5 @@ public class Mois extends JPanel implements Observer {
 			JCalendar dateEnd = new JCalendar(ev.getEnd().getTime());
 			addEventCalendar(ev.getName(), ev.getType(), dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE));
 		}
-		
-		
 	}
 }

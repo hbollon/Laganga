@@ -48,8 +48,8 @@ public abstract class Entity {
 	}
 	
 	// Sauvegarder les valeurs depuis un ResultSet
-	public void save(ResultSet res) throws SQLException, Exception {
-		fieldsValues = getFactory().getFieldsList().save(res, getFactory());
+	public void save(ResultSet res, String tableAlias) throws SQLException, Exception {
+		fieldsValues = getFactory().getFieldsList().save(res, tableAlias, getFactory());
 	}
 	
 	

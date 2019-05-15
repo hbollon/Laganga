@@ -1,13 +1,21 @@
 package view;
 
-import java.awt.*;
-import java.sql.SQLException;
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
 
 import com.toedter.calendar.JCalendar;
 

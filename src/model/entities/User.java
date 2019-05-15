@@ -1,6 +1,8 @@
 package model.entities;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import model.FieldsList;
 
@@ -31,7 +33,10 @@ public class User extends Entity {
 		factory.setFieldsList(fields);
 	}
 	
-	// Getteurs
+	
+	/*
+	 * Getteurs
+	 */
 	public String getFirstName() {
 		return (String) getFieldsValues().get("firstName");
 	}
@@ -48,7 +53,10 @@ public class User extends Entity {
 		return (Calendar) getFieldsValues().get("birth");
 	}
 	
-	// Setteurs
+	
+	/*
+	 * Setteurs
+	 */
 	public void setFirstName(String firstName) {
 		getFieldsValues().put("firstName", firstName);
 	}
@@ -63,5 +71,62 @@ public class User extends Entity {
 	}
 	public void setBirth(Calendar birth) {
 		getFieldsValues().put("birth", birth);
+	}
+	
+	
+	/*
+	 * Méthodes liées aux évènements
+	 */
+	
+	// Obtenir la liste des évènements auxquels l'utilisateur participe (dans une certaine plage horaire si précisée)
+	public List<Entity> getAttendedEvents(Calendar from, Calendar to) throws Exception {
+		List<Entity> events = new ArrayList<Entity>(); // Liste des évènements auxquels l'utilisateur participe (à remplir)
+		List<Entity> allEvents = Event.factory.getAll(); // Liste des tous les évènements
+		
+		for (int i = 0; i < allEvents.size(); i++) {
+			Event event = (Event) allEvents.get(i);
+			
+			// Si l'utilisateur participe à l'évènement et que ledit évènement chevauche la plage horaire [from, to] (si définie)
+			if (isAttendingEvent(event) && ((from == null || to == null) || event.isOverlapping(from, to)))
+				events.add(event);
+		}
+		
+		return events;
+	}
+	public List<Entity> getAttendedEvents() throws Exception {
+		return getAttendedEvents(null, null);
+	}
+	
+	// Est-ce que l'utilisateur participe à un évènement dans la plage horaire indiquée ?
+	public boolean isBusy(Calendar from, Calendar to) throws Exception {
+		List<Entity> allEvents = Event.factory.getAll();
+		
+		for (int i = 0; i < allEvents.size(); i++) {
+			Event event = (Event) allEvents.get(i);
+			
+			if (isAttendingEvent(event) && event.isOverlapping(from, to))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	// Est-ce que l'utilisateur peut-il participer à l'évènement ?
+	public boolean canAttendEvent(Event eventToAttend) throws Exception {
+		List<Entity> events = Event.getOverlapping(eventToAttend);
+		
+		for (int i = 0; i < events.size(); i++) {
+			Event event = (Event) events.get(i);
+			
+			if (isAttendingEvent(event) && event.getPriority() >= eventToAttend.getPriority())
+				return false;
+		}
+		
+		return true;
+	}
+	
+	// Est-ce que l'utilisateur participe à l'évènement ?
+	public boolean isAttendingEvent(Event event) {
+		return (event.getParticipants().contains(this));
 	}
 }
