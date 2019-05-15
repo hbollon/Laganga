@@ -78,7 +78,10 @@ public class Agenda extends Observable {
 	
 	// Récupérer les évènements donc l'utilisateur courant participe
 	private List<Entity> fetchEvents() throws Exception {
-		return Event.factory.getAll();
+		List<Entity> events = new ArrayList<Entity>();
+		events.addAll(Event.factory.getAll());
+		
+		return events;
 	}
 	
 	// Mettre à jour l'agenda et prévenir les observers
