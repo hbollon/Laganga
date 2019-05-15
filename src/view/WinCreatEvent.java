@@ -99,6 +99,12 @@ public class WinCreatEvent extends JFrame implements Observer {
 		description.add(labelDescription);
 		description.add(textDescription);
 		
+		//panel membres participant aux evenements
+		JPanel participants = new JPanel(new GridLayout(1,2));
+		JLabel labelParticipants = new JLabel("Membres parcipants à l'événement : ");
+		JPanel member = new JPanel(new FlowLayout());
+		
+		
 		//panel degre d'importance de l'évenement
 		JPanel degreeImportance = new JPanel(new GridLayout(1,2));
 		JLabel labelImportance = new JLabel("Style d'événement : ");
