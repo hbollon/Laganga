@@ -53,7 +53,7 @@ public class Event extends Entity {
 	
 	private List<User> attendingUsers = new ArrayList<User>(); // Utilisateurs individuels participants
 	private List<Group> attendingGroups = new ArrayList<Group>(); // Groupes participants
-	private List<User> participants; // Tous les utilisateurs participants (individuellement ou par appartenance à un groupe)
+	private List<User> participants = new ArrayList<User>(); // Tous les utilisateurs participants (individuellement ou par appartenance à un groupe)
 	
 	
 	// Getteurs des attributs
