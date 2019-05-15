@@ -50,7 +50,10 @@ public class Event extends Entity {
 	 */
 	private List<Entity> userParticipations; // Participations des utilisateurs
 	private List<Entity> groupParticipations; // Participations des groupes
-	private List<Entity> participants; // Utilisateurs participants
+	
+	private List<User> attendingUsers = new ArrayList<User>(); // Utilisateurs individuels participants
+	private List<Group> attendingGroups = new ArrayList<Group>(); // Groupes participants
+	private List<User> participants = new ArrayList<User>(); // Tous les utilisateurs participants (individuellement ou par appartenance à un groupe)
 	
 	
 	// Getteurs des attributs
@@ -75,7 +78,13 @@ public class Event extends Entity {
 	public User getCreator() {
 		return (User) getFieldsValues().get("creator");
 	}
-	public List<Entity> getParticipants() {
+	public List<User> getAttendingUsers() {
+		return attendingUsers;
+	}
+	public List<Group> attendingGroups() {
+		return attendingGroups;
+	}
+	public List<User> getParticipants() {
 		return participants;
 	}
 	
@@ -201,29 +210,38 @@ public class Event extends Entity {
 	public void refreshParticipations() throws SQLException, Exception {
 		userParticipations = EventUserParticipation.factory.get("WHERE `"+EventUserParticipation.factory.getPrefix()+"event` = ?", refreshParticipationsQueryFields, getFieldsValues());
 		groupParticipations = EventGroupParticipation.factory.get("WHERE `"+EventGroupParticipation.factory.getPrefix()+"event` = ?", refreshParticipationsQueryFields, getFieldsValues());
-		participants = buildParticipantsList();
+		
+		refreshAttendingUsersList();
+		refreshAttendingGroupsList();
+		refreshParticipantsList();
 	}
 	
-	// Récupérer la liste des participants (directs + membres des groupes participants)
-	public List<Entity> buildParticipantsList() {
-		List<Entity> participants = new ArrayList<Entity>();
+	// Rafraîchir la liste des utilisateurs participant individuellement
+	public void refreshAttendingUsersList() {
+		attendingUsers.clear();
 		
-		// Participations directes
 		for (int i = 0; i < userParticipations.size(); i++)
-			participants.add(((EventUserParticipation) userParticipations.get(i)).getUser());
-		
-		// Participations des groupes
-		for (int i = 0; i < groupParticipations.size(); i++) {
-			Group group = ((EventGroupParticipation) groupParticipations.get(i)).getGroup();
-			List<Entity> groupMembers = group.getMembers();
-			
-			for (int j = 0; j < groupMembers.size(); j++)
-				participants.add(groupMembers.get(j));
-		}
-		
-		return participants;
+			attendingUsers.add(((EventUserParticipation) userParticipations.get(i)).getUser());
 	}
 	
+	// Rafraîchir la liste des groupes participnts
+	public void refreshAttendingGroupsList() {
+		attendingGroups.clear();
+		
+		for (int i = 0; i < groupParticipations.size(); i++)
+			attendingGroups.add(((EventGroupParticipation) groupParticipations.get(i)).getGroup());
+	}
+	
+	// Rafraîchir la liste de tous les utilisateurs participant (individuellement + membres des groupes participants)
+	public void refreshParticipantsList() {
+		participants.clear();
+		participants.addAll(attendingUsers);
+		
+		for (int i = 0; i < attendingGroups.size(); i++)
+			participants.addAll(attendingGroups.get(i).getMembers());
+	}
+	
+	/*
 	// Est-ce que les participants passés (utilisateurs et membres des groupes) sont libres à cette plage horaire ?
 	public static List<Entity> getBusyParticipants(List<Entity> users, List<Entity> groups, Calendar from, Calendar to) throws Exception {
 		List<Entity> participants = new ArrayList<Entity>(); // Liste de tous les participants (individuels + membres des groupes)
@@ -254,4 +272,5 @@ public class Event extends Entity {
 		
 		return busyParticipants;
 	}
+	*/
 }

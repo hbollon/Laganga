@@ -1,10 +1,12 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
 import model.entities.Entity;
 import model.entities.Event;
+import model.entities.Group;
 import model.entities.User;
 
 @SuppressWarnings("deprecation")
@@ -16,15 +18,19 @@ public class Agenda extends Observable {
 	/*
 	 * Attributs
 	 */
-	private User user; // Utilisateur dont il faut afficher les évènement auxquels il participe
+	private List<User> activeUsers = new ArrayList<User>(); // Utilisateurs dont il faut afficher les évènement
+	private List<Group> activeGroups = new ArrayList<Group>(); // Groupes dont il faut afficher les évènement
 	private List<Entity> events; // Liste des évènements
 	
 	
 	/*
 	 * Getteurs
 	 */
-	public User getUser() {
-		return user;
+	public List<User> getActiveUsers() {
+		return activeUsers;
+	}
+	public List<Group> getActiveGroups() {
+		return activeGroups;
 	}
 	public List<Entity> getEvents() {
 		return events;
@@ -32,21 +38,37 @@ public class Agenda extends Observable {
 	
 	
 	/*
-	 * Setteurs
+	 * Gestion des utilisateurs et groupes actifs
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void reset() {
+		activeUsers.clear();
+		activeUsers.add(LocalUser.localUser.getUser());
+		
+		activeGroups.clear();
+	}
+	public void setActive(User user) {
+		if (!activeUsers.contains(user))
+			activeUsers.add(user);
+	}
+	public void setActive(Group group) {
+		if (!activeGroups.contains(group))
+			activeGroups.add(group);
+	}
+	public void setInactive(User user) {
+		if (activeUsers.contains(user))
+			activeUsers.remove(user);
+	}
+	public void setInactive(Group group) {
+		if (activeGroups.contains(group))
+			activeGroups.remove(group);
 	}
 	
 	
 	/*
-	 * Constructeurs
+	 * Constructeur
 	 */
-	public Agenda(User user) {
-		this.user = user;
-	}
 	public Agenda() {
-		this(LocalUser.localUser.getUser());
+		reset();
 	}
 	
 	
