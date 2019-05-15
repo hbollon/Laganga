@@ -108,8 +108,8 @@ public class Event extends Entity {
 	 */
 	
 	// Sauvegarder les champs depuis la BDD
-	public void save(ResultSet res) throws SQLException, Exception {
-		super.save(res);
+	public void save(ResultSet res, String tableAlias) throws SQLException, Exception {
+		super.save(res, tableAlias);
 		refreshParticipations();
 	}
 	
@@ -170,7 +170,7 @@ public class Event extends Entity {
 	public void refreshParticipations() throws SQLException, Exception {
 		userParticipations = EventUserParticipation.factory.get("WHERE `"+EventUserParticipation.factory.getPrefix()+"event` = ?", refreshParticipationsQueryFields, getFieldsValues());
 		groupParticipations = EventGroupParticipation.factory.get("WHERE `"+EventGroupParticipation.factory.getPrefix()+"event` = ?", refreshParticipationsQueryFields, getFieldsValues());
-		//participants = buildParticipantsList();
+		participants = buildParticipantsList();
 	}
 	
 	// Récupérer la liste des participants (directs + membres des groupes participants)

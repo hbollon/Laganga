@@ -100,12 +100,12 @@ public class EntityFactory {
 	}
 	
 	// Création d'une nouvelle entité instanciée
-	private Entity newEntity(ResultSet res) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, SQLException, Exception {
+	private Entity newEntity(ResultSet res, String tableAlias) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, SQLException, Exception {
 		Entity entity = (Entity) classObject.getConstructor().newInstance();
-		entities.put(res.getInt(getTable()+"."+getPrefix()+"id"), entity);
+		entities.put(res.getInt(tableAlias+"."+getPrefix()+"id"), entity);
 		
 		entity.setFactory(this);
-		entity.save(res);
+		entity.save(res, tableAlias);
 		
 		return entity;
 	}
@@ -120,15 +120,7 @@ public class EntityFactory {
 	private String getSelectQuery(String clauses) {
 		String query = "SELECT * FROM `"+getTable()+"`";
 		
-		// Parcourir tous les champs pour trouver les jointures
-		for (int i = 0; i < fieldsList.size(); i++) {
-			String field = fieldsList.getName(i);
-			EntityFactory joined = joinedEntities.get(field);
-			
-			// Ce champ comprend une jointure
-			if (joined != null)
-				query += "\n"+getJoinClause(joined, field);
-		}
+		query += "\n"+getJoints();
 		
 		if (clauses == null)
 			clauses = "ORDER BY `"+getPrefix()+"id` DESC";
@@ -140,14 +132,16 @@ public class EntityFactory {
 	 * getInstanceFromID
 	 * Renvoie l'instance du modèle d'ID id. Si une telle instance n'existe pas, elle est crée.
 	 */
-	public Entity getFromResultSet(ResultSet res) throws Exception {
-		System.out.println(getTable());
-		Entity entity = entities.get(res.getInt(getTable()+"."+getPrefix()+"id"));
+	public Entity getFromResultSet(ResultSet res, String tableAlias) throws Exception {
+		Entity entity = entities.get(res.getInt(tableAlias+"."+getPrefix()+"id"));
 		
 		if (entity == null)
-			entity = newEntity(res);
+			entity = newEntity(res, tableAlias);
 		
 		return entity;
+	}
+	public Entity getFromResultSet(ResultSet res) throws Exception {
+		return getFromResultSet(res, getTable());
 	}
 	
 	/*
@@ -171,8 +165,6 @@ public class EntityFactory {
 				list.add(ent);
 				previousId = ent.getID();
 			}
-			
-			//ent.saveJoined(res); // Sauvegarde des champs joins
 		}
 		
 		return list;
@@ -257,20 +249,39 @@ public class EntityFactory {
 	 * Construction des requêtes SQL
 	 */
 	
-	// Clause de jointure
-	public String getJoinClause(EntityFactory joined, String field) {
-		return "JOIN `"+joined.getTable()+"` ON `"+joined.getTable()+"`.`"+joined.getPrefix()+"id` = `"+getTable()+"`.`"+getPrefix()+field+"`";
+	// Joindre récursivement toutes les entités
+	public String getJoints(String tableAlias) {
+		String query = "";
+		
+		// Parcourir les champs de l'entité
+		for (int i = 0; i < getFieldsList().size(); i++) {
+			String field = getFieldsList().getName(i);
+			EntityFactory joined = getJoinedEntities().get(field);
+			
+			// Ce champ comprend une jointure
+			if (joined != null) {
+				String joinedTableAlias = joined.getTable()+"_"+field;
+				query += getJoint(tableAlias, joined, joinedTableAlias, field)+"\n"+joined.getJoints(joinedTableAlias);
+			}
+		}
+		
+		return query;
+	}
+	public String getJoints() {
+		return getJoints(getTable());
+	}
+	
+	// Clause de jointure d'une entité
+	public String getJoint(String tableAlias, EntityFactory joined, String joinedTableAlias, String onField) {
+		return "JOIN `"+joined.getTable()+"` AS `"+joinedTableAlias+"` ON `"+joinedTableAlias+"`.`"+joined.getPrefix()+"id` = `"+tableAlias+"`.`"+getPrefix()+onField+"`";
 	}
 	
 	// Update
 	public String getUpdateQuery(FieldsList fields) {
-		String query = "";
-		
-		query += "UPDATE `"+table+"`\n";
-		query += "SET "+fields.toUpdateQueryString(prefix)+"\n";
-		query += "WHERE `"+prefix+"id` = ?";
-		
-		return query;
+		return
+				"UPDATE `"+table+"`\n"+
+				"SET "+fields.toUpdateQueryString(prefix)+"\n"+
+				"WHERE `"+prefix+"id` = ?";
 	}
 	
 	// Delete

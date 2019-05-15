@@ -62,8 +62,8 @@ public class Group extends Entity {
 		getFieldsValues().put("owner", owner);
 	}
 	
-	public void save(ResultSet res) throws SQLException, Exception {
-		super.save(res);
+	public void save(ResultSet res, String tableAlias) throws SQLException, Exception {
+		super.save(res, tableAlias);
 		refreshMemberships();
 	}
 	

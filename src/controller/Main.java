@@ -26,11 +26,12 @@ public abstract class Main {
 		Database.database.connect();
 		
 		//User user = (User) User.factory.getByID(1);
-		Event event1657 = (Event) Event.factory.getByID(1657);
+		Event event = (Event) Event.factory.getByID(1657);
+		System.out.println(event.getParticipants());
 		
-		//System.out.println(user.isAttending(event1657));
+		//System.out.println(user.isAttending(event));
 		
-		//System.out.println(user.canAttend(event13));
+		//System.out.println(user.isBusy(event.getBegin(), event.getEnd()));
 		/*
 		Calendar from = new GregorianCalendar(2019, 4, 21, 9, 59);
 		Calendar to = new GregorianCalendar(2019, 4, 21, 12, 0);
@@ -55,6 +56,6 @@ public abstract class Main {
 		*/
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
-		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
+		//LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
 	}
 }
