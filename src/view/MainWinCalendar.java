@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import com.toedter.calendar.JCalendar;
 
+import view.tabs.EventTab;
 import view.tabs.TestTab;
 
 import java.util.Date;
@@ -24,9 +25,6 @@ public class MainWinCalendar extends JTabbedPane {
 		this.addTab("Semaine", semaine);
 		this.addTab("Mois", mois);
 		this.addTab("Année", annee);
-		
-		// Tests
-		new TestTab(this);
 	}
 	
 	public Mois getCalendarP()

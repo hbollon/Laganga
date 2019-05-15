@@ -219,7 +219,7 @@ public class MainWin extends JFrame {
 		barMenu.add(option);
 		barMenu.add(help);
 		
-		createEvent.addActionListener(new OpenWinCreatEvent());
+		createEvent.addActionListener(new OpenWinCreatEvent(winCalendar));
 		
 		return barMenu;
 	}

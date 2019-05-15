@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import controller.buttons.CloseTabButtonListener;
@@ -20,6 +21,7 @@ public abstract class MainWinTab extends JPanel {
 	private String name = ""; // Nom de l'onglet
 	private JPanel header = new JPanel(new BorderLayout()); // Barre du haut de l'onglet (avec le bouton pour le fermer)
 	protected JPanel content = new JPanel(); // Contenu de l'onglet
+	private JScrollPane contentScrollPane = new JScrollPane(content); // Panel à défilement du contenu
 	
 	public void setName(String name) {
 		this.name = name;
@@ -38,7 +40,7 @@ public abstract class MainWinTab extends JPanel {
 		// Mise en place de l'onglet
 		setLayout(new BorderLayout());
 		add(header, BorderLayout.NORTH);
-		add(content, BorderLayout.CENTER);
+		add(contentScrollPane, BorderLayout.CENTER);
 	}
 	
 	// Afficher l'onglet
