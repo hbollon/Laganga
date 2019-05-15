@@ -26,8 +26,7 @@ public class MainWinCalendar extends JTabbedPane {
 		this.addTab("Année", annee);
 		
 		// Tests
-		TestTab test = new TestTab(this);
-		test.switchTo();
+		new TestTab(this);
 	}
 	
 	public Mois getCalendarP()
