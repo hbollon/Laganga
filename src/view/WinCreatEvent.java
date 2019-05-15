@@ -32,6 +32,7 @@ import com.toedter.calendar.JCalendar;
 import controller.AnnuleEvent;
 import controller.CloseWindow;
 import controller.CreateEventListener;
+import controller.SearchUser;
 import model.entities.Entity;
 import model.entities.User;
 
@@ -112,19 +113,22 @@ public class WinCreatEvent extends JFrame implements Observer {
 		description.add(textDescription);
 		
 		//panel membres participant aux evenements
-		JPanel participants = new JPanel(new GridLayout(1,2));
+		JPanel participants = new JPanel(new GridLayout(1,2)); //paneau qui permet de séparer en deux partie le GridLayout
 		participants.setPreferredSize(new Dimension(800, 130));
-		JLabel labelParticipants = new JLabel("Membres parcipants à l'événement : ");
+		JLabel labelParticipants = new JLabel("Membres parcipants à l'événement : "); 
 		
-		JPanel panMembres = new JPanel(new GridLayout(1,2));
-		JPanel search = new JPanel(new BorderLayout());
+		JPanel panMembres = new JPanel(new GridLayout(1,2)); 
+		JPanel search = new JPanel(new BorderLayout()); //paneau pour la barre recherche et la liste de membres dans la base de donnée
 		
-		JPanel barreRecherche = new JPanel(new FlowLayout());
-		JTextField text = new JTextField("Rechercher membre");
-		JButton image = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
-		barreRecherche.add(text);
+		JPanel barreRecherche = new JPanel(new FlowLayout()); //panneau pour la barre de recherche de membres
+		JTextField text = new JTextField("Rechercher membre"); //champ de texte pour la recherche
+		JButton image = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT))); //boutton qui lance la recherche
+		
+		/** Ajout des element de la barre de recherche dans le paneau **/
+		barreRecherche.add(text); 
 		barreRecherche.add(image);
 		
+		/** Liste des membres qui peut-etre rajouter dans un événement **/
 		DefaultMutableTreeNode allUsersTree = new DefaultMutableTreeNode("Membres");
 		List<Entity> allUsers = User.factory.getAll();
 		for(int i = 0; i < allUsers.size(); i++) {
@@ -132,11 +136,13 @@ public class WinCreatEvent extends JFrame implements Observer {
 			allUsersTree.add(new DefaultMutableTreeNode(member.getFirstName() + " " + member.getLastName()));
 		}
 		JTree listeMembres = new JTree(allUsersTree);
-		JScrollPane liste = new JScrollPane(listeMembres);
+		JScrollPane liste = new JScrollPane(listeMembres); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
 		
+		/** Ajout et placement des élements de recheche dans le paneau **/
 		search.add(barreRecherche, BorderLayout.NORTH);
 		search.add(liste, BorderLayout.CENTER);
 		
+		/** Deuxième liste de la même manière contenant les participants à l'événement **/
 		DefaultMutableTreeNode allparticipantsTree = new DefaultMutableTreeNode("Membres participants");
 		allparticipantsTree.add(new DefaultMutableTreeNode("Rachid Ben mha dit 'La salope' "));
 		JTree listeMembresParticipantsTree = new JTree(allparticipantsTree);
@@ -148,7 +154,7 @@ public class WinCreatEvent extends JFrame implements Observer {
 		participants.add(labelParticipants);
 		participants.add(panMembres);
 		
-		//panel degre d'importance de l'évenement
+		//panel degré d'importance de l'évenement
 		JPanel degreeImportance = new JPanel(new GridLayout(1,2));
 		JLabel labelImportance = new JLabel("Style d'événement : ");
 		labelImportance.setPreferredSize(new Dimension(350, 30));
@@ -190,6 +196,7 @@ public class WinCreatEvent extends JFrame implements Observer {
 	    this.add(buttonPane, BorderLayout.SOUTH);
 	    this.setVisible(true);
 	    this.addWindowListener(new CloseWindow(this));
+	    image.addActionListener(new SearchUser());
 	}
 
 	public String getName()
