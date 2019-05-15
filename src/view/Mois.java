@@ -6,6 +6,8 @@ import java.awt.geom.Dimension2D;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -22,7 +24,9 @@ import com.mindfusion.drawing.Pens;
 import com.mindfusion.scheduling.*;
 import com.toedter.calendar.JCalendar;
 
+import model.Agenda;
 import model.EventCalendar;
+import model.entities.Entity;
 import model.entities.Event;
 import model.entities.Location;
 
@@ -33,8 +37,8 @@ import model.entities.Location;
  *
  */
 
+@SuppressWarnings("deprecation")
 public class Mois extends JPanel implements Observer {
-		
 	private Calendar calendar = null;
 	private static final long serialVersionUID = 1L;
 	
@@ -60,7 +64,13 @@ public class Mois extends JPanel implements Observer {
 				calendarItemClicked(e);
 			}
 		});
-				
+		try {
+			Agenda.agenda.addObserver(this);
+			Agenda.agenda.refresh();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		this.add(calendar, BorderLayout.CENTER);
 	}
 	
@@ -108,7 +118,7 @@ public class Mois extends JPanel implements Observer {
 		}
 	}
 	
-	public void addEventMois(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
+	public void addEventBD(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
 			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
 	{
 		Map<String, Object> values = new HashMap<String, Object>();
@@ -117,8 +127,8 @@ public class Mois extends JPanel implements Observer {
 		values.put("name", name);
 		values.put("type", desc);
 		values.put("priority", 1);
-		values.put("begin", new GregorianCalendar(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin));
-		values.put("end", new GregorianCalendar(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd));
+		values.put("begin", new GregorianCalendar(dateB.getYear(), dateB.getMonthValue() - 1, dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin));
+		values.put("end", new GregorianCalendar(dateE.getYear(), dateE.getMonthValue() - 1, dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd));
 		try {
 			values.put("location", Location.factory.getByID(2));
 		} catch (Exception e) {
@@ -136,6 +146,14 @@ public class Mois extends JPanel implements Observer {
 			e.printStackTrace();
 		}
 		
+		addEventCalendar(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+	}
+	
+	public void addEventCalendar(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
+			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
+	{
+		LocalDate dateB = dateBegin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate dateE = dateEnd.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if(calendar != null)
 		{
 			EventCalendar newEvent = new EventCalendar();
@@ -145,15 +163,21 @@ public class Mois extends JPanel implements Observer {
 	        newEvent.setStartTime(new DateTime(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin, 00));
 	        newEvent.setEndTime(new DateTime(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd, 00));
 	        
-	        calendar.getSchedule().getItems().add(newEvent); 
-	        
+	        calendar.getSchedule().getItems().add(newEvent);
 		}
 	}
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		List<Entity> listeEvent= Agenda.agenda.getEvents();
 		
-		
+		for(int i = 0; i < listeEvent.size(); i++)
+		{
+			System.out.println((Event) listeEvent.get(i));
+			Event ev = (Event)listeEvent.get(i);
+			JCalendar dateBegin = new JCalendar(ev.getBegin().getTime());
+			JCalendar dateEnd = new JCalendar(ev.getEnd().getTime());
+			addEventCalendar(ev.getName(), ev.getType(), dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE));
+		}
 	}
 }

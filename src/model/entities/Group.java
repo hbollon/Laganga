@@ -34,10 +34,16 @@ public class Group extends Entity {
 		factory.setJoinedEntities(joinedEntities);
 	}
 	
-	// Liste des appartenances au groupe
-	private List<Entity> memberships = new ArrayList<Entity>();
 	
-	// Getteurs des attributs
+	/*
+	 * Attributs
+	 */
+	private List<Entity> memberships = new ArrayList<Entity>(); // Liste des appartenances au groupe
+	
+	
+	/*
+	 * Getteurs
+	 */
 	public String getName() {
 		return (String) getFieldsValues().get("name");
 	}
@@ -45,7 +51,10 @@ public class Group extends Entity {
 		return (User) getFieldsValues().get("owner");
 	}
 	
-	// Setteurs des attributs
+	
+	/*
+	 * Setteurs
+	 */
 	public void setName(String name) {
 		getFieldsValues().put("name", name);
 	}
@@ -53,13 +62,8 @@ public class Group extends Entity {
 		getFieldsValues().put("owner", owner);
 	}
 	
-	/**
-	 * Récupère la liste des membres du groupe.
-	 * @throws SQLException 
-	 * @throws Exception 
-	 */
-	public void save(ResultSet res) throws SQLException, Exception {
-		super.save(res);
+	public void save(ResultSet res, String tableAlias) throws SQLException, Exception {
+		super.save(res, tableAlias);
 		refreshMemberships();
 	}
 	
@@ -91,13 +95,13 @@ public class Group extends Entity {
 	}
 	
 	// L'utilisateur est-il membre du groupe ?
-	public boolean isMember(User user) {
+	public boolean isUserMember(User user) {
 		return (getMembership(user) != null);
 	}
 	
-	// Liste des membres
-	public List<User> getMembersList() {
-		List<User> list = new ArrayList<User>();
+	// Obtenir la liste des membres
+	public List<Entity> getMembers() {
+		List<Entity> list = new ArrayList<Entity>();
 		
 		for (int i = 0; i < memberships.size(); i++)
 			list.add(((GroupMembership) memberships.get(i)).getUser());
@@ -108,7 +112,7 @@ public class Group extends Entity {
 	// Ajouter un membre
 	public boolean addMember(User user) throws SQLException, Exception {
 		// Si l'utilisateur est déjà membre du groupe, tout arrêter et retourner false
-		if (isMember(user))
+		if (isUserMember(user))
 			return false;
 		
 		Map<String, Object> values = new HashMap<String, Object>();

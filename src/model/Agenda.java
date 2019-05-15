@@ -16,7 +16,6 @@ public class Agenda extends Observable {
 	/*
 	 * Attributs
 	 */
-	
 	private User user; // Utilisateur dont il faut afficher les évènement auxquels il participe
 	private List<Entity> events; // Liste des évènements
 	
@@ -62,7 +61,7 @@ public class Agenda extends Observable {
 	
 	// Mettre à jour l'agenda et prévenir les observers
 	public void refresh() throws Exception {
-		fetchEvents();
+		events = fetchEvents();
 		
 		setChanged();
 		notifyObservers();

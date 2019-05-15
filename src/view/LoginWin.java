@@ -79,9 +79,6 @@ public class LoginWin extends JFrame implements Observer {
 					// Fenêtre principale
 					MainWin fenetre = new MainWin();
 					fenetre.setVisible(true);
-					
-					// Calendrier de la fenêtre principale
-					new MainWinCalendar(fenetre);
 				}
 				catch (Exception e) {
 					e.printStackTrace();

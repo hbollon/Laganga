@@ -17,6 +17,11 @@ public class OpenWinCreatEvent implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		new WinCreatEvent();
+		try {
+			new WinCreatEvent();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }

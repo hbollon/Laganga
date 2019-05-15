@@ -1,12 +1,21 @@
 package view;
 
-import java.awt.*;
-import java.sql.SQLException;
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
 
 import com.toedter.calendar.JCalendar;
 
@@ -42,8 +51,10 @@ public class MainWin extends JFrame {
 	private JMenu help = null;
 	private JMenuItem createEvent = null;
 	private JMenuItem deleteEvent = null;
+	private JMenuItem createGroupe = null;
+	private JMenuItem delateGroupe = null;
+	private JMenuItem editGroupe = null;
 	private JMenuItem settings = null;
-	private JMenuItem close = null;
 	private JMenuItem aide = null;
 	private JMenuItem credit = null;
 	
@@ -178,20 +189,25 @@ public class MainWin extends JFrame {
 	private JMenuBar getMenu()
 	{
 		barMenu = new JMenuBar();
-		fichier = new JMenu("Fichier");
-		edition = new JMenu("Edition");
+		fichier = new JMenu("Evénements");
+		edition = new JMenu("Groupes");
 		option = new JMenu("Options");
 		help = new JMenu("Help");
 		createEvent = new JMenuItem("Créer un nouvel évènement");
 		deleteEvent = new JMenuItem("Supprimer un évènement");
+		createGroupe = new JMenuItem("Créer un nouveau groupe");
+		delateGroupe = new JMenuItem("Supprimer un groupe");
+		editGroupe = new JMenuItem("Modifier un groupe existant");
 		settings = new JMenuItem("Options");
-		close = new JMenuItem("Quitter");
 		aide = new JMenuItem("Aide");
 		credit = new JMenuItem("A propos");
 		
 		fichier.add(createEvent);
 		fichier.add(deleteEvent);
-		fichier.add(close);
+		
+		edition.add(createGroupe);
+		edition.add(delateGroupe);
+		edition.add(editGroupe);
 		
 		option.add(settings);
 		
@@ -210,6 +226,7 @@ public class MainWin extends JFrame {
 	
 	public static void callAddEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
 	{
-		winCalendar.getCalendarP().addEventMois(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+		winCalendar.getCalendarP().addEventBD(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
 	}
+
 }

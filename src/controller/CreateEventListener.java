@@ -54,6 +54,7 @@ public class CreateEventListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		createEventLocal();
+		win.dispose();
 		
 	}
 }
