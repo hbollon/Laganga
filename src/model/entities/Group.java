@@ -147,4 +147,14 @@ public class Group extends Entity {
 		// Suppression réussie, retourner true
 		return true;
 	}
+	
+	
+	/*
+	 * Méthodes liées aux évènements
+	 */
+	
+	// Est-ce que le groupe participe à l'évènement ?
+	public boolean isAttendingEvent(Event event) {
+		return (event.getAttendingGroups().contains(this));
+	}
 }
