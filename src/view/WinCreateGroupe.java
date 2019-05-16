@@ -48,23 +48,23 @@ public class WinCreateGroupe extends JFrame implements Observer {
 		JPanel nomGroupe = new JPanel(new FlowLayout());
 		JLabel labelGroupe = new JLabel("Nom du Groupe : ");
 		JTextField Groupe = new JTextField();
-		Groupe.setPreferredSize(new Dimension(100, 24));
+		Groupe.setPreferredSize(new Dimension(300, 24));
 		nomGroupe.add(labelGroupe);
 		nomGroupe.add(Groupe);
 		
 		JPanel membre = new JPanel(new FlowLayout());
-		JLabel labelmembre = new JLabel("Ajouter Membres");
+		JLabel labelmembre = new JLabel("Ajouter Membres:");
 		JTextField memb = new JTextField();
-		memb.setPreferredSize(new Dimension(100, 24));
+		memb.setPreferredSize(new Dimension(300, 24));
 		membre.add(labelmembre);
 		membre.add(memb);
 		
 		JButton creergroupe = new JButton("créer groupe");
-		this.add(membre, BorderLayout.CENTER);
 		this.add(nomGroupe, BorderLayout.CENTER);
+		this.add(membre, BorderLayout.SOUTH);
 		
 		this.setVisible(true);
-		creergroupe.addActionListener(new Inscription());
+		//creergroupe.addActionListener(new Creergroupe());
 		this.addWindowListener(new CloseWindow(this));
 		
 	}
