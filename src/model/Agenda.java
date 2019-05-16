@@ -47,20 +47,16 @@ public class Agenda extends Observable {
 		activeGroups.clear();
 	}
 	public void setActive(User user) {
-		if (!activeUsers.contains(user))
-			activeUsers.add(user);
+		activeUsers.add(user);
 	}
 	public void setActive(Group group) {
-		if (!activeGroups.contains(group))
-			activeGroups.add(group);
+		activeGroups.add(group);
 	}
 	public void setInactive(User user) {
-		if (activeUsers.contains(user))
-			activeUsers.remove(user);
+		activeUsers.remove(user);
 	}
 	public void setInactive(Group group) {
-		if (activeGroups.contains(group))
-			activeGroups.remove(group);
+		activeGroups.remove(group);
 	}
 	
 	
@@ -78,7 +74,16 @@ public class Agenda extends Observable {
 	
 	// Récupérer les évènements donc l'utilisateur courant participe
 	private List<Entity> fetchEvents() throws Exception {
-		return Event.factory.getAll();
+		List<Entity> events = new ArrayList<Entity>();
+		events.addAll(Event.factory.getAll());
+		
+		// Évènements des utilisateurs actifs
+		
+		
+		// Évènements des groupes actifs
+		
+		
+		return events;
 	}
 	
 	// Mettre à jour l'agenda et prévenir les observers
