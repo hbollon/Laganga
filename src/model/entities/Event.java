@@ -29,17 +29,18 @@ public class Event extends Entity {
 		fields.add("name", "String");
 		fields.add("type", "String");
 		fields.add("priority", "int");
+		fields.add("creator", "model.entities.User");
 		fields.add("begin", "DateTime");
 		fields.add("end", "DateTime");
 		fields.add("location", "model.entities.Location");
-		fields.add("creator", "model.entities.User");
+		fields.add("hidden", "boolean");
 		
 		factory.setFieldsList(fields);
 		
 		// Entités jointes
 		Map<String, EntityFactory> joinedEntities = new HashMap<String, EntityFactory>();
-		joinedEntities.put("location", Location.factory);
 		joinedEntities.put("creator", User.factory);
+		joinedEntities.put("location", Location.factory);
 		
 		factory.setJoinedEntities(joinedEntities);
 	}
@@ -66,6 +67,9 @@ public class Event extends Entity {
 	public int getPriority() {
 		return (int) getFieldsValues().get("priority");
 	}
+	public User getCreator() {
+		return (User) getFieldsValues().get("creator");
+	}
 	public Calendar getBegin() {
 		return (Calendar) getFieldsValues().get("begin");
 	}
@@ -75,8 +79,8 @@ public class Event extends Entity {
 	public Location getLocation() {
 		return (Location) getFieldsValues().get("location");
 	}
-	public User getCreator() {
-		return (User) getFieldsValues().get("creator");
+	public boolean getHidden() {
+		return (boolean) getFieldsValues().get("hidden");
 	}
 	public List<User> getAttendingUsers() {
 		return attendingUsers;
@@ -98,6 +102,9 @@ public class Event extends Entity {
 	public void setPriority(int priority) {
 		getFieldsValues().put("priority", priority);
 	}
+	public void setCreator(User creator) {
+		getFieldsValues().put("creator", creator);
+	}
 	public void setBegin(Calendar begin) {
 		getFieldsValues().put("begin", begin);
 	}
@@ -107,8 +114,8 @@ public class Event extends Entity {
 	public void setLocation(Location location) {
 		getFieldsValues().put("location", location);
 	}
-	public void setCreator(User creator) {
-		getFieldsValues().put("creator", creator);
+	public void setHidden(boolean hidden) {
+		getFieldsValues().put("hidden", hidden);
 	}
 	
 	
@@ -128,16 +135,17 @@ public class Event extends Entity {
 	 */
 	
 	// Ajouter un nouvel évènement
-	public static Event insert(String name, String type, int priority, Calendar begin, Calendar end, Location location, User creator, List<Entity> users, List<Entity> groups) throws ParticipantsBusyException, SQLException, Exception {
+	public static Event insert(String name, String type, int priority, User creator, Calendar begin, Calendar end, Location location, boolean hidden, List<Entity> users, List<Entity> groups) throws ParticipantsBusyException, SQLException, Exception {
 		// Insertion dans la BDD
 		Map<String, Object> values = new HashMap<String, Object>();
 		values.put("name", name);
 		values.put("type", type);
 		values.put("priority", priority);
+		values.put("creator", creator);
 		values.put("begin", begin);
 		values.put("end", end);
 		values.put("location", location);
-		values.put("creator", creator);
+		values.put("hidden", hidden);
 		
 		Event event = (Event) Event.factory.insert(values);
 		
@@ -150,8 +158,8 @@ public class Event extends Entity {
 		
 		return event;
 	}
-	public static Event insert(String name, String type, int priority, Calendar begin, Calendar end, Location location, User creator) throws SQLException, Exception {
-		return insert(name, type, priority, begin, end, location, creator, EMPTY_ENTITY_LIST, EMPTY_ENTITY_LIST);
+	public static Event insert(String name, String type, int priority, User creator, Calendar begin, Calendar end, Location location, boolean hidden) throws SQLException, Exception {
+		return insert(name, type, priority, creator, begin, end, location, hidden, EMPTY_ENTITY_LIST, EMPTY_ENTITY_LIST);
 	}
 	
 	// Obtenir les évènements chevauchant une certaine plage horaire (ou évènement)
