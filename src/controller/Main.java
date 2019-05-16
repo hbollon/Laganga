@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import model.Database;
 import model.LocalUser;
 import view.SplashWin;
-import view.WinCreateGroupe;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
@@ -15,13 +14,11 @@ public abstract class Main {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		
 		// Affichage du splash screen
-		//new SplashWin();
+		new SplashWin();
 		
 		// Initialisation de la connexion à la base de données
 		TimeUnit.SECONDS.sleep(1);
 		Database.database.connect();
-		
-		new WinCreateGroupe();
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		LocalUser.localUser.login("simon.bernoud@gmail.com", "bernoud");
