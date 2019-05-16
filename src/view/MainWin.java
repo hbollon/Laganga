@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -17,12 +19,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 
-import com.toedter.calendar.JCalendar;
-
 import controller.OpenWinCreatEvent;
 import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
+
+import com.mindfusion.scheduling.*;
 
 /**
  * Classe MainWin, fenetre principale de notre programme
@@ -224,7 +226,7 @@ public class MainWin extends JFrame {
 		return barMenu;
 	}
 	
-	public static void callAddEvent(String name, String desc, int priority,  JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
+	public static void callAddEvent(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
 	{
 		winCalendar.getCalendarP().addEventBD(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
 	}

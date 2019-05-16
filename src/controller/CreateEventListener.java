@@ -2,16 +2,12 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
-import com.toedter.calendar.JCalendar;
-
-import java.sql.Time;
+import com.mindfusion.scheduling.Calendar;
 
 import view.MainWin;
-import view.MainWinCalendar;
-import view.Mois;
-import view.WinCreatEvent;
+import view.tabs.EventTab;
 
 /**
  * Listener créant un Event dans la base de donnée et localement
@@ -24,8 +20,8 @@ public class CreateEventListener implements ActionListener {
 	private String name;
 	private String type = null;
 	private int priority = 0;
-	private JCalendar dateBegin;
-	private JCalendar dateEnd;
+	private GregorianCalendar dateBegin;
+	private GregorianCalendar dateEnd;
 	private int timeHourBegin;
 	private int timeMinuteBegin;
 	private int timeHourEnd;
@@ -33,17 +29,17 @@ public class CreateEventListener implements ActionListener {
 	private String desc;
 	private boolean hide;
 	
-	private WinCreatEvent win;
+	private EventTab win;
 	 
-	public CreateEventListener(WinCreatEvent win) {
-		this.win = win;
+	public CreateEventListener(EventTab eventTab) {
+		this.win = eventTab;
 	}
 	
 	public void createEventLocal()
 	{
 		name = win.getName();
-		dateBegin = win.getDateBegin();
-		dateEnd = win.getDateEnd();
+		dateBegin = new GregorianCalendar(win.getDateBegin().getDate().getYear(), win.getDateBegin().getDate().getMonth() - 1, win.getDateBegin().getDate().getDay());
+		dateEnd = new GregorianCalendar(win.getDateEnd().getDate().getYear(), win.getDateEnd().getDate().getMonth() - 1, win.getDateEnd().getDate().getDay());
 		timeHourBegin = win.getHourBegin();
 		timeMinuteBegin = win.getMinuteBegin();
 		timeHourEnd = win.getHourEnd();
@@ -51,13 +47,11 @@ public class CreateEventListener implements ActionListener {
 		desc = win.getDesc();
 		priority = win.getPriority().getSelectedIndex();
 		hide = win.getHide().isSelected();
-		MainWin.callAddEvent(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+		MainWin.callAddEvent(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		createEventLocal();
-		win.dispose();
-		
+		createEventLocal();		
 	}
 }

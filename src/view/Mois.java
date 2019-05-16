@@ -121,34 +121,34 @@ public class Mois extends JPanel implements Observer {
 		}
 	}
 	
-	public void addEventBD(String name, String desc, int priority, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
+	public void addEventBD(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin,
 			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
 	{
-		
-		LocalDate dateB = dateBegin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		LocalDate dateE = dateEnd.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		//Event.insert(name, desc, priority, Calendar begin, Calendar end, Location location, User creator, List<Entity> users, List<Entity> groups)
-		
-		addEventCalendar(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
+		//Event.insert(name, desc, priority, dateBegin, dateEnd, null, null, null, null);
+		try {
+			Agenda.agenda.refresh();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void addEventCalendar(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin,
+	public void addEventCalendar(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin,
 			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
 	{
-		LocalDate dateB = dateBegin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		LocalDate dateE = dateEnd.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if(calendar != null)
 		{
 			EventCalendar newEvent = new EventCalendar();
 			
 	        newEvent.setHeaderText(name);
 	        newEvent.setDescriptionText(desc);
-	        newEvent.setStartTime(new DateTime(dateB.getYear(), dateB.getMonthValue(), dateB.getDayOfMonth(), timeHourBegin, timeMinuteBegin, 00));
-	        newEvent.setEndTime(new DateTime(dateE.getYear(), dateE.getMonthValue(), dateE.getDayOfMonth(), timeHourEnd, timeMinuteEnd, 00));
+	        newEvent.setStartTime(new DateTime(dateBegin.get(java.util.Calendar.YEAR), dateBegin.get(java.util.Calendar.MONTH), dateBegin.get(java.util.Calendar.DAY_OF_MONTH), timeHourBegin, timeMinuteBegin, 00));
+	        newEvent.setEndTime(new DateTime(dateEnd.get(java.util.Calendar.YEAR), dateEnd.get(java.util.Calendar.MONTH), dateEnd.get(java.util.Calendar.DAY_OF_MONTH), timeHourEnd, timeMinuteEnd, 00));
 	        
 	        calendar.getSchedule().getItems().add(newEvent);
 		}
 	}
+
 	
 	@Override
 	public void update(Observable o, Object arg) {
@@ -158,9 +158,11 @@ public class Mois extends JPanel implements Observer {
 		{
 			System.out.println((Event) listeEvent.get(i));
 			Event ev = (Event)listeEvent.get(i);
-			JCalendar dateBegin = new JCalendar(ev.getBegin().getTime());
-			JCalendar dateEnd = new JCalendar(ev.getEnd().getTime());
-			addEventCalendar(ev.getName(), ev.getType(), ev.getPriority(),  dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE), true);
+			
+			GregorianCalendar dateBegin = new GregorianCalendar(ev.getBegin().get(java.util.Calendar.YEAR), ev.getBegin().get(java.util.Calendar.MONTH) + 1, ev.getBegin().get(java.util.Calendar.DAY_OF_MONTH));
+			GregorianCalendar dateEnd = new GregorianCalendar(ev.getEnd().get(java.util.Calendar.YEAR), ev.getEnd().get(java.util.Calendar.MONTH) + 1, ev.getEnd().get(java.util.Calendar.DAY_OF_MONTH));
+
+			addEventCalendar(ev.getName(), ev.getType(), ev.getPriority(),  dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE), ev.getHidden());
 		}
 	}
 }
