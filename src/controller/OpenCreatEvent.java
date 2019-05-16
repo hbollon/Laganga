@@ -11,11 +11,11 @@ import view.Mois;
 import view.WinCreatEvent;
 import view.tabs.EventTab;
 
-public class OpenWinCreatEvent implements ActionListener {
+public class OpenCreatEvent implements ActionListener {
 	
 	private JTabbedPane parent;
 
-	public OpenWinCreatEvent(JTabbedPane parent) {
+	public OpenCreatEvent(JTabbedPane parent) {
 		this.parent = parent;
 	}
 

@@ -30,6 +30,7 @@ import controller.CreateEventListener;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Event;
+import model.entities.Group;
 import model.entities.User;
 
 /**
@@ -200,14 +201,13 @@ public class EventTab extends MainWinTab {
 		
 		//panel membres participant aux evenements
 		JPanel participants = new JPanel(new FlowLayout());
-		JLabel labelParticipants = new JLabel("Membres parcipants à l'événement : "); 
+		JLabel labelParticipants = new JLabel("Membres participants à l'événement : "); 
 		participants.add(labelParticipants);
 		
 		JPanel panMembres = new JPanel(new BorderLayout()); 
 		JPanel listes = new JPanel(new FlowLayout());
 		
 		JPanel search = new JPanel(new FlowLayout()); //paneau pour la barre recherche et la liste de membres dans la base de donnée
-		//JPanel barreRecherche = new JPanel(new FlowLayout()); //panneau pour la barre de recherche de membres
 		JTextField text = new JTextField("Rechercher membre"); //champ de texte pour la recherche
 		text.setPreferredSize(new Dimension(200, 25));
 		JButton image = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT))); //boutton qui lance la recherche
@@ -231,7 +231,6 @@ public class EventTab extends MainWinTab {
 		
 		participants.add(panMembres);
 		listes.add(liste);
-		
 		/**
 		 * deuxieme liste
 		 */
@@ -243,6 +242,49 @@ public class EventTab extends MainWinTab {
 		
 		listes.add(listeMembresParticipants);
 		panMembres.add(listes, BorderLayout.CENTER);
+		
+		
+		//groupes pparticipant a l'événement
+		JPanel groupesParticipants = new JPanel(new FlowLayout()); //Panel ligne groupe
+		
+		JLabel panelTextGroupe = new JLabel("Groupes Participant à l'événement : ");
+		groupesParticipants.add(panelTextGroupe);
+		
+		JPanel listesGroupes = new JPanel(new BorderLayout()); //Panel gestion groupe
+		JPanel listeDesGroupes = new JPanel(new FlowLayout()); //Panel listes
+		
+		JPanel searchGroup = new JPanel(new FlowLayout()); //paneau pour la barre recherche et la liste de membres dans la base de donnée
+		JTextField textsearchGroup = new JTextField("Rechercher groupe"); //champ de texte pour la recherche
+		textsearchGroup.setPreferredSize(new Dimension(200, 25));
+		JButton imageGroupe = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
+		/** Ajout des element de la barre de recherche dans le paneau **/
+		searchGroup.add(textsearchGroup); 
+		searchGroup.add(imageGroupe); //boutton qui lance la recherche
+		listesGroupes.add(searchGroup, BorderLayout.NORTH);
+		
+		DefaultMutableTreeNode allGroupsTree = new DefaultMutableTreeNode("Groupes");
+		List<Entity> allGroups = Group.factory.getAll();
+		for(int i = 0; i < allGroups.size(); i++) {
+			Group group = (Group) allGroups.get(i);
+			allGroupsTree.add(new DefaultMutableTreeNode(group.getName()));
+		}
+		JTree listeGroupes = new JTree(allGroupsTree);
+		JScrollPane listeG = new JScrollPane(listeGroupes); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
+		listeG.setPreferredSize(new Dimension(200,200));
+		listeDesGroupes.add(listeG);
+		
+		//Deuxieme listes groupe
+		DefaultMutableTreeNode allGroupesParticipantsTree = new DefaultMutableTreeNode("Membres participants");
+		allGroupesParticipantsTree.add(new DefaultMutableTreeNode("Rachid Ben mha dit 'La salope' "));
+		JTree listeGroupesParticipantsTree = new JTree(allGroupesParticipantsTree);
+		JScrollPane listeGroupesParticipants = new JScrollPane(listeGroupesParticipantsTree);
+		listeGroupesParticipants.setPreferredSize(new Dimension(200,200));
+		listeDesGroupes.add(listeGroupesParticipants);
+		
+		listesGroupes.add(listeDesGroupes, BorderLayout.CENTER);
+		groupesParticipants.add(listesGroupes);
+		
+		
 		
 		//panel degré d'importance de l'évenement
 		JPanel degreeImportance = new JPanel(new FlowLayout());
@@ -269,6 +311,7 @@ public class EventTab extends MainWinTab {
 		buttonPane.add(ajoutEvent);
 	   
 		content.add(participants);
+		content.add(groupesParticipants);
 		content.add(degreeImportance);
 		content.add(eventVisible);
 	    content.add(buttonPane);

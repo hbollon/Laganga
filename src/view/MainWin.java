@@ -20,7 +20,7 @@ import javax.swing.JTree;
 import com.toedter.calendar.JCalendar;
 
 import controller.OpenOngletSupprGroup;
-import controller.OpenWinCreatEvent;
+import controller.OpenCreatEvent;
 import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
@@ -220,7 +220,7 @@ public class MainWin extends JFrame {
 		barMenu.add(option);
 		barMenu.add(help);
 		
-		createEvent.addActionListener(new OpenWinCreatEvent(winCalendar));
+		createEvent.addActionListener(new OpenCreatEvent(winCalendar));
 		delateGroupe.addActionListener(new OpenOngletSupprGroup(winCalendar));
 		
 		return barMenu;
