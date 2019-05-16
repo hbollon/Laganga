@@ -19,7 +19,7 @@ public abstract class MainWinTab extends JPanel {
 	
 	private JTabbedPane parent; // Conteneur des onglets
 	private String name = ""; // Nom de l'onglet
-	private JPanel header = new JPanel(new BorderLayout()); // Barre du haut de l'onglet (avec le bouton pour le fermer)
+	protected JPanel header = new JPanel(new BorderLayout()); // Barre du haut de l'onglet (avec le bouton pour le fermer)
 	protected JPanel content = new JPanel(); // Contenu de l'onglet
 	private JScrollPane contentScrollPane = new JScrollPane(content); // Panel à défilement du contenu
 	
