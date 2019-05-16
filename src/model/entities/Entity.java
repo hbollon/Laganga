@@ -10,7 +10,9 @@ import java.util.Map;
 import model.Database;
 import model.FieldsList;
 
-public abstract class Entity {
+import view.interfaces.EntityTreeDisplayable;
+
+public abstract class Entity implements EntityTreeDisplayable {
 	/*
 	 * Objet usine
 	 */
@@ -131,5 +133,14 @@ public abstract class Entity {
 	 */
 	public String toString() {
 		return getFactory().getClassName()+getFactory().getFieldsList().valuesToString(fieldsValues);
+	}
+	
+	
+	/*
+	 * Affichage dans un EntityTree
+	 */
+	@Override
+	public String getTreeDisplayName() {
+		return "Entity "+getID();
 	}
 }

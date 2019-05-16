@@ -118,7 +118,7 @@ public class MainWin extends JFrame {
 		List<Entity> usersList = User.factory.getAll();
 		List<String> usersNames = new ArrayList<String>();
 		
-		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Users");
+		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Utilisateurs");
 		  jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
 		  jScrollTree.setViewportView(jTree);
 		  
@@ -134,7 +134,7 @@ public class MainWin extends JFrame {
 		List<Entity> groupeList = Group.factory.getAll();
 		List<String> groupeNames = new ArrayList<String>();
 		
-		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste Groupe");
+		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Groupes");
 		  jTreeGroupe.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
 		  jScrollTreeGroup.setViewportView(jTreeGroupe);
 		  

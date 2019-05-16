@@ -22,7 +22,6 @@ import model.FieldsList;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Group;
-import model.entities.User;
 
 public class SupprGroupTab extends MainWinTab {
 	private static final long serialVersionUID = -618260664434187272L;
@@ -46,7 +45,7 @@ public class SupprGroupTab extends MainWinTab {
 		barreRecherche.add(image);
 		panMain.add(barreRecherche, BorderLayout.NORTH);
 		
-		DefaultMutableTreeNode allGroupsTree = new DefaultMutableTreeNode("Groupes");
+		DefaultMutableTreeNode allGroupsTree = new DefaultMutableTreeNode("Mes groupes");
 		
 		// Obtention de la liste des groupes dont on est le propriétaire
 		Map<String, Object> values = new HashMap<String, Object>();
