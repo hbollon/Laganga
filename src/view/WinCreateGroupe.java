@@ -64,7 +64,7 @@ public class WinCreateGroupe extends JFrame implements Observer {
 		this.add(membre, BorderLayout.SOUTH);
 		
 		this.setVisible(true);
-		//creergroupe.addActionListener(new Creergroupe());
+		creergroupe.addActionListener(new CreateGroupe());
 		this.addWindowListener(new CloseWindow(this));
 		
 	}
