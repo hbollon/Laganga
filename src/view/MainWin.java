@@ -224,9 +224,9 @@ public class MainWin extends JFrame {
 		return barMenu;
 	}
 	
-	public static void callAddEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
+	public static void callAddEvent(String name, String desc, int priority,  JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
 	{
-		winCalendar.getCalendarP().addEventBD(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+		winCalendar.getCalendarP().addEventBD(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
 	}
 
 }

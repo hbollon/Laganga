@@ -31,6 +31,7 @@ public class CreateEventListener implements ActionListener {
 	private int timeHourEnd;
 	private int timeMinuteEnd;
 	private String desc;
+	private boolean hide;
 	
 	private WinCreatEvent win;
 	 
@@ -48,7 +49,9 @@ public class CreateEventListener implements ActionListener {
 		timeHourEnd = win.getHourEnd();
 		timeMinuteEnd = win.getMinuteEnd();
 		desc = win.getDesc();
-		MainWin.callAddEvent(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+		priority = win.getPriority().getSelectedIndex();
+		hide = win.getHide().isSelected();
+		MainWin.callAddEvent(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
 	}
 
 	@Override

@@ -47,6 +47,8 @@ public class WinCreatEvent extends JFrame implements Observer {
 	private JSpinner hourEnd;
 	private JSpinner minuteBegin;
 	private JSpinner minuteEnd;
+	private JComboBox importance;
+	private JCheckBox eventVisible;
 				
 	public WinCreatEvent() throws Exception {
 		super();
@@ -158,8 +160,8 @@ public class WinCreatEvent extends JFrame implements Observer {
 		JPanel degreeImportance = new JPanel(new GridLayout(1,2));
 		JLabel labelImportance = new JLabel("Style d'événement : ");
 		labelImportance.setPreferredSize(new Dimension(350, 30));
-		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV proffessionel déplaçable", "RDV personnel non déplaçable", "RDV proffessionnel non déplaçable", "Autre"};
-		JComboBox importance = new JComboBox(elements);
+		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV professionel déplaçable", "RDV personnel non déplaçable", "RDV professionnel non déplaçable", "Autre"};
+		importance = new JComboBox(elements);
 		degreeImportance.add(labelImportance);
 		degreeImportance.add(importance);
 		
@@ -237,6 +239,16 @@ public class WinCreatEvent extends JFrame implements Observer {
 	public int getMinuteEnd()
 	{
 		return (Integer)minuteEnd.getValue();
+	}
+	
+	public JComboBox getPriority()
+	{
+		return importance;
+	}
+	
+	public JCheckBox getHide()
+	{
+		return eventVisible;
 	}
 	
 	@Override

@@ -22,7 +22,7 @@ public class OpenWinCreatEvent implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			EventTab newEventTab = new EventTab(parent); //, (Event) Event.factory.getByID(1658)
+			EventTab newEventTab = new EventTab(parent, (Event) Event.factory.getByID(1658)); //, (Event) Event.factory.getByID(1658)
 			newEventTab.switchTo();
 		} catch (Exception e1) {
 			e1.printStackTrace();
