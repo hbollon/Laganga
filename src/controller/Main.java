@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import model.Database;
 import model.LocalUser;
 import view.SplashWin;
+import view.tabs.TestTab;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
@@ -23,5 +24,11 @@ public abstract class Main {
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		//LocalUser.localUser.login("simon.bernoud@gmail.com", "bernoud");
 		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
+		
+		try {
+			new TestTab();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

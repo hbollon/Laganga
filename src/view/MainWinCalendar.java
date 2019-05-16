@@ -5,8 +5,6 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import view.tabs.TestTab;
-
 public class MainWinCalendar extends JTabbedPane {
 	private static final long serialVersionUID = 1L;
 	
@@ -23,12 +21,6 @@ public class MainWinCalendar extends JTabbedPane {
 		this.addTab("Semaine", semaine);
 		this.addTab("Mois", mois);
 		this.addTab("Année", annee);
-		
-		try {
-			new TestTab();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public Mois getCalendarP()
