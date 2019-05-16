@@ -2,6 +2,7 @@ package view.tabs;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
@@ -17,9 +18,11 @@ public class TestTab extends MainWinTab {
 		super(parent);
 		setName("Onglet de test"); // Nom de l'onglet
 		
+		// Ajouter un bouton dans la barre d'en-tête
+		header.add(new JButton("Modifier"), BorderLayout.WEST);
+		
 		// Le JPanel content représente le contenu de l'onglet
-		content.setLayout(new BorderLayout());
-		content.add(new JLabel("Onglet de test !"), BorderLayout.CENTER);
+		content.add(new JLabel("Onglet de test !"));
 		
 		open(); // Ouverture de l'onglet
 	}

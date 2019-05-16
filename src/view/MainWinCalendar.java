@@ -1,13 +1,11 @@
 package view;
 
-import javax.swing.*;
-
-import com.toedter.calendar.JCalendar;
-
-import view.tabs.EventTab;
-import view.tabs.TestTab;
-
 import java.util.Date;
+
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+
+import view.tabs.TestTab;
 
 public class MainWinCalendar extends JTabbedPane {
 	private static final long serialVersionUID = 1L;
@@ -25,6 +23,7 @@ public class MainWinCalendar extends JTabbedPane {
 		this.addTab("Semaine", semaine);
 		this.addTab("Mois", mois);
 		this.addTab("Année", annee);
+		new TestTab(this);
 	}
 	
 	public Mois getCalendarP()

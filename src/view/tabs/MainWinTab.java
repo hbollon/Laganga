@@ -2,6 +2,7 @@ package view.tabs;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -37,6 +38,9 @@ public abstract class MainWinTab extends JPanel {
 		close.addActionListener(new CloseTabButtonListener(this));
 		header.add(close, BorderLayout.EAST);
 		
+		// Mise en place du contenu
+		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
+		
 		// Mise en place de l'onglet
 		setLayout(new BorderLayout());
 		add(header, BorderLayout.NORTH);
@@ -56,5 +60,13 @@ public abstract class MainWinTab extends JPanel {
 	// Fermer l'onglet
 	public void close() {
 		parent.remove(this);
+	}
+	
+	// Création d'un panel en ligne
+	protected JPanel newLinePanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+		
+		return panel;
 	}
 }
