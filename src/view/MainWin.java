@@ -1,14 +1,36 @@
 package view;
 
-import java.awt.*;
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
+
+import com.toedter.calendar.JCalendar;
 
 import controller.OpenWinCreatEvent;
 import model.entities.Entity;
+import model.entities.Group;
 import model.entities.User;
+
+/**
+ * Classe MainWin, fenetre principale de notre programme
+ * 
+ * 
+ * @author hbollon
+ *
+ */
 
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
@@ -17,8 +39,6 @@ public class MainWin extends JFrame {
 	private JPanel centerPanel = null;
 	private JPanel leftPanel = null;
 	private JPanel rightPanel = null;
-	private JPanel jContentPane = null;
-	private JPanel jContentPaneGroup = null;
 	private JTree jTree = null;
 	private JTree jTreeGroupe = null;
 	private JScrollPane jScrollTree = null;
@@ -28,13 +48,17 @@ public class MainWin extends JFrame {
 	private JMenu fichier = null;
 	private JMenu edition = null;
 	private JMenu option = null;
-	private JMenu aPropos = null;
+	private JMenu help = null;
 	private JMenuItem createEvent = null;
 	private JMenuItem deleteEvent = null;
+	private JMenuItem createGroupe = null;
+	private JMenuItem delateGroupe = null;
+	private JMenuItem editGroupe = null;
 	private JMenuItem settings = null;
-	private JMenuItem close = null;
 	private JMenuItem aide = null;
 	private JMenuItem credit = null;
+	
+	private static MainWinCalendar winCalendar;
 	
 	private JTree getJTree() {
 		if (jTree == null) {
@@ -55,11 +79,12 @@ public class MainWin extends JFrame {
 		super();
 		initialize();
 		setTree();
-		//setTreeGroupe();
+		setTreeGroupe();
 	}
 	 
 	public void initialize()
 	{
+		winCalendar = new MainWinCalendar(this);
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());
@@ -91,7 +116,7 @@ public class MainWin extends JFrame {
 		}
 	}
 	
-	/*public void setTreeGroupe() throws Exception
+	public void setTreeGroupe() throws Exception
 	{
 		List<Entity> groupeList = Group.factory.getAll();
 		List<String> groupeNames = new ArrayList<String>();
@@ -105,7 +130,7 @@ public class MainWin extends JFrame {
 			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
 		    treeNode1.add(treeNode2);
 		}
-	}*/
+	}
 	
 	private JPanel getWindowPane()
 	{
@@ -113,43 +138,27 @@ public class MainWin extends JFrame {
 		{
 			windowPanel = new JPanel(new BorderLayout());
 			centerPanel = new JPanel(new BorderLayout());
-			leftPanel = new JPanel(new BorderLayout());
+			leftPanel = new JPanel(new GridLayout(2, 1));
 			rightPanel = new JPanel(new BorderLayout());
 			
-			leftPanel.add(getJContentPane(), BorderLayout.SOUTH);
-			leftPanel.add(getJContentPaneGroupe(), BorderLayout.NORTH);
+			leftPanel.add(getJScrollPaneGroup());
+			leftPanel.add(getJScrollPane());
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
-			centerPanel.add(new MainWinCalendar(this));
+			centerPanel.add(winCalendar);
 			windowPanel.add(leftPanel, BorderLayout.WEST);
 			windowPanel.add(centerPanel, BorderLayout.CENTER);
 			windowPanel.add(rightPanel, BorderLayout.EAST);
 		}
 		return windowPanel;
 	}
-	 
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel(new BorderLayout());
-			jContentPane.add(getJScrollPane(), BorderLayout.SOUTH);
-		}
-		return jContentPane;
-	}
-	
-	private JPanel getJContentPaneGroupe() {
-		if (jContentPaneGroup == null) {
-			jContentPaneGroup = new JPanel(new BorderLayout());
-			jContentPaneGroup.add(getJScrollPaneGroup(), BorderLayout.NORTH);
-		}
-		return jContentPaneGroup;
-	}
-	
+	 	
 	private JScrollPane getJScrollPane()
 	{
 		if(jScrollTree == null)
 		{
 			jScrollTree = new JScrollPane();
 			jScrollTree.setViewportView(getJTree());
-			jScrollTree.setPreferredSize(new Dimension(240,450));
+			jScrollTree.setPreferredSize(new Dimension(200,450));
 		}
 		return jScrollTree;
 	}
@@ -160,7 +169,7 @@ public class MainWin extends JFrame {
 		{
 			jScrollTreeGroup = new JScrollPane();
 			jScrollTreeGroup.setViewportView(getJTreeGroupe());
-			jScrollTreeGroup.setPreferredSize(new Dimension(240,450));
+			jScrollTreeGroup.setPreferredSize(new Dimension(200,450));
 		}
 		return jScrollTreeGroup;
 	}
@@ -179,25 +188,30 @@ public class MainWin extends JFrame {
 	
 	private JMenuBar getMenu()
 	{
-		JMenuBar barMenu = new JMenuBar();
-		JMenu fichier = new JMenu("Fichier");
-		JMenu edition = new JMenu("Edition");
-		JMenu option = new JMenu("Options");
-		JMenu help = new JMenu("Help");
-		JMenuItem createEvent = new JMenuItem("Créer un nouvel évènement");
-		JMenuItem deleteEvent = new JMenuItem("Supprimer un évènement");
-		JMenuItem settings = new JMenuItem("Options");
-		JMenuItem close = new JMenuItem("Quitter");
-		JMenuItem helpItem = new JMenuItem("Aide");
-		JMenuItem credit = new JMenuItem("A propos");
+		barMenu = new JMenuBar();
+		fichier = new JMenu("Evénements");
+		edition = new JMenu("Groupes");
+		option = new JMenu("Options");
+		help = new JMenu("Help");
+		createEvent = new JMenuItem("Créer un nouvel évènement");
+		deleteEvent = new JMenuItem("Supprimer un évènement");
+		createGroupe = new JMenuItem("Créer un nouveau groupe");
+		delateGroupe = new JMenuItem("Supprimer un groupe");
+		editGroupe = new JMenuItem("Modifier un groupe existant");
+		settings = new JMenuItem("Options");
+		aide = new JMenuItem("Aide");
+		credit = new JMenuItem("A propos");
 		
 		fichier.add(createEvent);
 		fichier.add(deleteEvent);
-		fichier.add(close);
+		
+		edition.add(createGroupe);
+		edition.add(delateGroupe);
+		edition.add(editGroupe);
 		
 		option.add(settings);
 		
-		help.add(helpItem);
+		help.add(aide);
 		help.add(credit);
 		
 		barMenu.add(fichier);
@@ -205,8 +219,14 @@ public class MainWin extends JFrame {
 		barMenu.add(option);
 		barMenu.add(help);
 		
-		createEvent.addActionListener(new OpenWinCreatEvent());
+		createEvent.addActionListener(new OpenWinCreatEvent(winCalendar));
 		
 		return barMenu;
 	}
+	
+	public static void callAddEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
+	{
+		winCalendar.getCalendarP().addEventBD(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+	}
+
 }

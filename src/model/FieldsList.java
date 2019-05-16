@@ -105,14 +105,14 @@ public class FieldsList {
 	}
 	
 	// Sauvegarder les valeurs des champs à partir du résultat d'une requête
-	public Map<String, Object> save(ResultSet res, EntityFactory factory) throws SQLException, Exception {
+	public Map<String, Object> save(ResultSet res, String tableName, EntityFactory factory) throws SQLException, Exception {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
 		for (int i = 0; i < size(); i++) {
 			Calendar cal;
 			
 			String name = getName(i);
-			String field = factory.getTable()+"."+factory.getPrefix()+name; // Nom complet du champ à récupérer
+			String field = tableName+"."+factory.getPrefix()+name; // Nom complet du champ à récupérer
 			
 			switch (getType(i)) {
 				case "int":
@@ -146,7 +146,7 @@ public class FieldsList {
 					
 					// Si le champ courant comprend une jointure
 					if (joined != null)
-						values.put(name, joined.getFromResultSet(res));
+						values.put(name, joined.getFromResultSet(res, joined.getTable()+"_"+name));
 			}
 		}
 		
