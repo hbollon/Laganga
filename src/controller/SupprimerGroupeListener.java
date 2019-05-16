@@ -9,17 +9,17 @@ import view.WinGestionGroup;
 public class SupprimerGroupeListener implements ActionListener {
 
 	private WinGestionGroup fenetre;
-	private Group cuck;
+	private Group groupe;
 
-	public SupprimerGroupeListener(WinGestionGroup fenetre, Group cuck) {
+	public SupprimerGroupeListener(WinGestionGroup fenetre, Group groupe) {
 		this.fenetre = fenetre;
-		this.cuck = cuck;
+		this.groupe = groupe;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			cuck.delete();
+			groupe.delete();
 			fenetre.dispose();
 		} catch (Exception e1) {
 			e1.printStackTrace();

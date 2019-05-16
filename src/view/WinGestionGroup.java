@@ -73,10 +73,10 @@ public class WinGestionGroup extends JFrame implements Observer {
 			// Partie "Liste Des Membres"
 			JPanel listeMembres = new JPanel(new GridLayout(1,2));
 			JLabel listeDesMembres = new JLabel("Liste des membres : ");
-			JTree GNEUGNEUCHARLIEHEBDO = new JTree(top);
-			JScrollPane liste = new JScrollPane(GNEUGNEUCHARLIEHEBDO);
+			JTree arbre = new JTree(top);
+			JScrollPane liste = new JScrollPane(arbre);
 			Button bannirMembre = new Button("Mieux vaut bannir que guérir");
-			bannirMembre.addActionListener(new SupprimerMembreListener(group, GNEUGNEUCHARLIEHEBDO, members));
+			bannirMembre.addActionListener(new SupprimerMembreListener(group, arbre, members));
 			
 			listeMembres.add(liste);
 			listeMembres.add(bannirMembre);
@@ -116,8 +116,8 @@ public class WinGestionGroup extends JFrame implements Observer {
 				
 			// Partie "Liste Des Membres"
 			JLabel listeDesMembres = new JLabel("Liste des membres : ");
-			JTree GNEUGNEUCHARLIEHEBDO = new JTree(top);
-			JScrollPane liste = new JScrollPane(GNEUGNEUCHARLIEHEBDO);
+			JTree arbre = new JTree(top);
+			JScrollPane liste = new JScrollPane(arbre);
 						
 			gestGroupe.add(listeDesMembres);
 			gestGroupe.add(liste);
