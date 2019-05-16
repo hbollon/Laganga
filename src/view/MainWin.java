@@ -1,13 +1,18 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.TextArea;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -15,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 
 import com.toedter.calendar.JCalendar;
@@ -43,6 +49,8 @@ public class MainWin extends JFrame {
 	private JTree jTreeGroupe = null;
 	private JScrollPane jScrollTree = null;
 	private JScrollPane jScrollTreeGroup = null;
+	private JPanel jPanelTree = null;
+	private JPanel jPanelTreeGroup = null;
 	private JTextArea notificationBar = null;
 	private JMenuBar barMenu = null;
 	private JMenu fichier = null;
@@ -138,11 +146,9 @@ public class MainWin extends JFrame {
 		{
 			windowPanel = new JPanel(new BorderLayout());
 			centerPanel = new JPanel(new BorderLayout());
-			leftPanel = new JPanel(new GridLayout(2, 1));
+			leftPanel = getJPanelTree();
 			rightPanel = new JPanel(new BorderLayout());
 			
-			leftPanel.add(getJScrollPaneGroup());
-			leftPanel.add(getJScrollPane());
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
 			centerPanel.add(winCalendar);
 			windowPanel.add(leftPanel, BorderLayout.WEST);
@@ -172,6 +178,50 @@ public class MainWin extends JFrame {
 			jScrollTreeGroup.setPreferredSize(new Dimension(200,450));
 		}
 		return jScrollTreeGroup;
+	}
+	
+	private JPanel getJPanelTree() {
+		
+		// Création des barres de recherche (zone de texte + bouton)
+		JPanel barreRechercheUsers = new JPanel(new FlowLayout());
+		JPanel barreRechercheGroupe = new JPanel(new FlowLayout());
+		
+		// Création des zones de texte
+		JTextField texteUsers = new JTextField();
+		JTextField texteGroupe = new JTextField();
+		
+		// Création des boutons
+		JButton searchUsers = new JButton("Rechercher");
+		JButton searchGroupe = new JButton("Rechercher");
+		
+		// Changement des tailles afin de s'adapter à la fenêtre
+		texteUsers.setPreferredSize(new Dimension(150, 25));
+		texteGroupe.setPreferredSize(new Dimension(150, 25));
+		
+		// On ajoute les composants des barres de recherche
+		barreRechercheUsers.add(texteUsers);
+		barreRechercheUsers.add(searchUsers);
+		barreRechercheGroupe.add(texteGroupe);
+		barreRechercheGroupe.add(searchGroupe);
+		
+		// On ajoute les barres de recherche complétées au nord des panels Users et Groupe
+		JPanel ensemble1 = new JPanel(new BorderLayout());
+		ensemble1.add(barreRechercheUsers, BorderLayout.NORTH);
+		
+		JPanel ensemble2 = new JPanel(new BorderLayout());
+		ensemble2.add(barreRechercheGroupe, BorderLayout.NORTH);
+		
+		if (jPanelTree == null) {
+			jPanelTree = new JPanel(new GridLayout(2, 1));
+			
+			// On ajoute les deux panels dans le GridLayout pour les mettre l'un sous l'autre
+			ensemble1.add(getJScrollPane(), BorderLayout.CENTER);
+			jPanelTree.add(ensemble1);
+			ensemble2.add(getJScrollPaneGroup(), BorderLayout.CENTER);
+			jPanelTree.add(ensemble2);
+		}
+		
+		return jPanelTree;
 	}
 	
 	private JTextArea getNotificationBar()
