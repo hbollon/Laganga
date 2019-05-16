@@ -38,7 +38,7 @@ public class WinGestionGroup extends JFrame implements Observer {
 			// Liste des membres
 			DefaultMutableTreeNode top = new DefaultMutableTreeNode("Membres du Groupe");
 			
-			List<User> members = group.getMembersList();
+			List<User> members = group.getMembers();
 			for(int i = 0; i < members.size(); i++) {
 				User member = members.get(i);
 				
