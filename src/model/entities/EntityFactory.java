@@ -280,12 +280,12 @@ public class EntityFactory {
 	public String getUpdateQuery(FieldsList fields) {
 		return
 				"UPDATE `"+table+"`\n"+
-				"SET "+fields.toUpdateQueryString(prefix)+"\n"+
+				"SET "+fields.toUpdateQueryString(getPrefix())+"\n"+
 				"WHERE `"+prefix+"id` = ?";
 	}
 	
 	// Delete
 	public String getDeleteQuery() {
-		return "DELETE FROM `"+table+"` WHERE `"+prefix+"id` = ?";
+		return "DELETE FROM `"+getTable()+"` WHERE `"+getPrefix()+"id` = ?";
 	}
 }

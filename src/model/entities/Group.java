@@ -39,6 +39,7 @@ public class Group extends Entity {
 	 * Attributs
 	 */
 	private List<Entity> memberships = new ArrayList<Entity>(); // Liste des appartenances au groupe
+	private List<User> members = new ArrayList<User>();
 	
 	
 	/*
@@ -49,6 +50,9 @@ public class Group extends Entity {
 	}
 	public User getOwner() {
 		return (User) getFieldsValues().get("owner");
+	}
+	public List<User> getMembers() {
+		return members;
 	}
 	
 	
@@ -80,6 +84,8 @@ public class Group extends Entity {
 	public void refreshMemberships() throws SQLException, Exception {
 		memberships.clear();
 		memberships.addAll(GroupMembership.factory.get("WHERE `"+GroupMembership.factory.getPrefix()+"group` = ?", refreshMembershipsQueryFields, getFieldsValues()));
+		
+		refreshMembersList();
 	}
 	
 	// Récupérer l'objet d'appartenance au groupe à partir d'un utilisateur (s'il est bien membre, dans le cas contraire la fonction renvoie null)
@@ -100,13 +106,11 @@ public class Group extends Entity {
 	}
 	
 	// Obtenir la liste des membres
-	public List<Entity> getMembers() {
-		List<Entity> list = new ArrayList<Entity>();
+	public void refreshMembersList() {
+		members.clear();
 		
 		for (int i = 0; i < memberships.size(); i++)
-			list.add(((GroupMembership) memberships.get(i)).getUser());
-		
-		return list;
+			members.add(((GroupMembership) memberships.get(i)).getUser());
 	}
 	
 	// Ajouter un membre
