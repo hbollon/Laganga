@@ -82,6 +82,7 @@ public class Agenda extends Observable {
 		// Parcourir tous les évènements
 		for (int i = 0; i < allEvents.size(); i++) {
 			Event event = (Event) allEvents.get(i);
+			System.out.println(event);
 			
 			// Évènements des utilisateurs actifs
 			for (int j = 0; j < activeUsers.size(); j++) {
