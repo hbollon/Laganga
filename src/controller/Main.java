@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import model.Database;
 import model.LocalUser;
 import view.SplashWin;
+import view.WinCreateGroupe;
 
 public abstract class Main {
 	public static void main(String[] args) throws Exception {
@@ -14,7 +15,8 @@ public abstract class Main {
 		JFrame.setDefaultLookAndFeelDecorated(false);
 		
 		// Affichage du splash screen
-		new SplashWin();
+		//new SplashWin();
+		new WinCreateGroupe();
 		
 		// Initialisation de la connexion à la base de données
 		TimeUnit.SECONDS.sleep(1);
