@@ -71,7 +71,7 @@ public class MainWin extends JFrame {
 	private JMenuItem aide = null;
 	private JMenuItem credit = null;
 	
-	private static MainWinCalendar winCalendar;
+	public static MainWinCalendar tabbedPane;
 	
 	private JTree getJTree() {
 		if (jTree == null) {
@@ -97,7 +97,7 @@ public class MainWin extends JFrame {
 	 
 	public void initialize()
 	{
-		winCalendar = new MainWinCalendar(this);
+		tabbedPane = new MainWinCalendar(this);
 		this.setTitle("Laganga");
 	    this.setSize(1280, 720);
 	    this.setJMenuBar(getMenu());
@@ -155,7 +155,7 @@ public class MainWin extends JFrame {
 			rightPanel = new JPanel(new BorderLayout());
 			
 			rightPanel.add(getNotificationBar(), BorderLayout.EAST);
-			centerPanel.add(winCalendar);
+			centerPanel.add(tabbedPane);
 			windowPanel.add(leftPanel, BorderLayout.WEST);
 			windowPanel.add(centerPanel, BorderLayout.CENTER);
 			windowPanel.add(rightPanel, BorderLayout.EAST);
@@ -274,15 +274,15 @@ public class MainWin extends JFrame {
 		barMenu.add(option);
 		barMenu.add(help);
 		
-		createEvent.addActionListener(new OpenCreatEvent(winCalendar));
-		delateGroupe.addActionListener(new OpenOngletSupprGroup(winCalendar));
+		createEvent.addActionListener(new OpenCreatEvent());
+		delateGroupe.addActionListener(new OpenOngletSupprGroup());
 		
 		return barMenu;
 	}
 	
 	public static void callAddEvent(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
 	{
-		winCalendar.getCalendarP().addEventBD(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
+		tabbedPane.getCalendarP().addEventBD(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
 	}
 
 }

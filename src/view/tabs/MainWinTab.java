@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import controller.buttons.CloseTabButtonListener;
+import view.MainWin;
 
 /**
  * Le MainWinTab est la classe mère des onglets de la fenêtre principale
@@ -17,7 +18,8 @@ import controller.buttons.CloseTabButtonListener;
 public abstract class MainWinTab extends JPanel {
 	private static final long serialVersionUID = 1707149621277512327L;
 	
-	private JTabbedPane parent; // Conteneur des onglets
+	private static JTabbedPane parent = MainWin.tabbedPane; // Conteneur des onglets
+	
 	private String name = ""; // Nom de l'onglet
 	protected JPanel header = new JPanel(new BorderLayout()); // Barre du haut de l'onglet (avec le bouton pour le fermer)
 	protected JPanel content = new JPanel(); // Contenu de l'onglet
@@ -27,10 +29,8 @@ public abstract class MainWinTab extends JPanel {
 		this.name = name;
 	}
 	
-	public MainWinTab(JTabbedPane parent) {
+	public MainWinTab() {
 		super();
-		
-		this.parent = parent;
 		
 		// Remplissage de l'header
 		JButton close = new JButton("Fermer");
