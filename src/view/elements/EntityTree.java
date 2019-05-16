@@ -1,7 +1,6 @@
 package view.elements;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class EntityTree extends JPanel {
 		// Zone de recherche
 		JPanel searchPanel = new JPanel();
 			searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.LINE_AXIS));
-			searchPanel.setPreferredSize(new Dimension(10, 20));
+			searchPanel.setPreferredSize(new Dimension(500, 20));
 			add(searchPanel);
 		
 		/*
@@ -51,10 +50,12 @@ public class EntityTree extends JPanel {
 		*/
 		
 		JTextField searchBar = new JTextField();
+			searchBar.setPreferredSize(new Dimension(500, 20));
 			searchPanel.add(searchBar);
 		
 		JButton searchButton = new JButton("Filtrer");
 			searchButton.addActionListener(new EntityTreeFilterButton(this, searchBar));
+			searchButton.setPreferredSize(new Dimension(150, 50));
 			searchPanel.add(searchButton);
 		
 		// Initialisation du tree
@@ -71,7 +72,7 @@ public class EntityTree extends JPanel {
 		for (int i = 0; i < baseList.size(); i++) {
 			Entity entity = baseList.get(i);
 			
-			if (entity.getTreeDisplayName().matches(".*"+search+".*"))
+			if (entity.getTreeDisplayName().toLowerCase().matches(".*"+search+".*".toLowerCase()))
 				filteredList.add(entity);
 		}
 	}

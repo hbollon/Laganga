@@ -63,7 +63,7 @@ public abstract class Tab extends JPanel {
 	}
 	
 	// Création d'un panel en ligne
-	protected JPanel newLinePanel() {
+	protected JPanel createLinePanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
 		

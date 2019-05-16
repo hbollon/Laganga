@@ -162,7 +162,7 @@ public class MainWin extends JFrame {
 		}
 		return windowPanel;
 	}
-	 	
+	
 	private JScrollPane getJScrollPane()
 	{
 		if(jScrollTree == null)
