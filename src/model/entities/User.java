@@ -134,4 +134,13 @@ public class User extends Entity {
 	public boolean isAttendingEventIndividually(Event event) {
 		return (event.getAttendingUsers().contains(this));
 	}
+	
+	
+	/*
+	 * Affichage dans un EntityTree
+	 */
+	@Override
+	public String getTreeDisplayName() {
+		return getFirstName()+" "+getLastName();
+	}
 }

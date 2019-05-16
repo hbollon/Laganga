@@ -3,8 +3,10 @@ package view.tabs;
 import java.awt.BorderLayout;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+
+import model.entities.User;
+import view.elements.EntityTree;
 
 /**
  * Un onglet de test pour servir d'exemple
@@ -14,7 +16,7 @@ import javax.swing.JTabbedPane;
 public class TestTab extends MainWinTab {
 	private static final long serialVersionUID = -618260664434187272L;
 	
-	public TestTab(JTabbedPane parent) {
+	public TestTab(JTabbedPane parent) throws Exception {
 		super(parent);
 		setName("Onglet de test"); // Nom de l'onglet
 		
@@ -22,7 +24,7 @@ public class TestTab extends MainWinTab {
 		header.add(new JButton("Modifier"), BorderLayout.WEST);
 		
 		// Le JPanel content représente le contenu de l'onglet
-		content.add(new JLabel("Onglet de test !"));
+		content.add(new EntityTree("Utilisateurs", User.factory.getAll()));
 		
 		open(); // Ouverture de l'onglet
 	}

@@ -157,4 +157,13 @@ public class Group extends Entity {
 	public boolean isAttendingEvent(Event event) {
 		return (event.getAttendingGroups().contains(this));
 	}
+	
+	
+	/*
+	 * Affichage dans un EntityTree
+	 */
+	@Override
+	public String getTreeDisplayName() {
+		return getName();
+	}
 }
