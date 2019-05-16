@@ -16,11 +16,12 @@ public abstract class Main {
 		
 		// Affichage du splash screen
 		//new SplashWin();
-		new WinCreateGroupe();
 		
 		// Initialisation de la connexion à la base de données
 		TimeUnit.SECONDS.sleep(1);
 		Database.database.connect();
+		
+		new WinCreateGroupe();
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		LocalUser.localUser.login("simon.bernoud@gmail.com", "bernoud");
