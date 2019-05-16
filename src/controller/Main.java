@@ -6,8 +6,6 @@ import javax.swing.JFrame;
 
 import model.Database;
 import model.LocalUser;
-import model.entities.Event;
-import model.entities.User;
 import view.SplashWin;
 
 public abstract class Main {
@@ -22,9 +20,7 @@ public abstract class Main {
 		TimeUnit.SECONDS.sleep(1);
 		Database.database.connect();
 		
-		System.out.println(((User) User.factory.getByID(1)).isAttendingEvent((Event) Event.factory.getByID(1658)));
-		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
-		LocalUser.localUser.login("simon.bernoud@gmail.com", "bernoud");
+		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
 	}
 }
