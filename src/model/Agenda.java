@@ -55,12 +55,10 @@ public class Agenda extends Observable {
 			activeGroups.add(group);
 	}
 	public void setInactive(User user) {
-		if (activeUsers.contains(user))
-			activeUsers.remove(user);
+		activeUsers.remove(user);
 	}
 	public void setInactive(Group group) {
-		if (activeGroups.contains(group))
-			activeGroups.remove(group);
+		activeGroups.remove(group);
 	}
 	
 	
@@ -78,7 +76,32 @@ public class Agenda extends Observable {
 	
 	// Récupérer les évènements donc l'utilisateur courant participe
 	private List<Entity> fetchEvents() throws Exception {
-		return Event.factory.getAll();
+		List<Entity> events = new ArrayList<Entity>();
+		List<Entity> allEvents = Event.factory.getAll();
+		
+		// Parcourir tous les évènements
+		for (int i = 0; i < allEvents.size(); i++) {
+			Event event = (Event) allEvents.get(i);
+			System.out.println(event);
+			
+			// Évènements des utilisateurs actifs
+			for (int j = 0; j < activeUsers.size(); j++) {
+				User user = activeUsers.get(j);
+				
+				if (!events.contains(event) && user.isAttendingEvent(event) && (!event.getHidden() || event.getCreator() == LocalUser.localUser.getUser()))
+					events.add(event);
+			}
+			
+			// Évènements des groupes actifs
+			for (int j = 0; j < activeGroups.size(); j++) {
+				Group group = activeGroups.get(j);
+				
+				if (!events.contains(event) && group.isAttendingEvent(event) && (!event.getHidden() || event.getCreator() == LocalUser.localUser.getUser()))
+					events.add(event);
+			}
+		}
+		
+		return events;
 	}
 	
 	// Mettre à jour l'agenda et prévenir les observers

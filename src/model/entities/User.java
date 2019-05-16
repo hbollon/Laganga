@@ -129,4 +129,9 @@ public class User extends Entity {
 	public boolean isAttendingEvent(Event event) {
 		return (event.getParticipants().contains(this));
 	}
+	
+	// Est-ce que l'utilisateur participe individuellement à l'évènement ?
+	public boolean isAttendingEventIndividually(Event event) {
+		return (event.getAttendingUsers().contains(this));
+	}
 }

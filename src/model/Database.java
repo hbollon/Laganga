@@ -35,6 +35,7 @@ public class Database extends Observable {
 	// Objet de connexion
 	private Connection connection;
 	
+	
 	/**
 	 * Initialise la connexion à la base de données.
 	 * @throws ClassNotFoundException

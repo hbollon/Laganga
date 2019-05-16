@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -25,10 +27,13 @@ import javax.swing.JTree;
 
 import com.toedter.calendar.JCalendar;
 
+import controller.OpenOngletSupprGroup;
 import controller.OpenWinCreatEvent;
 import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
+
+import com.mindfusion.scheduling.*;
 
 /**
  * Classe MainWin, fenetre principale de notre programme
@@ -270,13 +275,14 @@ public class MainWin extends JFrame {
 		barMenu.add(help);
 		
 		createEvent.addActionListener(new OpenWinCreatEvent(winCalendar));
+		delateGroupe.addActionListener(new OpenOngletSupprGroup(winCalendar));
 		
 		return barMenu;
 	}
 	
-	public static void callAddEvent(String name, String desc, JCalendar dateBegin, JCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd)
+	public static void callAddEvent(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
 	{
-		winCalendar.getCalendarP().addEventBD(name, desc, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd);
+		winCalendar.getCalendarP().addEventBD(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
 	}
 
 }
