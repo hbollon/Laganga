@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,7 +22,7 @@ import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Group;
 
-public class SupprGroupTab extends MainWinTab {
+public class SupprGroupTab extends Tab {
 	private static final long serialVersionUID = -618260664434187272L;
 	
 	private static FieldsList groupsQueryFieldList = new FieldsList();
@@ -31,8 +30,8 @@ public class SupprGroupTab extends MainWinTab {
 		groupsQueryFieldList.add("owner", "model.entities.User");
 	}
 	
-	public SupprGroupTab(JTabbedPane parent) throws Exception {
-		super(parent);
+	public SupprGroupTab() throws Exception {
+		super();
 		setName("Supprimer un groupe");
 		
 		JPanel panMain = new JPanel(new BorderLayout());

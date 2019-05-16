@@ -4,11 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.util.List;
 
-import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,16 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import com.mindfusion.scheduling.Calendar;
-import com.toedter.calendar.JCalendar;
 
-import controller.AnnuleEvent;
+import com.mindfusion.scheduling.Calendar;
+
 import controller.CreateEventListener;
 import model.LocalUser;
 import model.entities.Entity;
@@ -40,7 +36,7 @@ import model.entities.User;
  * 
  * @author Julien Valverdé
  */
-public class EventTab extends MainWinTab {
+public class EventTab extends Tab {
 	private static final long serialVersionUID = -618260664434187272L;
 
 	private Component textName;
@@ -54,12 +50,12 @@ public class EventTab extends MainWinTab {
 	private JComboBox importance;
 	private JCheckBox eventVisible;
 	
-	public EventTab(JTabbedPane parent) throws Exception {
-		this(parent, null);
+	public EventTab() throws Exception {
+		this(null);
 	}
 	
-	public EventTab(JTabbedPane parent, Event event) throws Exception {
-		super(parent);
+	public EventTab(Event event) throws Exception {
+		super();
 		
 		// Nom de l'onglet
 		if (event == null)

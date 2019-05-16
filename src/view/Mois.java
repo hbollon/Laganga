@@ -25,6 +25,7 @@ import com.mindfusion.drawing.Pens;
 import com.mindfusion.scheduling.*;
 import com.toedter.calendar.JCalendar;
 
+import controller.OpenCreatEvent;
 import model.Agenda;
 import model.EventCalendar;
 import model.entities.Entity;
@@ -83,6 +84,7 @@ public class Mois extends JPanel implements Observer {
 		{
 			calendar.resetDrag();
 			JOptionPane.showMessageDialog(this, ((EventCalendar)e.getItem()).getCustomField(), "Description", JOptionPane.INFORMATION_MESSAGE);
+			//new OpenCreatEvent();
 		}
 	}
 

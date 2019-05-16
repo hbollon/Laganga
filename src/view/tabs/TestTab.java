@@ -3,7 +3,6 @@ package view.tabs;
 import java.awt.BorderLayout;
 
 import javax.swing.JButton;
-import javax.swing.JTabbedPane;
 
 import model.entities.User;
 import view.elements.EntityTree;
@@ -13,11 +12,11 @@ import view.elements.EntityTree;
  * 
  * @author Julien Valverdé
  */
-public class TestTab extends MainWinTab {
+public class TestTab extends Tab {
 	private static final long serialVersionUID = -618260664434187272L;
 	
-	public TestTab(JTabbedPane parent) throws Exception {
-		super(parent);
+	public TestTab() throws Exception {
+		super();
 		setName("Onglet de test"); // Nom de l'onglet
 		
 		// Ajouter un bouton dans la barre d'en-tête

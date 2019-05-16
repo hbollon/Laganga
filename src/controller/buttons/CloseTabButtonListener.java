@@ -3,7 +3,7 @@ package controller.buttons;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import view.tabs.MainWinTab;
+import view.tabs.Tab;
 
 /**
  * Listener du bouton permettant de quitter un onglet
@@ -11,9 +11,9 @@ import view.tabs.MainWinTab;
  * @author Julien Valverdé
  */
 public class CloseTabButtonListener implements ActionListener {
-	private MainWinTab tab; // Onglet à fermer
+	private Tab tab; // Onglet à fermer
 	
-	public CloseTabButtonListener(MainWinTab tab) {
+	public CloseTabButtonListener(Tab tab) {
 		this.tab = tab;
 	}
 
