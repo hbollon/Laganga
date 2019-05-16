@@ -25,6 +25,8 @@ import javax.swing.JTree;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import com.mindfusion.scheduling.Calendar;
+import com.toedter.calendar.JCalendar;
+
 import controller.AnnuleEvent;
 import controller.CreateEventListener;
 import model.LocalUser;
@@ -49,6 +51,8 @@ public class EventTab extends MainWinTab {
 	private JSpinner hourEnd;
 	private JSpinner minuteBegin;
 	private JSpinner minuteEnd;
+	private JComboBox importance;
+	private JCheckBox eventVisible;
 	
 	public EventTab(JTabbedPane parent) throws Exception {
 		this(parent, null);
@@ -307,6 +311,7 @@ public class EventTab extends MainWinTab {
 		JPanel buttonPane = new JPanel(new FlowLayout());
 		JButton annuleEvent = new JButton("Annuler");
 		JButton ajoutEvent = new JButton("Ajouter l'événement");
+		ajoutEvent.addActionListener(new CreateEventListener(this));
 		buttonPane.add(annuleEvent);
 		buttonPane.add(ajoutEvent);
 	   
@@ -318,4 +323,55 @@ public class EventTab extends MainWinTab {
 		
 		open(); // Ouverture de l'onglet
 	}
+	
+	public String getName()
+	{
+		return ((JTextField)textName).getText();
+	}
+	
+	public String getDesc()
+	{
+		return textDescription.getText();
+	}
+	
+	public Calendar getDateBegin()
+	{
+		return calendarBegin;
+	}
+	
+	public Calendar getDateEnd()
+	{
+		return calendarEnd;
+	}
+	
+	public int getHourBegin()
+	{
+		return (Integer)hourBegin.getValue();
+	}
+	
+	public int getMinuteBegin()
+	{
+		return (Integer)minuteBegin.getValue();
+	}
+	
+	public int getHourEnd()
+	{
+		return (Integer)hourEnd.getValue();
+	}
+	
+	public int getMinuteEnd()
+	{
+		return (Integer)minuteEnd.getValue();
+	}
+	
+	public JComboBox getPriority()
+	{
+		return importance;
+	}
+	
+	public JCheckBox getHide()
+	{
+		return eventVisible;
+	}
+	
 }

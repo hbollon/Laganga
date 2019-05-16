@@ -92,8 +92,30 @@ public class CanevasSemaine extends Canvas {
 	    int cellHeight = getCellHeight(size.height);
 	    int taille_nom = nom.length()*7;
 	    
-		g.fillRect(jour*cellWidth+OFFSET_GAUCHE+1, demi_heure_debut*cellHeight+OFFSET_HAUT+1, cellWidth-1, cellHeight*nb_demi_heure-1);
+		g.fillRect(calculer_X_event(heure_debut, minute_debut, jour), calculer_Y_event(heure_debut, minute_debut), cellWidth-1, calculer_height_event (heure_debut, heure_fin, minute_debut, minute_fin));
 		g.setColor(Color.BLACK);
 		g.drawString(nom, jour*cellWidth+OFFSET_GAUCHE + (cellWidth-taille_nom)/2, OFFSET_HAUT + demi_heure_debut*cellHeight + nb_demi_heure/2*cellHeight+5);
+	}
+	public int calculer_X_event (int heure_debut, int minute_debut, int jour) {
+		Dimension size = getSize();
+		int cellWidth = getCellWidth(size.width);
+		int valeur_x = jour*cellWidth+OFFSET_GAUCHE+1;
+		return valeur_x;
+	}
+	public int calculer_Y_event (int heure_debut, int minute_debut) {
+		Dimension size = getSize();
+		int cellHeight = getCellHeight(size.height);
+		int demi_heure_debut = heure_debut*2 + minute_debut/30; 
+		int valeur_y =  demi_heure_debut*cellHeight+OFFSET_HAUT+1;
+		return valeur_y;
+	}
+	public int calculer_height_event (int heure_debut, int heure_fin, int minute_debut, int minute_fin) {
+		Dimension size = getSize();
+		int demi_heure_debut = heure_debut*2 + minute_debut/30;
+		int demi_heure_fin = heure_fin*2 + minute_fin/30;
+		int cellHeight = getCellHeight(size.height);
+		int nb_demi_heure = demi_heure_fin - demi_heure_debut;
+		int height_event = cellHeight*nb_demi_heure-1;
+		return height_event;
 	}
 }
