@@ -19,6 +19,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 
+import com.toedter.calendar.JCalendar;
+
+import controller.OpenOngletSupprGroup;
 import controller.OpenWinCreatEvent;
 import model.entities.Entity;
 import model.entities.Group;
@@ -222,6 +225,7 @@ public class MainWin extends JFrame {
 		barMenu.add(help);
 		
 		createEvent.addActionListener(new OpenWinCreatEvent(winCalendar));
+		delateGroupe.addActionListener(new OpenOngletSupprGroup(winCalendar));
 		
 		return barMenu;
 	}

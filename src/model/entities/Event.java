@@ -85,7 +85,7 @@ public class Event extends Entity {
 	public List<User> getAttendingUsers() {
 		return attendingUsers;
 	}
-	public List<Group> attendingGroups() {
+	public List<Group> getAttendingGroups() {
 		return attendingGroups;
 	}
 	public List<User> getParticipants() {
