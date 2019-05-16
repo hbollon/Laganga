@@ -23,7 +23,7 @@ public class TestTab extends Tab {
 		header.add(new JButton("Modifier"), BorderLayout.WEST);
 		
 		// Le JPanel content représente le contenu de l'onglet
-		content.add(new EntityTree("Utilisateurs", User.factory.getAll()));
+		content.add(new EntityTree("Utilisateurs", User.factory.getAll(), true));
 		
 		open(); // Ouverture de l'onglet
 	}

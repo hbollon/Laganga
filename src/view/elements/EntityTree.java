@@ -1,19 +1,19 @@
 package view.elements;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import controller.buttons.EntityTreeFilterButton;
+import controller.EntityTreeSearchBarListener;
 import model.entities.Entity;
 
 /**
@@ -24,72 +24,100 @@ import model.entities.Entity;
 public class EntityTree extends JPanel {
 	private static final long serialVersionUID = 6453784844876350543L;
 	
-	private JTree tree = new JTree(); // Tree des entités
+	private JTextField searchBar; // Barre de recherche
+	
+	private JTree topTree = new JTree(); // Arbre des entités
+	private JTree bottomTree = new JTree(); // Arbre des entités sélectionnées
 	
 	private String name; // Nom du noeud père
+	private boolean selectionEnabled; // Autorisation de la sélection d'éléments
+	
 	private List<Entity> baseList; // Liste originale
-	private List<Entity> filteredList = new ArrayList<Entity>(); // Liste filtrée
+	private List<Entity> selectedList = new ArrayList<Entity>(); // Liste des entités sélectionnées
 	
 	public EntityTree(String name, List<Entity> baseList) {
+		this(name, baseList, false);
+	}
+	public EntityTree(String name, List<Entity> baseList, boolean selectionEnabled) {
 		super();
 		this.name = name;
 		this.baseList = baseList;
+		this.selectionEnabled = selectionEnabled;
 		
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new BorderLayout());
 		
 		// Zone de recherche
-		JPanel searchPanel = new JPanel();
-			searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.LINE_AXIS));
-			searchPanel.setPreferredSize(new Dimension(500, 20));
-			add(searchPanel);
+		JPanel searchPanel = new JPanel(new BorderLayout());
+			searchPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
+			add(searchPanel, BorderLayout.NORTH);
 		
-		/*
-		JPanel searchPanelContent = new JPanel();
-			searchPanelContent.setLayout(new BoxLayout(searchPanelContent, BoxLayout.LINE_AXIS));
-			searchPanel.add(searchPanelContent);
-		*/
+		JLabel searchLabel = new JLabel("Filtrer : ");
+			searchPanel.add(searchLabel, BorderLayout.WEST);
 		
 		JTextField searchBar = new JTextField();
-			searchBar.setPreferredSize(new Dimension(500, 20));
-			searchPanel.add(searchBar);
+			searchBar.getDocument().addDocumentListener(new EntityTreeSearchBarListener(this));
+			searchPanel.add(searchBar, BorderLayout.CENTER);
+			this.searchBar = searchBar;
 		
-		JButton searchButton = new JButton("Filtrer");
-			searchButton.addActionListener(new EntityTreeFilterButton(this, searchBar));
-			searchButton.setPreferredSize(new Dimension(150, 50));
-			searchPanel.add(searchButton);
+		// Initialisation des tree
+		update();
 		
-		// Initialisation du tree
-		filter("");
+		// Scroll zones des tree
+		add(new JScrollPane(topTree), BorderLayout.CENTER);
 		
-		// Scroll zone du tree
-		add(new JScrollPane(tree));
+		if (selectionEnabled)
+			add(new JScrollPane(bottomTree), BorderLayout.SOUTH);
 	}
 	
-	// Générer la liste d'entités filtrée
-	private void createFilteredList(String search) {
-		filteredList.clear();
+	// Mettre à jour les listes et les arbres
+	public void update() {
+		List<Entity> filteredList = filterList(searchBar.getText());
+		applyListToTree(topTree, filteredList, name);
+	}
+	
+	
+	/*
+	 * Filtrage de l'arbre du haut
+	 */
+	
+	// Filtrer la liste du haut en fonction de la recherche
+	private List<Entity> filterList(String search) {
+		List<Entity> filteredList = new ArrayList<Entity>();
 		
 		for (int i = 0; i < baseList.size(); i++) {
 			Entity entity = baseList.get(i);
 			
-			if (entity.getTreeDisplayName().toLowerCase().matches(".*"+search+".*".toLowerCase()))
+			if (!selectedList.contains(entity) && entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
 				filteredList.add(entity);
 		}
+		
+		return filteredList;
 	}
 	
-	// Appliquer la listre filtrée au JTree
-	private void applyTreeModel() {
+	// Appliquer une liste à un JTree
+	private void applyListToTree(JTree tree, List<Entity> list, String name) {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(name);
 		
-		for (int i = 0; i < filteredList.size(); i++)
-			node.add(new DefaultMutableTreeNode(filteredList.get(i).getTreeDisplayName()));
+		for (int i = 0; i < list.size(); i++)
+			node.add(new DefaultMutableTreeNode(list.get(i).getTreeDisplayName()));
 		
 		tree.setModel(new DefaultTreeModel(node));
 	}
 	
-	// Filtrer la liste et appliquer les modifications sur le JTree
-	public void filter(String search) {
-		createFilteredList(search);
-		applyTreeModel();
+	
+	/*
+	 * Séléctions des entités
+	 */
+	
+	// Ajouter un élément à l'arbre des entités sélectionnées
+	public void setEntitySelected(Entity entity) {
+		if (selectionEnabled && baseList.contains(entity) && !selectedList.contains(entity))
+			selectedList.add(entity);
+	}
+	
+	// Enlever un élément de l'arbre des entités sélectionnées
+	public void setEntityDeselected(Entity entity) {
+		if (selectionEnabled)
+			selectedList.remove(entity);
 	}
 }
