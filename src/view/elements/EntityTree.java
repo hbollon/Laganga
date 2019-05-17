@@ -147,7 +147,7 @@ public class EntityTree extends JPanel {
 	
 	
 	/*
-	 * Callbacks des clics
+	 * Callbacks
 	 */
 	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
 	}

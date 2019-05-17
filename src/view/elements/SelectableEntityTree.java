@@ -107,7 +107,7 @@ public class SelectableEntityTree extends EntityTree {
 	
 	
 	/*
-	 * Callbacks des clics
+	 * Callbacks
 	 */
 	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
 		if (jTree == getTree()) // Arbre du haut cliqué
