@@ -1,6 +1,6 @@
 package view.elements;
 
-import model.entities.Event;
+import model.entities.User;
 
 /**
  * L'EntityTree permettant de sélectionner les utilisateurs dont il faut afficher les évènements
@@ -14,6 +14,6 @@ public class AgendaUsersEntityTree extends SelectableEntityTree {
 	 * Constructeur
 	 */
 	public AgendaUsersEntityTree() throws Exception {
-		super("Utilisateurs", Event.factory.getAll(), true, "Utilisateurs actifs");
+		super("Utilisateurs", User.factory.getAll(), true, "Utilisateurs actifs");
 	}
 }
