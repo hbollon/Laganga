@@ -32,9 +32,9 @@ public class EntityTree extends JPanel {
 	
 	
 	/*
-	 * Constructeurs
+	 * Constructeur interne
 	 */
-	public EntityTree(String treeName, List<Entity> baseList, boolean isFilterable) {
+	protected EntityTree(String treeName, List<Entity> baseList, boolean isFilterable, boolean callInternalConstructor) {
 		super();
 		this.treeName = treeName;
 		this.baseList = baseList;
@@ -55,11 +55,17 @@ public class EntityTree extends JPanel {
 			searchPanel.add(searchBar, BorderLayout.CENTER);
 			this.searchBar = searchBar;
 		
-		// Initialisation du tree
-		update();
-		
 		// Scroll zone du tree
 		add(new JScrollPane(tree), BorderLayout.CENTER);
+	}
+	
+	
+	/*
+	 * Constructeurs publics
+	 */
+	public EntityTree(String treeName, List<Entity> baseList, boolean isFilterable) {
+		this(treeName, baseList, isFilterable, true);
+		update();
 	}
 	public EntityTree(String treeName, List<Entity> baseList) {
 		this(treeName, baseList, false);

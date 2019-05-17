@@ -23,16 +23,22 @@ public class SelectableEntityTree extends EntityTree {
 	
 	
 	/*
-	 * Constructeurs
+	 * Constructeur interne
 	 */
-	public SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName) {
-		super(treeName, baseList, isFilterable);
+	protected SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName, boolean callInternalConstructor) {
+		super(treeName, baseList, isFilterable, true);
 		this.selectedEntitiesTreeName = selectedEntitiesTreeName;
 		
 		add(new JScrollPane(selectedEntitiesTree), BorderLayout.SOUTH);
-		
-		// Initialisation du tree
-		//update();
+	}
+	
+	
+	/*
+	 * Constructeurs publics
+	 */
+	public SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName) {
+		this(treeName, baseList, isFilterable, selectedEntitiesTreeName, true);
+		update();
 	}
 	public SelectableEntityTree(String treeName, List<Entity> baseList, String selectedEntitiesTreeName) {
 		this(treeName, baseList, false, selectedEntitiesTreeName);
@@ -58,7 +64,6 @@ public class SelectableEntityTree extends EntityTree {
 		for (int i = 0; i < baseList.size(); i++) {
 			Entity entity = baseList.get(i);
 			
-			System.out.println(selectedEntitiesList);
 			if (!selectedEntitiesList.contains(entity) && entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
 				filteredList.add(entity);
 		}
