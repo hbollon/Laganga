@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
+import controller.EntityTreeMouseListener;
 import model.entities.Entity;
 
 /**
@@ -17,19 +18,38 @@ import model.entities.Entity;
 public class SelectableEntityTree extends EntityTree {
 	private static final long serialVersionUID = -441239061979776560L;
 	
-	protected JTree selectedEntitiesTree = new JTree(); // Arbre des entités sélectionnées
-	protected String selectedEntitiesTreeName; // Nom du noeud père de l'arbre des éléments séléctionnés
-	protected List<Entity> selectedEntitiesList = new ArrayList<Entity>(); // Liste des éléments sélectionnés
+	/*
+	 * Attributs
+	 */
+	private String selectedTreeName; // Nom du noeud père de l'arbre des éléments séléctionnés
+	
+	private JTree selectedTree = new JTree(); // Arbre des entités sélectionnées
+	private List<Entity> selectedList = new ArrayList<Entity>(); // Liste des éléments sélectionnés
+	
+	
+	/*
+	 * Getteurs
+	 */
+	public String getSelectedTreeName() {
+		return selectedTreeName;
+	}
+	public JTree getSelectedTree() {
+		return selectedTree;
+	}
+	public List<Entity> getSelectedList() {
+		return selectedList;
+	}
 	
 	
 	/*
 	 * Constructeur interne
 	 */
-	protected SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName, boolean callInternalConstructor) {
+	protected SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedTreeName, boolean callInternalConstructor) {
 		super(treeName, baseList, isFilterable, true);
-		this.selectedEntitiesTreeName = selectedEntitiesTreeName;
+		this.selectedTreeName = selectedTreeName;
 		
-		add(new JScrollPane(selectedEntitiesTree), BorderLayout.SOUTH);
+		selectedTree.addMouseListener(new EntityTreeMouseListener(this, selectedTree, selectedList));
+		add(new JScrollPane(selectedTree), BorderLayout.SOUTH);
 	}
 	
 	
@@ -53,24 +73,20 @@ public class SelectableEntityTree extends EntityTree {
 	public void update() {
 		super.update();
 		//applyListToTree(tree, filterList(searchBar.getText()), treeName);
-		applyListToTree(selectedEntitiesTree, selectedEntitiesList, selectedEntitiesTreeName);
+		applyListToTree(selectedTree, selectedList, selectedTreeName);
 	}
 	
 	// Filtrer les entités à afficher en fonction de la recherche
-	/*
-	protected List<Entity> filterList(String search) {
-		List<Entity> filteredList = new ArrayList<Entity>();
+	protected void filterDisplayedList(String search) {
+		getDisplayedList().clear();
 		
-		for (int i = 0; i < baseList.size(); i++) {
-			Entity entity = baseList.get(i);
+		for (int i = 0; i < getBaseList().size(); i++) {
+			Entity entity = getBaseList().get(i);
 			
-			if (!selectedEntitiesList.contains(entity) && entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
-				filteredList.add(entity);
+			if (!selectedList.contains(entity) && entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
+				getDisplayedList().add(entity);
 		}
-		
-		return filteredList;
 	}
-	*/
 	
 	
 	/*
@@ -79,12 +95,26 @@ public class SelectableEntityTree extends EntityTree {
 	
 	// Ajouter un élément à l'arbre des entités sélectionnées
 	public void setEntitySelected(Entity entity) {
-		if (baseList.contains(entity) && !selectedEntitiesList.contains(entity))
-			selectedEntitiesList.add(entity);
+		if (getBaseList().contains(entity) && !selectedList.contains(entity))
+			selectedList.add(entity);
 	}
 	
 	// Enlever un élément de l'arbre des entités sélectionnées
 	public void setEntityDeselected(Entity entity) {
-		selectedEntitiesList.remove(entity);
+		if (selectedList.contains(entity))
+			selectedList.remove(entity);
+	}
+	
+	
+	/*
+	 * Callbacks des clics
+	 */
+	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
+		if (jTree == getTree()) // Arbre du haut cliqué
+			setEntitySelected(entity);
+		else if (jTree == selectedTree) // Arbre du bas cliqué
+			setEntityDeselected(entity);
+		
+		update();
 	}
 }
