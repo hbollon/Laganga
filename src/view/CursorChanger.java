@@ -17,7 +17,6 @@ import model.Database;
  * 
  * @author Julien Valverdé
  */
-@SuppressWarnings("deprecation")
 public class CursorChanger implements Observer {
 	private static final Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
 	private static final Image LOADING_CURSOR_IMAGE = new ImageIcon("./res/loading.gif").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);

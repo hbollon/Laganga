@@ -11,7 +11,6 @@ import model.entities.User;
  * 
  * @author Julien Valverdé
  */
-@SuppressWarnings("deprecation")
 public class LocalUser extends Observable {
 	// Objet principal
 	public static LocalUser localUser = new LocalUser();

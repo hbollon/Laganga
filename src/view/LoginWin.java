@@ -16,7 +16,6 @@ import controller.LoginButtonListener;
 import controller.OpenWinInsription;
 import model.LocalUser;
 
-@SuppressWarnings("deprecation")
 public class LoginWin extends JFrame implements Observer {
 	private static final long serialVersionUID = 4411916212116263837L;
 	

@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 
 public class CanevasSemaine extends Canvas {
+
+	private static final long serialVersionUID = -4520399507339240493L;
 	// Nombre de colonnes et de lignes
 	private static final int NB_COLONNES = 7;
 	private static final int NB_LIGNES = 48;

@@ -7,7 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Semaine extends JPanel {
-	
+
+	private static final long serialVersionUID = 7784128513693664718L;
+
 	public Semaine() {
 		this.setLayout(new BorderLayout());
 		

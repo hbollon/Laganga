@@ -1,37 +1,36 @@
 package view;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Dimension2D;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import com.mindfusion.common.DateTime;
 import com.mindfusion.drawing.AwtGraphics;
 import com.mindfusion.drawing.Brushes;
 import com.mindfusion.drawing.Pens;
-import com.mindfusion.scheduling.*;
-import com.toedter.calendar.JCalendar;
+import com.mindfusion.scheduling.CalendarAdapter;
+import com.mindfusion.scheduling.CalendarDrawEvent;
+import com.mindfusion.scheduling.CalendarView;
+import com.mindfusion.scheduling.CustomDrawElements;
+import com.mindfusion.scheduling.ItemMouseEvent;
+import com.mindfusion.scheduling.ThemeType;
+import com.mindfusion.scheduling.WeekRangeHeaderStyle;
 
-import controller.OpenCreatEvent;
 import model.Agenda;
 import model.EventCalendar;
 import model.entities.Entity;
 import model.entities.Event;
-import model.entities.Location;
-import model.entities.User;
 
 /**
  * Classe Mois héritant de JPanel permettant d'afficher une instance de Calendar contenue dans un JPanel
@@ -40,7 +39,6 @@ import model.entities.User;
  *
  */
 
-@SuppressWarnings("deprecation")
 public class Mois extends JPanel implements Observer {
 	private com.mindfusion.scheduling.Calendar calendar = null;
 	private static final long serialVersionUID = 1L;
@@ -158,7 +156,6 @@ public class Mois extends JPanel implements Observer {
 		
 		for(int i = 0; i < listeEvent.size(); i++)
 		{
-			System.out.println((Event) listeEvent.get(i));
 			Event ev = (Event)listeEvent.get(i);
 			
 			GregorianCalendar dateBegin = new GregorianCalendar(ev.getBegin().get(java.util.Calendar.YEAR), ev.getBegin().get(java.util.Calendar.MONTH) + 1, ev.getBegin().get(java.util.Calendar.DAY_OF_MONTH));

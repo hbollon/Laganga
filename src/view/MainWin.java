@@ -1,18 +1,14 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.TextArea;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,15 +21,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 
-import com.toedter.calendar.JCalendar;
-
-import controller.OpenOngletSupprGroup;
 import controller.OpenCreatEvent;
+import controller.OpenOngletSupprGroup;
 import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
-
-import com.mindfusion.scheduling.*;
 
 /**
  * Classe MainWin, fenetre principale de notre programme

@@ -47,7 +47,7 @@ public class EventTab extends Tab {
 	private JSpinner hourEnd;
 	private JSpinner minuteBegin;
 	private JSpinner minuteEnd;
-	private JComboBox importance;
+	private JComboBox<Object> importance;
 	private JCheckBox eventVisible;
 	
 	public EventTab() throws Exception {
@@ -290,7 +290,7 @@ public class EventTab extends Tab {
 		JPanel degreeImportance = new JPanel(new FlowLayout());
 		JLabel labelImportance = new JLabel("Style d'événement : ");
 		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV proffessionel déplaçable", "RDV personnel non déplaçable", "RDV proffessionnel non déplaçable", "Autre"};
-		JComboBox importance = new JComboBox(elements);
+		JComboBox<Object> importance = new JComboBox<Object>(elements);
 		degreeImportance.add(labelImportance);
 		degreeImportance.add(importance);
 		
@@ -360,7 +360,7 @@ public class EventTab extends Tab {
 		return (Integer)minuteEnd.getValue();
 	}
 	
-	public JComboBox getPriority()
+	public JComboBox<Object> getPriority()
 	{
 		return importance;
 	}

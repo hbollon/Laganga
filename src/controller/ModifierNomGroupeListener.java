@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 
 import model.entities.Group;
-import view.WinGestionGroup;
 
 public class ModifierNomGroupeListener implements ActionListener {
 	private Group group;

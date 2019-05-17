@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
-import com.mindfusion.scheduling.Calendar;
-
 import view.MainWin;
 import view.tabs.EventTab;
 
@@ -18,7 +16,6 @@ import view.tabs.EventTab;
 
 public class CreateEventListener implements ActionListener {
 	private String name;
-	private String type = null;
 	private int priority = 0;
 	private GregorianCalendar dateBegin;
 	private GregorianCalendar dateEnd;

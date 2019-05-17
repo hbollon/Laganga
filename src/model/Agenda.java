@@ -9,7 +9,6 @@ import model.entities.Event;
 import model.entities.Group;
 import model.entities.User;
 
-@SuppressWarnings("deprecation")
 public class Agenda extends Observable {
 	// Agenda principal
 	public static Agenda agenda = new Agenda();

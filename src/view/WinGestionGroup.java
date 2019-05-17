@@ -20,11 +20,13 @@ import controller.ModifierNomGroupeListener;
 import controller.SupprimerGroupeListener;
 import controller.SupprimerMembreListener;
 import model.LocalUser;
-import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
 
 public class WinGestionGroup extends JFrame implements Observer {
+
+	private static final long serialVersionUID = -942892911146765943L;
+
 	public WinGestionGroup(Group group) {
 		super();
 		

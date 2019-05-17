@@ -4,31 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import com.toedter.calendar.JCalendar;
-
-import controller.AnnuleEvent;
 import controller.CloseWindow;
-import controller.CreateGroupe;
-import controller.Inscription;
 import model.entities.Entity;
 import model.entities.User;
 
@@ -36,15 +26,17 @@ public class WinCreateGroupe extends JFrame implements Observer {
 
 	//private JLabel status = new JLabel("Ajouter un groupe", JLabel.CENTER);
 			
+	private static final long serialVersionUID = 1335122662037829913L;
+
 	public WinCreateGroupe() throws Exception {
 		super();
 		
-		this.setTitle("Création Groupe");
+		this.setTitle("Crï¿½ation Groupe");
 	    this.setSize(800, 700);
 		this.setBackground(Color.white);
 		this.setLayout(new BorderLayout());
 		
-		// Création du GridLayout principal
+		// Crï¿½ation du GridLayout principal
 		JPanel newGroupe = new JPanel(new GridLayout(3,1));
 		
 		// Liste des membres
@@ -55,11 +47,11 @@ public class WinCreateGroupe extends JFrame implements Observer {
 			arbre.add(new DefaultMutableTreeNode(member.getFirstName() + " " + member.getLastName()));
 		}
 		
-		// Création des 3 éléments de la fenêtre en GridLayout
+		// Crï¿½ation des 3 ï¿½lï¿½ments de la fenï¿½tre en GridLayout
 		JPanel nomGroupe = new JPanel(new FlowLayout());
 		JPanel nomAdmin = new JPanel(new FlowLayout());
 		JPanel creation = new JPanel(new FlowLayout());
-		JButton creerGroupe = new JButton("Créer Groupe");
+		JButton creerGroupe = new JButton("Crï¿½er Groupe");
 		//creerGroupe.addActionListener(new CreateGroupe(null));
 		
 		// Remplissage du panel du nom de groupe

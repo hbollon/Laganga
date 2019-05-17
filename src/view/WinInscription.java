@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Panel;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +16,8 @@ import controller.CloseWindow;
 import controller.Inscription;
 
 public class WinInscription extends JFrame {
+
+	private static final long serialVersionUID = -5918855599444972396L;
 
 	public WinInscription() {
 		super();

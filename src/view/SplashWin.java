@@ -18,7 +18,6 @@ import model.Database;
  * 
  * @author Julien Valverdé
  */
-@SuppressWarnings("deprecation")
 public class SplashWin extends JFrame implements Observer {
 	private static final long serialVersionUID = -4244014342067339792L;
 	
