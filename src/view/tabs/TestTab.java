@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 
 import model.entities.User;
-import view.elements.EntityTree;
+import view.elements.SelectableEntityTree;
 
 /**
  * Un onglet de test pour servir d'exemple
@@ -23,7 +23,7 @@ public class TestTab extends Tab {
 		header.add(new JButton("Modifier"), BorderLayout.WEST);
 		
 		// Le JPanel content représente le contenu de l'onglet
-		content.add(new EntityTree("Utilisateurs", User.factory.getAll(), true));
+		content.add(new SelectableEntityTree("Utilisateurs", User.factory.getAll(), "Utilisateurs sélectionnés"));
 		
 		open(); // Ouverture de l'onglet
 	}

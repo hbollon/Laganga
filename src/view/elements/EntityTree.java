@@ -17,39 +17,35 @@ import controller.EntityTreeSearchBarListener;
 import model.entities.Entity;
 
 /**
- * Un EntitySelectionJTree est un JTree spécialisé permettant d'afficher une liste d'entités et d'en séléctionner des éléments
+ * Un JTree spécialisé permettant d'afficher une liste d'entités sous forme d'arbre
  * 
  * @author Julien Valverdé
  */
 public class EntityTree extends JPanel {
 	private static final long serialVersionUID = 6453784844876350543L;
 	
-	private JTextField searchBar; // Barre de recherche
+	protected JTree tree = new JTree(); // Arbre des entités
+	protected String treeName; // Nom du noeud père de l'arbre des éléments
+	protected List<Entity> baseList; // Liste originale
 	
-	private JTree topTree = new JTree(); // Arbre des entités
-	private JTree bottomTree = new JTree(); // Arbre des entités sélectionnées
+	protected JTextField searchBar; // Barre de recherche
 	
-	private String name; // Nom du noeud père
-	private boolean selectionEnabled; // Autorisation de la sélection d'éléments
 	
-	private List<Entity> baseList; // Liste originale
-	private List<Entity> selectedList = new ArrayList<Entity>(); // Liste des entités sélectionnées
-	
-	public EntityTree(String name, List<Entity> baseList) {
-		this(name, baseList, false);
-	}
-	public EntityTree(String name, List<Entity> baseList, boolean selectionEnabled) {
+	/*
+	 * Constructeurs
+	 */
+	public EntityTree(String treeName, List<Entity> baseList, boolean isFilterable) {
 		super();
-		this.name = name;
+		this.treeName = treeName;
 		this.baseList = baseList;
-		this.selectionEnabled = selectionEnabled;
 		
 		setLayout(new BorderLayout());
 		
 		// Zone de recherche
 		JPanel searchPanel = new JPanel(new BorderLayout());
 			searchPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
-			add(searchPanel, BorderLayout.NORTH);
+			if (isFilterable)
+				add(searchPanel, BorderLayout.NORTH);
 		
 		JLabel searchLabel = new JLabel("Filtrer : ");
 			searchPanel.add(searchLabel, BorderLayout.WEST);
@@ -59,35 +55,34 @@ public class EntityTree extends JPanel {
 			searchPanel.add(searchBar, BorderLayout.CENTER);
 			this.searchBar = searchBar;
 		
-		// Initialisation des tree
+		// Initialisation du tree
 		update();
 		
-		// Scroll zones des tree
-		add(new JScrollPane(topTree), BorderLayout.CENTER);
-		
-		if (selectionEnabled)
-			add(new JScrollPane(bottomTree), BorderLayout.SOUTH);
+		// Scroll zone du tree
+		add(new JScrollPane(tree), BorderLayout.CENTER);
 	}
-	
-	// Mettre à jour les listes et les arbres
-	public void update() {
-		List<Entity> filteredList = filterList(searchBar.getText());
-		applyListToTree(topTree, filteredList, name);
+	public EntityTree(String treeName, List<Entity> baseList) {
+		this(treeName, baseList, false);
 	}
 	
 	
 	/*
-	 * Filtrage de l'arbre du haut
+	 * Mise à jour de l'arbre
 	 */
 	
-	// Filtrer la liste du haut en fonction de la recherche
-	private List<Entity> filterList(String search) {
+	// Mettre à jour la liste et l'arbre
+	public void update() {
+		applyListToTree(tree, filterList(searchBar.getText()), treeName);
+	}
+	
+	// Filtrer les entités à afficher en fonction de la recherche
+	protected List<Entity> filterList(String search) {
 		List<Entity> filteredList = new ArrayList<Entity>();
 		
 		for (int i = 0; i < baseList.size(); i++) {
 			Entity entity = baseList.get(i);
 			
-			if (!selectedList.contains(entity) && entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
+			if (entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
 				filteredList.add(entity);
 		}
 		
@@ -95,29 +90,12 @@ public class EntityTree extends JPanel {
 	}
 	
 	// Appliquer une liste à un JTree
-	private void applyListToTree(JTree tree, List<Entity> list, String name) {
+	protected void applyListToTree(JTree tree, List<Entity> list, String name) {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(name);
 		
 		for (int i = 0; i < list.size(); i++)
 			node.add(new DefaultMutableTreeNode(list.get(i).getTreeDisplayName()));
 		
 		tree.setModel(new DefaultTreeModel(node));
-	}
-	
-	
-	/*
-	 * Séléctions des entités
-	 */
-	
-	// Ajouter un élément à l'arbre des entités sélectionnées
-	public void setEntitySelected(Entity entity) {
-		if (selectionEnabled && baseList.contains(entity) && !selectedList.contains(entity))
-			selectedList.add(entity);
-	}
-	
-	// Enlever un élément de l'arbre des entités sélectionnées
-	public void setEntityDeselected(Entity entity) {
-		if (selectionEnabled)
-			selectedList.remove(entity);
 	}
 }
