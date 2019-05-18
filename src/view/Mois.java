@@ -67,11 +67,6 @@ public class Mois extends JPanel implements Observer {
 		});
 		
 		Agenda.agenda.addObserver(this);
-		try {
-			Agenda.agenda.refresh();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
 		
 		this.add(calendar, BorderLayout.CENTER);
 	}

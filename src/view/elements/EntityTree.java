@@ -1,93 +1,166 @@
 package view.elements;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import controller.buttons.EntityTreeFilterButton;
+import controller.EntityTreeMouseListener;
+import controller.EntityTreeSearchBarListener;
 import model.entities.Entity;
 
 /**
- * Un EntitySelectionJTree est un JTree spécialisé permettant d'afficher une liste d'entités et d'en séléctionner des éléments
+ * Un JTree spécialisé permettant d'afficher une liste d'entités sous forme d'arbre
  * 
  * @author Julien Valverdé
  */
 public class EntityTree extends JPanel {
 	private static final long serialVersionUID = 6453784844876350543L;
 	
-	private JTree tree = new JTree(); // Tree des entités
-	
-	private String name; // Nom du noeud père
+	/*
+	 * Attributs
+	 */
+	private String treeName; // Nom du noeud père de l'arbre des éléments
 	private List<Entity> baseList; // Liste originale
-	private List<Entity> filteredList = new ArrayList<Entity>(); // Liste filtrée
+	private List<Entity> displayedList = new ArrayList<Entity>(); // Liste filtrée contenant les entités affichées dans l'arbre
 	
-	public EntityTree(String name, List<Entity> baseList) {
-		super();
-		this.name = name;
-		this.baseList = baseList;
-		
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
-		// Zone de recherche
-		JPanel searchPanel = new JPanel();
-			searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.LINE_AXIS));
-			searchPanel.setPreferredSize(new Dimension(10, 20));
-			add(searchPanel);
-		
-		/*
-		JPanel searchPanelContent = new JPanel();
-			searchPanelContent.setLayout(new BoxLayout(searchPanelContent, BoxLayout.LINE_AXIS));
-			searchPanel.add(searchPanelContent);
-		*/
-		
-		JTextField searchBar = new JTextField();
-			searchPanel.add(searchBar);
-		
-		JButton searchButton = new JButton("Filtrer");
-			searchButton.addActionListener(new EntityTreeFilterButton(this, searchBar));
-			searchPanel.add(searchButton);
-		
-		// Initialisation du tree
-		filter("");
-		
-		// Scroll zone du tree
-		add(new JScrollPane(tree));
+	private JTextField searchBar; // Barre de recherche
+	private JPanel treePanel; // Panneau contenant l'arbre
+	private JTree tree = new JTree(); // Arbre des entités
+	
+	
+	/*
+	 * Getteurs
+	 */
+	public String getTreeName() {
+		return treeName;
+	}
+	public List<Entity> getBaseList() {
+		return baseList;
+	}
+	public List<Entity> getDisplayedList() {
+		return displayedList;
+	}
+	public JTextField getSearchBar() {
+		return searchBar;
+	}
+	public JPanel getTreePanel() {
+		return treePanel;
+	}
+	public JTree getTree() {
+		return tree;
 	}
 	
-	// Générer la liste d'entités filtrée
-	private void createFilteredList(String search) {
-		filteredList.clear();
+	
+	/*
+	 * Constructeur interne
+	 */
+	protected EntityTree(String treeName, List<Entity> baseList, boolean isFilterable, boolean callInternalConstructor) {
+		super();
+		this.treeName = treeName;
+		this.baseList = baseList;
+		
+		setLayout(new BorderLayout());
+		
+		// Zone de recherche
+		if (isFilterable) {
+			JPanel searchPanel = new JPanel(new BorderLayout());
+				searchPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
+				add(searchPanel, BorderLayout.NORTH);
+			
+			JLabel searchLabel = new JLabel("Filtrer : ");
+				searchPanel.add(searchLabel, BorderLayout.WEST);
+			
+			JTextField searchBar = new JTextField();
+				searchBar.getDocument().addDocumentListener(new EntityTreeSearchBarListener(this));
+				searchPanel.add(searchBar, BorderLayout.CENTER);
+				this.searchBar = searchBar;
+		}
+		
+		// Arbre
+		tree.addMouseListener(new EntityTreeMouseListener(this, tree, displayedList));
+		
+		JPanel treePanel = new JPanel(new GridLayout(1, 1));
+			treePanel.add(new JScrollPane(tree));
+			add(treePanel, BorderLayout.CENTER);
+			this.treePanel = treePanel;
+	}
+	
+	
+	/*
+	 * Constructeurs publics
+	 */
+	public EntityTree(String treeName, List<Entity> baseList, boolean isFilterable) {
+		this(treeName, baseList, isFilterable, true);
+		updateView();
+	}
+	public EntityTree(String treeName, List<Entity> baseList) {
+		this(treeName, baseList, false);
+	}
+	
+	
+	/*
+	 * Mise à jour de l'arbre
+	 */
+	
+	// Mettre à jour l'affichage
+	public void updateView() {
+		filterDisplayedList(searchBar.getText());
+		applyListToTree(tree, displayedList, treeName);
+	}
+	
+	// Filtrer les entités à afficher en fonction de la recherche
+	protected void filterDisplayedList(String search) {
+		displayedList.clear();
 		
 		for (int i = 0; i < baseList.size(); i++) {
 			Entity entity = baseList.get(i);
 			
-			if (entity.getTreeDisplayName().matches(".*"+search+".*"))
-				filteredList.add(entity);
+			if (entity.getTreeDisplayName().toLowerCase().matches(".*"+search.toLowerCase()+".*"))
+				displayedList.add(entity);
 		}
 	}
 	
-	// Appliquer la listre filtrée au JTree
-	private void applyTreeModel() {
+	// Appliquer une liste à un JTree
+	protected void applyListToTree(JTree tree, List<Entity> list, String name) {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(name);
 		
-		for (int i = 0; i < filteredList.size(); i++)
-			node.add(new DefaultMutableTreeNode(filteredList.get(i).getTreeDisplayName()));
+		for (int i = 0; i < list.size(); i++)
+			node.add(new DefaultMutableTreeNode(list.get(i).getTreeDisplayName()));
 		
 		tree.setModel(new DefaultTreeModel(node));
 	}
 	
-	// Filtrer la liste et appliquer les modifications sur le JTree
-	public void filter(String search) {
-		createFilteredList(search);
-		applyTreeModel();
+	
+	/*
+	 * Méthodes sur les entités
+	 */
+	
+	// Obtenir l'entité située à une certaine ligne
+	public Entity getRowEntity(JTree jTree, List<Entity> entities, MouseEvent e) {
+		int row = jTree.getRowForLocation(e.getX(), e.getY());
+		if (row <= 0 || row > entities.size())
+			return null;
+		
+		return entities.get(row - 1);
+	}
+	
+	
+	/*
+	 * Callbacks
+	 */
+	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
+	}
+	public void onTreeDoubleClicked(JTree jTree, List<Entity> entities, Entity entity) {
 	}
 }
