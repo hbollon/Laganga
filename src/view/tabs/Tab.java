@@ -30,21 +30,25 @@ public abstract class Tab extends JPanel {
 		this.name = name;
 	}
 	
-	public Tab() {
-		super();
+	public Tab(boolean closable) {
+		super(new BorderLayout());
 		
 		// Remplissage de l'header
-		JButton close = new JButton("Fermer");
-		close.addActionListener(new CloseTabButtonListener(this));
-		header.add(close, BorderLayout.EAST);
+		if (closable) {
+			JButton close = new JButton("Fermer");
+				close.addActionListener(new CloseTabButtonListener(this));
+				header.add(close, BorderLayout.EAST);
+		}
 		
 		// Mise en place du contenu
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 		
 		// Mise en place de l'onglet
-		setLayout(new BorderLayout());
 		add(header, BorderLayout.NORTH);
 		add(contentScrollPane, BorderLayout.CENTER);
+	}
+	public Tab() {
+		this(true);
 	}
 	
 	// Afficher l'onglet

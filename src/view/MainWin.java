@@ -20,6 +20,7 @@ import controller.OpenOngletSupprGroup;
 
 import view.elements.AgendaGroupsEntityTree;
 import view.elements.AgendaUsersEntityTree;
+import view.tabs.GroupsTab;
 
 /**
  * Classe MainWin, fenetre principale de notre programme
@@ -73,6 +74,13 @@ public class MainWin extends JFrame {
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
+	    
+	    // Ajout des onglets
+	    try {
+			new GroupsTab();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	    
 	    // Permet de changer le curseur lors d'une opération avec la BDD
 	    new CursorChanger(this);
