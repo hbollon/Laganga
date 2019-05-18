@@ -17,22 +17,22 @@ public class EntityTreeSearchBarListener implements DocumentListener {
 		this.tree = tree;
 	}
 	
-	private void update() {
-		tree.update();
+	private void updateView() {
+		tree.updateView();
 	}
 	
 	@Override
 	public void changedUpdate(DocumentEvent arg0) {
-		update();
+		updateView();
 	}
 	
 	@Override
 	public void insertUpdate(DocumentEvent arg0) {
-		update();
+		updateView();
 	}
 	
 	@Override
 	public void removeUpdate(DocumentEvent arg0) {
-		update();
+		updateView();
 	}
 }

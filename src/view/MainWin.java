@@ -1,41 +1,23 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.TextArea;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTree;
 
-import com.toedter.calendar.JCalendar;
-
-import controller.OpenOngletSupprGroup;
 import controller.OpenCreatEvent;
-import model.entities.Entity;
-import model.entities.Group;
-import model.entities.User;
+import controller.OpenOngletSupprGroup;
 import view.elements.AgendaGroupsEntityTree;
 import view.elements.AgendaUsersEntityTree;
-
-import com.mindfusion.scheduling.*;
 
 /**
  * Classe MainWin, fenetre principale de notre programme
@@ -52,12 +34,7 @@ public class MainWin extends JFrame {
 	private JPanel centerPanel = null;
 	private JPanel leftPanel = null;
 	private JPanel rightPanel = null;
-	private JTree jTree = null;
-	private JTree jTreeGroupe = null;
-	private JScrollPane jScrollTree = null;
-	private JScrollPane jScrollTreeGroup = null;
 	private JPanel jPanelTree = null;
-	private JPanel jPanelTreeGroup = null;
 	private JTextArea notificationBar = null;
 	private JMenuBar barMenu = null;
 	private JMenu fichier = null;
@@ -75,26 +52,10 @@ public class MainWin extends JFrame {
 	
 	public static MainWinCalendar tabbedPane;
 	
-	private JTree getJTree() {
-		if (jTree == null) {
-			jTree = new JTree();
-		}
-		return jTree;
-	}
-	
-	private JTree getJTreeGroupe() {
-		if (jTreeGroupe == null) {
-			jTreeGroupe = new JTree();
-		}
-		return jTreeGroupe;
-	} 
-	
 	public MainWin() throws Exception 
 	{
 		super();
 		initialize();
-		setTree();
-		setTreeGroupe();
 	}
 	 
 	public void initialize()
@@ -115,38 +76,6 @@ public class MainWin extends JFrame {
 	    new CursorChanger(this);
 	}
 	
-	public void setTree() throws Exception
-	{
-		List<Entity> usersList = User.factory.getAll();
-		List<String> usersNames = new ArrayList<String>();
-		
-		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Utilisateurs");
-		  jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-		  jScrollTree.setViewportView(jTree);
-		  
-		for (int i = 0; i < usersList.size(); i++) {
-			usersNames.add(((String) ((User) usersList.get(i)).getFirstName()) + " " + ((String) ((User) usersList.get(i)).getLastName()));
-			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(usersNames.get(i));
-		    treeNode1.add(treeNode2);
-		}
-	}
-	
-	public void setTreeGroupe() throws Exception
-	{
-		List<Entity> groupeList = Group.factory.getAll();
-		List<String> groupeNames = new ArrayList<String>();
-		
-		javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Groupes");
-		  jTreeGroupe.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-		  jScrollTreeGroup.setViewportView(jTreeGroupe);
-		  
-		for (int i = 0; i < groupeList.size(); i++) {
-			groupeNames.add(((Group) groupeList.get(i)).getName());
-			javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode(groupeNames.get(i));
-		    treeNode1.add(treeNode2);
-		}
-	}
-	
 	private JPanel getWindowPane()
 	{
 		if(windowPanel == null)
@@ -163,28 +92,6 @@ public class MainWin extends JFrame {
 			windowPanel.add(rightPanel, BorderLayout.EAST);
 		}
 		return windowPanel;
-	}
-	
-	private JScrollPane getJScrollPane()
-	{
-		if(jScrollTree == null)
-		{
-			jScrollTree = new JScrollPane();
-			jScrollTree.setViewportView(getJTree());
-			jScrollTree.setPreferredSize(new Dimension(200,450));
-		}
-		return jScrollTree;
-	}
-	
-	private JScrollPane getJScrollPaneGroup()
-	{
-		if(jScrollTreeGroup == null)
-		{
-			jScrollTreeGroup = new JScrollPane();
-			jScrollTreeGroup.setViewportView(getJTreeGroupe());
-			jScrollTreeGroup.setPreferredSize(new Dimension(200,450));
-		}
-		return jScrollTreeGroup;
 	}
 	
 	private JPanel getJPanelTree() {

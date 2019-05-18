@@ -1,6 +1,7 @@
 package view.elements;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class EntityTree extends JPanel {
 	private List<Entity> displayedList = new ArrayList<Entity>(); // Liste filtrée contenant les entités affichées dans l'arbre
 	
 	private JTextField searchBar; // Barre de recherche
+	private JPanel treePanel; // Panneau contenant l'arbre
 	private JTree tree = new JTree(); // Arbre des entités
 	
 	
@@ -52,6 +54,9 @@ public class EntityTree extends JPanel {
 	public JTextField getSearchBar() {
 		return searchBar;
 	}
+	public JPanel getTreePanel() {
+		return treePanel;
+	}
 	public JTree getTree() {
 		return tree;
 	}
@@ -68,22 +73,27 @@ public class EntityTree extends JPanel {
 		setLayout(new BorderLayout());
 		
 		// Zone de recherche
-		JPanel searchPanel = new JPanel(new BorderLayout());
-			searchPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
-			if (isFilterable)
+		if (isFilterable) {
+			JPanel searchPanel = new JPanel(new BorderLayout());
+				searchPanel.setBorder(new EmptyBorder(2, 2, 2, 2));
 				add(searchPanel, BorderLayout.NORTH);
+			
+			JLabel searchLabel = new JLabel("Filtrer : ");
+				searchPanel.add(searchLabel, BorderLayout.WEST);
+			
+			JTextField searchBar = new JTextField();
+				searchBar.getDocument().addDocumentListener(new EntityTreeSearchBarListener(this));
+				searchPanel.add(searchBar, BorderLayout.CENTER);
+				this.searchBar = searchBar;
+		}
 		
-		JLabel searchLabel = new JLabel("Filtrer : ");
-			searchPanel.add(searchLabel, BorderLayout.WEST);
-		
-		JTextField searchBar = new JTextField();
-			searchBar.getDocument().addDocumentListener(new EntityTreeSearchBarListener(this));
-			searchPanel.add(searchBar, BorderLayout.CENTER);
-			this.searchBar = searchBar;
-		
-		// Scroll zone du tree
+		// Arbre
 		tree.addMouseListener(new EntityTreeMouseListener(this, tree, displayedList));
-		add(new JScrollPane(tree), BorderLayout.CENTER);
+		
+		JPanel treePanel = new JPanel(new GridLayout(1, 1));
+			treePanel.add(new JScrollPane(tree));
+			add(treePanel, BorderLayout.CENTER);
+			this.treePanel = treePanel;
 	}
 	
 	
@@ -92,7 +102,7 @@ public class EntityTree extends JPanel {
 	 */
 	public EntityTree(String treeName, List<Entity> baseList, boolean isFilterable) {
 		this(treeName, baseList, isFilterable, true);
-		update();
+		updateView();
 	}
 	public EntityTree(String treeName, List<Entity> baseList) {
 		this(treeName, baseList, false);
@@ -104,7 +114,7 @@ public class EntityTree extends JPanel {
 	 */
 	
 	// Mettre à jour l'affichage
-	public void update() {
+	public void updateView() {
 		filterDisplayedList(searchBar.getText());
 		applyListToTree(tree, displayedList, treeName);
 	}

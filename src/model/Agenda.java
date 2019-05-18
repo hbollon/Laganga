@@ -42,10 +42,9 @@ public class Agenda extends Observable {
 	 */
 	public void reset() {
 		activeUsers.clear();
-		activeUsers.add(LocalUser.localUser.getUser());
-		
 		activeGroups.clear();
 	}
+	
 	public void setActive(User user) {
 		if (!activeUsers.contains(user))
 			activeUsers.add(user);
@@ -54,6 +53,20 @@ public class Agenda extends Observable {
 		if (!activeGroups.contains(group))
 			activeGroups.add(group);
 	}
+	
+	public void setActiveUsers(List<Entity> users) {
+		activeUsers.clear();
+		
+		for (int i = 0; i < users.size(); i++)
+			setActive((User) users.get(i));
+	}
+	public void setActiveGroups(List<Entity> groups) {
+		activeGroups.clear();
+		
+		for (int i = 0; i < groups.size(); i++)
+			setActive((Group) groups.get(i));
+	}
+	
 	public void setInactive(User user) {
 		activeUsers.remove(user);
 	}

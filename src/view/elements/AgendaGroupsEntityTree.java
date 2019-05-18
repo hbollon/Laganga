@@ -1,5 +1,6 @@
 package view.elements;
 
+import model.Agenda;
 import model.entities.Group;
 
 /**
@@ -11,9 +12,32 @@ public class AgendaGroupsEntityTree extends SelectableEntityTree {
 	private static final long serialVersionUID = -1156581786365101846L;
 	
 	/*
-	 * Constructeur
+	 * Constructeur interne
+	 */
+	protected AgendaGroupsEntityTree(boolean callInternalConstructor) throws Exception {
+		super("Tous les groupes", Group.factory.getAll(), true, "Groupes actifs", true);
+	}
+	
+	
+	/*
+	 * Constructeur public
 	 */
 	public AgendaGroupsEntityTree() throws Exception {
-		super("Groupes", Group.factory.getAll(), true, "Groupes actifs");
+		this(true);
+		updateView();
+	}
+	
+	
+	/*
+	 * Mise à jour des modèles attachés à la vue
+	 */
+	public void updateModel() {
+		Agenda.agenda.setActiveGroups(getSelectedList());
+		
+		try {
+			Agenda.agenda.refresh();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

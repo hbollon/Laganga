@@ -1,6 +1,6 @@
 package view.elements;
 
-import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +49,10 @@ public class SelectableEntityTree extends EntityTree {
 		this.selectedTreeName = selectedTreeName;
 		
 		selectedTree.addMouseListener(new EntityTreeMouseListener(this, selectedTree, selectedList));
-		add(new JScrollPane(selectedTree), BorderLayout.SOUTH);
+		
+		// Ajout de l'arbre des sélections
+		getTreePanel().setLayout(new GridLayout(2, 1));
+		getTreePanel().add(new JScrollPane(selectedTree));
 	}
 	
 	
@@ -58,7 +61,9 @@ public class SelectableEntityTree extends EntityTree {
 	 */
 	public SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName) {
 		this(treeName, baseList, isFilterable, selectedEntitiesTreeName, true);
-		update();
+		
+		updateView();
+		updateModel();
 	}
 	public SelectableEntityTree(String treeName, List<Entity> baseList, String selectedEntitiesTreeName) {
 		this(treeName, baseList, false, selectedEntitiesTreeName);
@@ -70,9 +75,9 @@ public class SelectableEntityTree extends EntityTree {
 	 */
 	
 	// Mettre à jour les listes et les arbres
-	public void update() {
-		super.update();
-		//applyListToTree(tree, filterList(searchBar.getText()), treeName);
+	public void updateView() {
+		super.updateView();
+		
 		applyListToTree(selectedTree, selectedList, selectedTreeName);
 	}
 	
@@ -109,12 +114,17 @@ public class SelectableEntityTree extends EntityTree {
 	/*
 	 * Callbacks
 	 */
+	
+	// Mettre à jour les modèles auxquels cette vue est associée
+	public void updateModel() {}
+	
 	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
 		if (jTree == getTree()) // Arbre du haut cliqué
 			setEntitySelected(entity);
 		else if (jTree == selectedTree) // Arbre du bas cliqué
 			setEntityDeselected(entity);
 		
-		update();
+		updateModel();
+		updateView();
 	}
 }

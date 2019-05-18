@@ -1,5 +1,7 @@
 package view.elements;
 
+import model.Agenda;
+import model.LocalUser;
 import model.entities.User;
 
 /**
@@ -11,9 +13,35 @@ public class AgendaUsersEntityTree extends SelectableEntityTree {
 	private static final long serialVersionUID = -1156581786365101846L;
 	
 	/*
-	 * Constructeur
+	 * Constructeur interne
+	 */
+	protected AgendaUsersEntityTree(boolean callInternalConstructor) throws Exception {
+		super("Tous les utilisateurs", User.factory.getAll(), true, "Utilisateurs actifs", true);
+		setEntitySelected(LocalUser.localUser.getUser());
+	}
+	
+	
+	/*
+	 * Constructeur public
 	 */
 	public AgendaUsersEntityTree() throws Exception {
-		super("Utilisateurs", User.factory.getAll(), true, "Utilisateurs actifs");
+		this(true);
+		
+		updateModel();
+		updateView();
+	}
+	
+	
+	/*
+	 * Mise à jour des modèles attachés à la vue
+	 */
+	public void updateModel() {
+		Agenda.agenda.setActiveUsers(getSelectedList());
+		
+		try {
+			Agenda.agenda.refresh();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
