@@ -6,7 +6,9 @@ import javax.swing.JFrame;
 
 import model.Database;
 import model.LocalUser;
+import model.entities.Group;
 import view.SplashWin;
+import view.WinGestionGroup;
 import view.tabs.TestTab;
 
 public abstract class Main {
@@ -27,6 +29,7 @@ public abstract class Main {
 		
 		try {
 			new TestTab();
+			new WinGestionGroup((Group) Group.factory.getByID(3));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

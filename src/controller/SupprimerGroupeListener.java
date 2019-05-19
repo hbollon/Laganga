@@ -20,7 +20,7 @@ public class SupprimerGroupeListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			groupe.delete();
-			fenetre.dispose();
+			fenetre.close();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
