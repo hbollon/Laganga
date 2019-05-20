@@ -5,8 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import model.entities.Group;
-import view.elements.EntityTree;
+import view.elements.GroupsEntityTree;
 
 /**
  * Un onglet affichant la liste des groupes
@@ -26,8 +25,8 @@ public class GroupsTab extends Tab {
 		
 		// Contenu
 		content.setLayout(new BorderLayout());
-		content.add(new JLabel("Double-cliquez sur un groupe pour l'ouvrir dans un nouvel onglet", JLabel.CENTER), BorderLayout.NORTH);
-		content.add(new EntityTree("Tous les groupes", Group.factory.getAll(), true), BorderLayout.CENTER);
+		content.add(new JLabel("Double-cliquez sur un groupe pour l'ouvrir", JLabel.CENTER), BorderLayout.NORTH);
+		content.add(new GroupsEntityTree(), BorderLayout.CENTER);
 		
 		open();
 	}
