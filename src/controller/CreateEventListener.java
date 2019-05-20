@@ -3,7 +3,9 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import model.entities.Entity;
 import model.entities.Location;
 import model.entities.User;
 import view.MainWin;
@@ -27,6 +29,9 @@ public class CreateEventListener implements ActionListener {
 	private int timeMinuteEnd;
 	private String desc;
 	private boolean hide;
+	private List<Entity> users;
+	private List<Entity> groups;
+	
 	
 	private EventTab win;
 	 
@@ -45,13 +50,14 @@ public class CreateEventListener implements ActionListener {
 		timeMinuteEnd = win.getMinuteEnd();
 		desc = win.getDesc();
 		priority = win.getPriority().getSelectedIndex();
-		hide = win.getHide().isSelected();
+		hide = win.getHide();
+		users = win.getUsersP();
+		groups = win.getGroupsP();
 		
 		Location testLoc = new Location();
 		User testUser = new User();
 		
-		
-		MainWin.callAddEvent(name, desc, priority, testUser, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, testLoc, null, null);
+		MainWin.callAddEvent(name, desc, priority, testUser, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, testLoc, users, groups);
 	}
 
 	@Override

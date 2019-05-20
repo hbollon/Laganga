@@ -47,7 +47,7 @@ public class EventTab extends Tab {
 	private JSpinner minuteBegin;
 	private JSpinner minuteEnd;
 	private JComboBox<Object> importance;
-	private JCheckBox eventVisible;
+	private JCheckBox checkVisible;
 	private ParticipationUsersEntityTree listeMembresParticipantsTree;
 	private ParticipationGroupsEntityTree listeGroupesParticipantsTree;
 	
@@ -262,14 +262,14 @@ public class EventTab extends Tab {
 		JPanel degreeImportance = new JPanel(new FlowLayout());
 		JLabel labelImportance = new JLabel("Style d'événement : ");
 		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV proffessionel déplaçable", "RDV personnel non déplaçable", "RDV proffessionnel non déplaçable", "Autre"};
-		JComboBox<Object> importance = new JComboBox<Object>(elements);
+		importance = new JComboBox<Object>(elements);
 		degreeImportance.add(labelImportance);
 		degreeImportance.add(importance);
 		
 		//CheckBox pour si les details de l'événement est visible ou non
 		JPanel eventVisible = new JPanel(new FlowLayout());
 		JLabel labelVisible = new JLabel("Descrition de l'événement caché : ");
-		JCheckBox checkVisible = new JCheckBox();
+		checkVisible = new JCheckBox();
 		eventVisible.add(labelVisible);
 		eventVisible.add(checkVisible);
 		
@@ -337,9 +337,9 @@ public class EventTab extends Tab {
 		return importance;
 	}
 	
-	public JCheckBox getHide()
+	public boolean getHide()
 	{
-		return eventVisible;
+		return checkVisible.isSelected();
 	}
 	
 	public List<Entity> getUsersP()
