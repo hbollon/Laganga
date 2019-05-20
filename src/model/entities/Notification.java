@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.FieldsList;
+import model.LocalUser;
 
 /**
  * Un Notification représente une notification à l'attention d'un utilisateur
@@ -27,7 +28,7 @@ public class Notification extends Entity {
 		
 		// Champs
 		FieldsList fields = new FieldsList();
-		fields.add("name", "String");
+		fields.add("title", "String");
 		fields.add("description", "String");
 		fields.add("time", "DateTime");
 		fields.add("target", "model.entities.User");
@@ -39,8 +40,8 @@ public class Notification extends Entity {
 	/*
 	 * Getteurs
 	 */
-	public String getName() {
-		return (String) getFieldsValues().get("name");
+	public String getTitle() {
+		return (String) getFieldsValues().get("title");
 	}
 	public String getDescription() {
 		return (String) getFieldsValues().get("description");
@@ -56,8 +57,8 @@ public class Notification extends Entity {
 	/*
 	 * Setteurs
 	 */
-	public void setName(String name) {
-		getFieldsValues().put("name", name);
+	public void setTitle(String title) {
+		getFieldsValues().put("title", title);
 	}
 	public void setDescription(String description) {
 		getFieldsValues().put("description", description);
@@ -75,9 +76,9 @@ public class Notification extends Entity {
 	 */
 	
 	// Insérer une nouvelle notification
-	public static Notification create(String name, String description, Calendar time, User target) throws SQLException, Exception {
+	public static Notification create(String title, String description, Calendar time, User target) throws SQLException, Exception {
 		Map<String, Object> values = new HashMap<String, Object>();
-		values.put("name", name);
+		values.put("title", title);
 		values.put("description", description);
 		values.put("time", time);
 		values.put("target", target);
@@ -86,22 +87,27 @@ public class Notification extends Entity {
 	}
 	
 	// Insérer une nouvelle notification au moment présent
-	public static Notification create(String name, String description, User target) throws SQLException, Exception {
-		return create(name, description, Calendar.getInstance(), target);
+	public static Notification create(String title, String description, User target) throws SQLException, Exception {
+		return create(title, description, Calendar.getInstance(), target);
+	}
+	
+	// Insérer une nouvelle notification au moment présent pour l'utilisateur courant
+	public static Notification create(String title, String description) throws SQLException, Exception {
+		return create(title, description, Calendar.getInstance(), LocalUser.localUser.getUser());
 	}
 	
 	// Insérer une nouvelle notification à destination de plusieurs utilisateurs
-	public static List<Notification> create(String name, String description, Calendar time, List<User> targets) throws SQLException, Exception {
+	public static List<Notification> create(String title, String description, Calendar time, List<User> targets) throws SQLException, Exception {
 		List<Notification> notifications = new ArrayList<Notification>();
 		
 		for (int i = 0; i < targets.size(); i++)
-			notifications.add(create(name, description, time, targets.get(i)));
+			notifications.add(create(title, description, time, targets.get(i)));
 		
 		return notifications;
 	}
 	
 	// Insérer une nouvelle notification à destination de plusieurs utilisateurs au moment présent
-	public static List<Notification> create(String name, String description, List<User> targets) throws SQLException, Exception {
-		return create(name, description, Calendar.getInstance(), targets);
+	public static List<Notification> create(String title, String description, List<User> targets) throws SQLException, Exception {
+		return create(title, description, Calendar.getInstance(), targets);
 	}
 }
