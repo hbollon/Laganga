@@ -177,7 +177,8 @@ public class MainWin extends JFrame {
 	
 	public static void callAddEvent(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide, Location location, List<Entity> users, List<Entity> groups)
 	{
-		tabbedPane.getCalendarP().addEventBD(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, groups, users, location);
+		tabbedPane.getMoisP().getCalendar().addEventBD(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, groups, users, location);
+		tabbedPane.getSemaineP().getCalendar().addEventBD(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, groups, users, location);
 	}
 
 }

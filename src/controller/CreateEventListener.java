@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Location;
 import model.entities.User;
@@ -31,6 +32,7 @@ public class CreateEventListener implements ActionListener {
 	private boolean hide;
 	private List<Entity> users;
 	private List<Entity> groups;
+	private User author;
 	
 	
 	private EventTab win;
@@ -51,13 +53,13 @@ public class CreateEventListener implements ActionListener {
 		desc = win.getDesc();
 		priority = win.getPriority().getSelectedIndex();
 		hide = win.getHide();
+		author = LocalUser.localUser.getUser();
 		users = win.getUsersP();
 		groups = win.getGroupsP();
 		
 		Location testLoc = new Location();
-		User testUser = new User();
 		
-		MainWin.callAddEvent(name, desc, priority, testUser, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, testLoc, users, groups);
+		MainWin.callAddEvent(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, testLoc, users, groups);
 	}
 
 	@Override
