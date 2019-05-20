@@ -41,4 +41,13 @@ public class Location extends Entity {
 	public void setDescription(String description) {
 		getFieldsValues().put("description", description);
 	}
+	
+	
+	/*
+	 * Affichage dans un EntityTree
+	 */
+	@Override
+	public String getTreeDisplayName() {
+		return getName();
+	}
 }

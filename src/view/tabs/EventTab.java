@@ -29,7 +29,9 @@ import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Event;
 import model.entities.Group;
+import model.entities.Location;
 import model.entities.User;
+import view.elements.LocationsSelectableEntityTree;
 
 /**
  * Un onglet de test pour servir d'exemple
@@ -49,6 +51,9 @@ public class EventTab extends Tab {
 	private JSpinner minuteEnd;
 	private JComboBox<Object> importance;
 	private JCheckBox eventVisible;
+	
+	// Arbres de sélection
+	private LocationsSelectableEntityTree locationsTree = new LocationsSelectableEntityTree(1);
 	
 	public EventTab() throws Exception {
 		this(null);
@@ -284,7 +289,12 @@ public class EventTab extends Tab {
 		listesGroupes.add(listeDesGroupes, BorderLayout.CENTER);
 		groupesParticipants.add(listesGroupes);
 		
-		
+		/*
+		 * Lieu de l'évènement
+		 */
+		JPanel locationSelectionPanel = new JPanel(new FlowLayout());
+			locationSelectionPanel.add(new JLabel("Lieu (un seul choix) :"));
+			locationSelectionPanel.add(locationsTree);
 		
 		//panel degré d'importance de l'évenement
 		JPanel degreeImportance = new JPanel(new FlowLayout());
@@ -313,6 +323,7 @@ public class EventTab extends Tab {
 	   
 		content.add(participants);
 		content.add(groupesParticipants);
+		content.add(locationSelectionPanel);
 		content.add(degreeImportance);
 		content.add(eventVisible);
 	    content.add(buttonPane);
@@ -370,4 +381,10 @@ public class EventTab extends Tab {
 		return eventVisible;
 	}
 	
+	public Location getSelectedLocation() {
+		if (locationsTree.getSelectedList().size() == 1)
+			return (Location) locationsTree.getSelectedList().get(0);
+		else
+			return null;
+	}
 }

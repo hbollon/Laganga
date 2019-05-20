@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
+import model.entities.Location;
 import view.MainWin;
 import view.tabs.EventTab;
 
@@ -23,6 +24,7 @@ public class CreateEventListener implements ActionListener {
 	private int timeMinuteBegin;
 	private int timeHourEnd;
 	private int timeMinuteEnd;
+	private Location location;
 	private String desc;
 	private boolean hide;
 	
@@ -41,6 +43,7 @@ public class CreateEventListener implements ActionListener {
 		timeMinuteBegin = win.getMinuteBegin();
 		timeHourEnd = win.getHourEnd();
 		timeMinuteEnd = win.getMinuteEnd();
+		location = win.getSelectedLocation();
 		desc = win.getDesc();
 		priority = win.getPriority().getSelectedIndex();
 		hide = win.getHide().isSelected();

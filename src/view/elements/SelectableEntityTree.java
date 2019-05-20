@@ -114,7 +114,7 @@ public class SelectableEntityTree extends EntityTree {
 	
 	// Ajouter un élément à l'arbre des entités sélectionnées
 	public void setEntitySelected(Entity entity) {
-		if (getBaseList().contains(entity) && !selectedList.contains(entity) && (maxSelectableItems == NO_MAX || selectedList.size() < maxSelectableItems))
+		if (getBaseList().contains(entity) && !selectedList.contains(entity))
 			selectedList.add(entity);
 	}
 	
@@ -133,12 +133,22 @@ public class SelectableEntityTree extends EntityTree {
 	public void updateModel() {}
 	
 	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
-		if (jTree == getTree()) // Arbre du haut cliqué
-			setEntitySelected(entity);
-		else if (jTree == selectedTree) // Arbre du bas cliqué
-			setEntityDeselected(entity);
+		boolean updated = false; // Définit si le modèle et la vue doivent être mises à jour suite à l'action
 		
-		updateModel();
-		updateView();
+		if (jTree == getTree()) { // Arbre du haut cliqué
+			if (maxSelectableItems == NO_MAX || selectedList.size() < maxSelectableItems) {
+				setEntitySelected(entity);
+				updated = true;
+			}
+		}
+		else if (jTree == selectedTree) { // Arbre du bas cliqué
+			setEntityDeselected(entity);
+			updated = true;
+		}
+		
+		if (updated) {
+			updateModel();
+			updateView();
+		}
 	}
 }
