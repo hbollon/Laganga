@@ -2,13 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 
-import model.FieldsList;
-import model.LocalUser;
-import model.entities.Group;
-import view.WinCreateGroupe;
 import view.tabs.GroupTab;
 
 public class CreateGroupe implements ActionListener {

@@ -20,7 +20,7 @@ public class GroupsTab extends Tab {
 		setName("Groupes");
 		
 		// Header
-		JButton newGroup = new JButton("Nouveau groupe");
+		JButton newGroup = new JButton("Nouveau");
 			headerWest.add(newGroup, BorderLayout.WEST);
 		
 		// Contenu

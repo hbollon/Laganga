@@ -1,24 +1,32 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Semaine extends JPanel {
+import com.mindfusion.scheduling.CalendarView;
 
-	private static final long serialVersionUID = 7784128513693664718L;
+/**
+ * Classe Semaine héritant de JPanel permettant d'afficher une instance de Calendar contenue dans un JPanel
+ * 
+ * @author hbollon
+ *
+ */
 
+public class Semaine extends JPanel{
+	private static final long serialVersionUID = 6569641352308296962L;
+	private view.Planner calendar;;
+	
 	public Semaine() {
-		this.setLayout(new BorderLayout());
+		super(new BorderLayout());
 		
-		JPanel changerSemaine = new JPanel(new FlowLayout());
-		changerSemaine.add(new JButton("Semaine précédente"));
-		changerSemaine.add(new JButton("Semaine suivante"));
-		
-		
-		this.add(changerSemaine, BorderLayout.NORTH);
-		this.add(new CanevasSemaine(), BorderLayout.CENTER);
+		setSize(368, 362);
+		calendar = new view.Planner(CalendarView.List);
+		this.add(calendar, BorderLayout.CENTER);
+	}
+	
+	public view.Planner getCalendar()
+	{
+		return calendar;
 	}
 }

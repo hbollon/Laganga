@@ -16,12 +16,10 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import controller.SupprGroup;
 import model.FieldsList;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Event;
-import model.entities.Group;
 
 public class SupprEventTab extends Tab {
 	private static final long serialVersionUID = -618260664434187272L;

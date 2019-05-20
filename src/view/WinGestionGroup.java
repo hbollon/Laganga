@@ -23,7 +23,6 @@ import model.entities.Group;
 import model.entities.User;
 import view.tabs.Tab;
 
-@SuppressWarnings("deprecation")
 public class WinGestionGroup extends Tab implements Observer {
 	private static final long serialVersionUID = -942892911146765943L;
 	

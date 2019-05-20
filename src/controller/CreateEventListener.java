@@ -2,14 +2,20 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import model.LocalUser;
+import model.entities.Entity;
 import model.entities.Location;
+import model.entities.User;
 import view.MainWin;
 import view.tabs.EventTab;
 
 /**
- * Listener créant un Event dans la base de donnée et localement
+ * Listener récupérant les attributs nécéssaires à la creation d'un event
+ * Il appel ensuite la méthode statique "MainWin.callAddEvent()"
  * 
  * @author hbollon
  *
@@ -20,13 +26,13 @@ public class CreateEventListener implements ActionListener {
 	private int priority = 0;
 	private GregorianCalendar dateBegin;
 	private GregorianCalendar dateEnd;
-	private int timeHourBegin;
-	private int timeMinuteBegin;
-	private int timeHourEnd;
-	private int timeMinuteEnd;
 	private Location location;
 	private String desc;
 	private boolean hide;
+	private List<Entity> users;
+	private List<Entity> groups;
+	private User author;
+	
 	
 	private EventTab win;
 	 
@@ -36,22 +42,37 @@ public class CreateEventListener implements ActionListener {
 	
 	public void createEventLocal()
 	{
-		name = win.getName();
-		dateBegin = new GregorianCalendar(win.getDateBegin().getDate().getYear(), win.getDateBegin().getDate().getMonth() - 1, win.getDateBegin().getDate().getDay());
-		dateEnd = new GregorianCalendar(win.getDateEnd().getDate().getYear(), win.getDateEnd().getDate().getMonth() - 1, win.getDateEnd().getDate().getDay());
-		timeHourBegin = win.getHourBegin();
-		timeMinuteBegin = win.getMinuteBegin();
-		timeHourEnd = win.getHourEnd();
-		timeMinuteEnd = win.getMinuteEnd();
-		location = win.getSelectedLocation();
-		desc = win.getDesc();
-		priority = win.getPriority().getSelectedIndex();
-		hide = win.getHide().isSelected();
-		MainWin.callAddEvent(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
+		try
+		{
+			//Récupération des attributs depuis l'instance de EventTab
+			name = win.getName();
+			dateBegin = new GregorianCalendar(win.getDateBegin().getCalendar().get(Calendar.YEAR), win.getDateBegin().getCalendar().get(Calendar.MONTH) - 1, win.getDateBegin().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourBegin(), win.getMinuteBegin());
+			dateEnd = new GregorianCalendar(win.getDateEnd().getCalendar().get(Calendar.YEAR), win.getDateEnd().getCalendar().get(Calendar.MONTH) - 1, win.getDateEnd().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourEnd(), win.getMinuteEnd());
+			location = win.getSelectedLocation();
+			desc = win.getDesc();
+			priority = win.getPriority().getSelectedIndex();
+			hide = win.getHide();
+			author = LocalUser.localUser.getUser();
+			users = win.getUsersP();
+			groups = win.getGroupsP();
+			
+			if(win.getSelectedLocation() != null)
+				location = win.getSelectedLocation();
+			else
+				throw new Exception();
+					
+			//Méthode statique de MainWin, elle permet de démarrer l'ajout d'évènement dans la base
+			MainWin.callAddEvent(name, desc, priority, author, dateBegin, dateEnd, hide, location, users, groups);
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error : location is null");
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		createEventLocal();		
+		win.close();
 	}
 }
