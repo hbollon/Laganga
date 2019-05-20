@@ -249,15 +249,15 @@ public class Event extends Entity {
 			participants.addAll(attendingGroups.get(i).getMembers());
 	}
 	
-	// Est-ce que les participants passés (utilisateurs et membres des groupes) sont libres à cette plage horaire ?
-	public static List<User> getBusyParticipants(List<User> participants, Calendar from, Calendar to) throws Exception {
+	// Retourne les utilisateurs ne pouvant pas participer à l'évènement parmis les utilisateurs passés
+	public List<User> getBusyUsers(List<User> users) throws Exception {
 		List<User> busy = new ArrayList<User>(); // Liste des utilisateurs occupés (à remplir)
 		
 		// Recherche des utilisateurs occupés
-		for (int i = 0; i < participants.size(); i++) {
-			User user = (User) participants.get(i);
+		for (int i = 0; i < users.size(); i++) {
+			User user = (User) users.get(i);
 			
-			if (user.isBusy(from, to))
+			if (!user.canAttendEvent(this))
 				busy.add(user);
 		}
 		

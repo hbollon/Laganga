@@ -15,6 +15,7 @@ import java.util.Observable;
  * @author Julien Valverdé
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class Database extends Observable {
 	// Instance principale de Database
 	public static Database database = new Database();
