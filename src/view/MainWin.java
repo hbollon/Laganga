@@ -25,6 +25,7 @@ import model.entities.Location;
 import model.entities.User;
 import view.elements.AgendaGroupsEntityTree;
 import view.elements.AgendaUsersEntityTree;
+import view.elements.NotificationsBar;
 import view.tabs.GroupsTab;
 
 /**
@@ -43,7 +44,7 @@ public class MainWin extends JFrame {
 	private JPanel leftPanel = null;
 	private JPanel rightPanel = null;
 	private JPanel jPanelTree = null;
-	private JTextArea notificationBar = null;
+	private NotificationsBar notificationBar = null;
 	private JMenuBar barMenu = null;
 	private JMenu fichier = null;
 	private JMenu edition = null;
@@ -124,13 +125,11 @@ public class MainWin extends JFrame {
 		return jPanelTree;
 	}
 	
-	private JTextArea getNotificationBar()
+	private NotificationsBar getNotificationBar()
 	{
 		if(notificationBar == null)
 		{
-			notificationBar = new JTextArea();
-			notificationBar.setPreferredSize(new Dimension(200, 720));
-			notificationBar.setEditable(false);
+			notificationBar = new NotificationsBar();
 		}
 		
 		return notificationBar;
