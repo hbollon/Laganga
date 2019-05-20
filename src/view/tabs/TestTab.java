@@ -23,7 +23,7 @@ public class TestTab extends Tab {
 		setName("Onglet de test"); // Nom de l'onglet
 		
 		// Ajouter un bouton dans la barre d'en-tête
-		header.add(new JButton("Modifier"), BorderLayout.WEST);
+		headerCenter.add(new JButton("Modifier"), BorderLayout.WEST);
 		
 		// Le JPanel content représente le contenu de l'onglet
 		JPanel l1 = createLinePanel();
