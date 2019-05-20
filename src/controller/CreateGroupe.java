@@ -9,12 +9,13 @@ import model.FieldsList;
 import model.LocalUser;
 import model.entities.Group;
 import view.WinCreateGroupe;
+import view.tabs.GroupTab;
 
 public class CreateGroupe implements ActionListener {
 
-	private WinCreateGroupe ouient;
+	private GroupTab ouient;
 
-	public CreateGroupe(WinCreateGroupe ouient) {
+	public CreateGroupe(GroupTab ouient) {
 		this.ouient = ouient;
 		
 	}
