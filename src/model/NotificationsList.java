@@ -10,17 +10,12 @@ import model.entities.Entity;
 import model.entities.Notification;
 
 /**
- * Permet d'actualiser la liste des notifications
+ * Permet de récupérer la liste des notifications de l'utilisateur courant
  * 
  * @author Julien Valverdé
  */
 public class NotificationsList extends ArrayList<Notification> {
 	private static final long serialVersionUID = 3175062159922737360L;
-	
-	/*
-	 * Instance principale
-	 */
-	public static NotificationsList notificationsList = new NotificationsList();
 	
 	
 	/*
