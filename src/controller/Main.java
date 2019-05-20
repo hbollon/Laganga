@@ -9,6 +9,7 @@ import model.LocalUser;
 import model.entities.Group;
 import view.SplashWin;
 import view.WinGestionGroup;
+import view.tabs.SupprEventTab;
 import view.tabs.TestTab;
 
 public abstract class Main {
@@ -30,6 +31,7 @@ public abstract class Main {
 		try {
 			new TestTab();
 			new WinGestionGroup((Group) Group.factory.getByID(3));
+			new SupprEventTab();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
