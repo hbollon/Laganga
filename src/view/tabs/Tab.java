@@ -1,6 +1,7 @@
 package view.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,7 +23,12 @@ public abstract class Tab extends JPanel {
 	private static JTabbedPane parent = MainWin.tabbedPane; // Conteneur des onglets
 	
 	private String name = ""; // Nom de l'onglet
-	protected JPanel header = new JPanel(new BorderLayout()); // Barre du haut de l'onglet (avec le bouton pour le fermer)
+	
+	private JPanel header = new JPanel(new BorderLayout()); // Barre du haut de l'onglet (avec le bouton pour le fermer)
+	protected JPanel headerWest = new JPanel(new FlowLayout());
+	protected JPanel headerCenter = new JPanel(new FlowLayout());
+	protected JPanel headerEast = new JPanel(new FlowLayout());
+	
 	protected JPanel content = new JPanel(); // Contenu de l'onglet
 	private JScrollPane contentScrollPane = new JScrollPane(content); // Panel à défilement du contenu
 	
@@ -37,8 +43,12 @@ public abstract class Tab extends JPanel {
 		if (closable) {
 			JButton close = new JButton("Fermer");
 				close.addActionListener(new CloseTabButtonListener(this));
-				header.add(close, BorderLayout.EAST);
+				headerEast.add(close, BorderLayout.EAST);
 		}
+		
+		header.add(headerWest, BorderLayout.WEST);
+		header.add(headerCenter, BorderLayout.CENTER);
+		header.add(headerEast, BorderLayout.EAST);
 		
 		// Mise en place du contenu
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));

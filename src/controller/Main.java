@@ -27,11 +27,13 @@ public abstract class Main {
 		//LocalUser.localUser.login("simon.bernoud@gmail.com", "bernoud");
 		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
 		
+		/*
 		try {
 			new TestTab();
 			new WinGestionGroup((Group) Group.factory.getByID(3));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 }

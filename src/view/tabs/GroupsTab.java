@@ -21,7 +21,7 @@ public class GroupsTab extends Tab {
 		
 		// Header
 		JButton newGroup = new JButton("Nouveau groupe");
-			header.add(newGroup, BorderLayout.WEST);
+			headerWest.add(newGroup, BorderLayout.WEST);
 		
 		// Contenu
 		content.setLayout(new BorderLayout());
