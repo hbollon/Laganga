@@ -18,18 +18,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.mindfusion.scheduling.Calendar;
+import com.toedter.calendar.JCalendar;
 
 import controller.CreateEventListener;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Event;
 import model.entities.Group;
+import model.entities.Location;
 import model.entities.User;
+import view.elements.LocationsSelectableEntityTree;
+import view.elements.ParticipationGroupsEntityTree;
+import view.elements.ParticipationUsersEntityTree;
 
 /**
  * Un onglet de test pour servir d'exemple
@@ -41,14 +44,19 @@ public class EventTab extends Tab {
 
 	private Component textName;
 	private JTextArea textDescription;
-	private Calendar calendarBegin;
-	private Calendar calendarEnd;
+	private JCalendar calendarBegin;
+	private JCalendar calendarEnd;
 	private JSpinner hourBegin;
 	private JSpinner hourEnd;
 	private JSpinner minuteBegin;
 	private JSpinner minuteEnd;
 	private JComboBox<Object> importance;
-	private JCheckBox eventVisible;
+	private JCheckBox checkVisible;
+	private ParticipationUsersEntityTree listeMembresParticipantsTree;
+	private ParticipationGroupsEntityTree listeGroupesParticipantsTree;
+	
+	// Arbres de sélection
+	private LocationsSelectableEntityTree locationsTree = new LocationsSelectableEntityTree(1);
 	
 	public EventTab() throws Exception {
 		this(null);
@@ -93,7 +101,7 @@ public class EventTab extends Tab {
 				
 				//Date
 				JLabel labelBegin = new JLabel("Début de l'événement : ");
-				calendarBegin = new Calendar();
+				calendarBegin = new JCalendar();
 						
 				//Heure
 				JPanel timeBegin = new JPanel(new FlowLayout());
@@ -110,7 +118,7 @@ public class EventTab extends Tab {
 				JPanel dateEnd = new JPanel(new FlowLayout());
 				//Date
 				JLabel labelEnd = new JLabel("Fin de l'événement : ");
-				calendarEnd = new Calendar();
+				calendarEnd = new JCalendar();
 				
 				//Heure
 				JPanel timeEnd = new JPanel(new FlowLayout());
@@ -138,7 +146,7 @@ public class EventTab extends Tab {
 			
 			//Date
 			JLabel labelBegin = new JLabel("Début de l'événement : ");
-			calendarBegin = new Calendar();
+			calendarBegin = new JCalendar();
 					
 			//Heure
 			JPanel timeBegin = new JPanel(new FlowLayout());
@@ -155,7 +163,7 @@ public class EventTab extends Tab {
 			JPanel dateEnd = new JPanel(new FlowLayout());
 			//Date
 			JLabel labelEnd = new JLabel("Fin de l'événement : ");
-			calendarEnd = new Calendar();
+			calendarEnd = new JCalendar();
 			
 			//Heure
 			JPanel timeEnd = new JPanel(new FlowLayout());
@@ -219,28 +227,13 @@ public class EventTab extends Tab {
 		/** 
 		 * Liste des membres qui peut-etre rajouter dans un événement 
 		 * **/
-		DefaultMutableTreeNode allUsersTree = new DefaultMutableTreeNode("Membres");
 		List<Entity> allUsers = User.factory.getAll();
-		for(int i = 0; i < allUsers.size(); i++) {
-			User member = (User) allUsers.get(i);
-			allUsersTree.add(new DefaultMutableTreeNode(member.getFirstName() + " " + member.getLastName()));
-		}
-		JTree listeMembres = new JTree(allUsersTree);
-		JScrollPane liste = new JScrollPane(listeMembres); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
+		listeMembresParticipantsTree = new ParticipationUsersEntityTree();
+		JScrollPane liste = new JScrollPane(listeMembresParticipantsTree); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
 		liste.setPreferredSize(new Dimension(200,200));
 		
 		participants.add(panMembres);
 		listes.add(liste);
-		/**
-		 * deuxieme liste
-		 */
-		DefaultMutableTreeNode allparticipantsTree = new DefaultMutableTreeNode("Membres participants");
-		allparticipantsTree.add(new DefaultMutableTreeNode("Rachid Ben mha dit 'La salope' "));
-		JTree listeMembresParticipantsTree = new JTree(allparticipantsTree);
-		JScrollPane listeMembresParticipants = new JScrollPane(listeMembresParticipantsTree);
-		listeMembresParticipants.setPreferredSize(new Dimension(200,200));
-		
-		listes.add(listeMembresParticipants);
 		panMembres.add(listes, BorderLayout.CENTER);
 		
 		
@@ -262,42 +255,33 @@ public class EventTab extends Tab {
 		searchGroup.add(imageGroupe); //boutton qui lance la recherche
 		listesGroupes.add(searchGroup, BorderLayout.NORTH);
 		
-		DefaultMutableTreeNode allGroupsTree = new DefaultMutableTreeNode("Groupes");
-		List<Entity> allGroups = Group.factory.getAll();
-		for(int i = 0; i < allGroups.size(); i++) {
-			Group group = (Group) allGroups.get(i);
-			allGroupsTree.add(new DefaultMutableTreeNode(group.getName()));
-		}
-		JTree listeGroupes = new JTree(allGroupsTree);
-		JScrollPane listeG = new JScrollPane(listeGroupes); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
+		listeGroupesParticipantsTree = new ParticipationGroupsEntityTree();		
+		JScrollPane listeG = new JScrollPane(listeGroupesParticipantsTree); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
 		listeG.setPreferredSize(new Dimension(200,200));
 		listeDesGroupes.add(listeG);
-		
-		//Deuxieme listes groupe
-		DefaultMutableTreeNode allGroupesParticipantsTree = new DefaultMutableTreeNode("Membres participants");
-		allGroupesParticipantsTree.add(new DefaultMutableTreeNode("Rachid Ben mha dit 'La salope' "));
-		JTree listeGroupesParticipantsTree = new JTree(allGroupesParticipantsTree);
-		JScrollPane listeGroupesParticipants = new JScrollPane(listeGroupesParticipantsTree);
-		listeGroupesParticipants.setPreferredSize(new Dimension(200,200));
-		listeDesGroupes.add(listeGroupesParticipants);
 		
 		listesGroupes.add(listeDesGroupes, BorderLayout.CENTER);
 		groupesParticipants.add(listesGroupes);
 		
-		
+		/*
+		 * Lieu de l'évènement
+		 */
+		JPanel locationSelectionPanel = new JPanel(new FlowLayout());
+			locationSelectionPanel.add(new JLabel("Lieu (un seul choix) :"));
+			locationSelectionPanel.add(locationsTree);
 		
 		//panel degré d'importance de l'évenement
 		JPanel degreeImportance = new JPanel(new FlowLayout());
 		JLabel labelImportance = new JLabel("Style d'événement : ");
 		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV proffessionel déplaçable", "RDV personnel non déplaçable", "RDV proffessionnel non déplaçable", "Autre"};
-		JComboBox<Object> importance = new JComboBox<Object>(elements);
+		importance = new JComboBox<Object>(elements);
 		degreeImportance.add(labelImportance);
 		degreeImportance.add(importance);
 		
 		//CheckBox pour si les details de l'événement est visible ou non
 		JPanel eventVisible = new JPanel(new FlowLayout());
 		JLabel labelVisible = new JLabel("Descrition de l'événement caché : ");
-		JCheckBox checkVisible = new JCheckBox();
+		checkVisible = new JCheckBox();
 		eventVisible.add(labelVisible);
 		eventVisible.add(checkVisible);
 		
@@ -313,6 +297,7 @@ public class EventTab extends Tab {
 	   
 		content.add(participants);
 		content.add(groupesParticipants);
+		content.add(locationSelectionPanel);
 		content.add(degreeImportance);
 		content.add(eventVisible);
 	    content.add(buttonPane);
@@ -330,12 +315,12 @@ public class EventTab extends Tab {
 		return textDescription.getText();
 	}
 	
-	public Calendar getDateBegin()
+	public JCalendar getDateBegin()
 	{
 		return calendarBegin;
 	}
 	
-	public Calendar getDateEnd()
+	public JCalendar getDateEnd()
 	{
 		return calendarEnd;
 	}
@@ -365,9 +350,25 @@ public class EventTab extends Tab {
 		return importance;
 	}
 	
-	public JCheckBox getHide()
+	public boolean getHide()
 	{
-		return eventVisible;
+		return checkVisible.isSelected();
 	}
 	
+	public List<Entity> getUsersP()
+	{
+		return listeMembresParticipantsTree.getSelectedList();
+	}
+	
+	public List<Entity> getGroupsP()
+	{
+		return listeGroupesParticipantsTree.getSelectedList();
+	}
+	
+	public Location getSelectedLocation() {
+		if (locationsTree.getSelectedList().size() == 1)
+			return (Location) locationsTree.getSelectedList().get(0);
+		else
+			return null;
+	}
 }

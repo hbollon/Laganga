@@ -19,9 +19,16 @@ public class SelectableEntityTree extends EntityTree {
 	private static final long serialVersionUID = -441239061979776560L;
 	
 	/*
+	 * Constantes
+	 */
+	public static final int NO_MAX = -1; // Aucune limite d'éléments sélectionnables
+	
+	
+	/*
 	 * Attributs
 	 */
 	private String selectedTreeName; // Nom du noeud père de l'arbre des éléments séléctionnés
+	private int maxSelectableItems; // Nombre maximum d'éléments sélectionnables (-1 pour aucun max)
 	
 	private JTree selectedTree = new JTree(); // Arbre des entités sélectionnées
 	private List<Entity> selectedList = new ArrayList<Entity>(); // Liste des éléments sélectionnés
@@ -32,6 +39,9 @@ public class SelectableEntityTree extends EntityTree {
 	 */
 	public String getSelectedTreeName() {
 		return selectedTreeName;
+	}
+	public int maxSelectableItems() {
+		return maxSelectableItems;
 	}
 	public JTree getSelectedTree() {
 		return selectedTree;
@@ -44,9 +54,10 @@ public class SelectableEntityTree extends EntityTree {
 	/*
 	 * Constructeur interne
 	 */
-	protected SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedTreeName, boolean callInternalConstructor) {
+	protected SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedTreeName, int maxSelectableItems, boolean callInternalConstructor) {
 		super(treeName, baseList, isFilterable, true);
 		this.selectedTreeName = selectedTreeName;
+		this.maxSelectableItems = maxSelectableItems;
 		
 		selectedTree.addMouseListener(new EntityTreeMouseListener(this, selectedTree, selectedList));
 		
@@ -59,11 +70,14 @@ public class SelectableEntityTree extends EntityTree {
 	/*
 	 * Constructeurs publics
 	 */
-	public SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName) {
-		this(treeName, baseList, isFilterable, selectedEntitiesTreeName, true);
+	public SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName, int maxSelectableItems) {
+		this(treeName, baseList, isFilterable, selectedEntitiesTreeName, maxSelectableItems, true);
 		
 		updateView();
 		updateModel();
+	}
+	public SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedEntitiesTreeName) {
+		this(treeName, baseList, isFilterable, selectedEntitiesTreeName, -1);
 	}
 	public SelectableEntityTree(String treeName, List<Entity> baseList, String selectedEntitiesTreeName) {
 		this(treeName, baseList, false, selectedEntitiesTreeName);
@@ -119,12 +133,22 @@ public class SelectableEntityTree extends EntityTree {
 	public void updateModel() {}
 	
 	public void onTreeClicked(JTree jTree, List<Entity> entities, Entity entity) {
-		if (jTree == getTree()) // Arbre du haut cliqué
-			setEntitySelected(entity);
-		else if (jTree == selectedTree) // Arbre du bas cliqué
-			setEntityDeselected(entity);
+		boolean updated = false; // Définit si le modèle et la vue doivent être mises à jour suite à l'action
 		
-		updateModel();
-		updateView();
+		if (jTree == getTree()) { // Arbre du haut cliqué
+			if (maxSelectableItems == NO_MAX || selectedList.size() < maxSelectableItems) {
+				setEntitySelected(entity);
+				updated = true;
+			}
+		}
+		else if (jTree == selectedTree) { // Arbre du bas cliqué
+			setEntityDeselected(entity);
+			updated = true;
+		}
+		
+		if (updated) {
+			updateModel();
+			updateView();
+		}
 	}
 }
