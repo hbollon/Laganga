@@ -60,7 +60,7 @@ public class GroupTab extends Tab {
 		
 		// Nom de l'onglet
 		if (group == null)
-			setName("Nouvel évènement");
+			setName("Nouveau groupe");
 		else
 			setName(group.getName());
 		
