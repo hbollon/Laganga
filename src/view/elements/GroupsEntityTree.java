@@ -29,6 +29,7 @@ public class GroupsEntityTree extends EntityTree {
 	 * Évènements
 	 */
 	public void onTreeDoubleClicked(JTree jTree, List<Entity> entities, Entity entity) {
-		new WinGestionGroup((Group) entity);
+		WinGestionGroup groupTab = new WinGestionGroup((Group) entity);
+		groupTab.switchTo();
 	}
 }
