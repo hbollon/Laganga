@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,7 +18,9 @@ import javax.swing.JTextArea;
 
 import controller.OpenCreatEvent;
 import controller.OpenOngletSupprGroup;
-
+import model.entities.Entity;
+import model.entities.Location;
+import model.entities.User;
 import view.elements.AgendaGroupsEntityTree;
 import view.elements.AgendaUsersEntityTree;
 
@@ -162,9 +165,9 @@ public class MainWin extends JFrame {
 		return barMenu;
 	}
 	
-	public static void callAddEvent(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
+	public static void callAddEvent(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide, Location location, List<Entity> users, List<Entity> groups)
 	{
-		tabbedPane.getCalendarP().addEventBD(name, desc, priority, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide);
+		tabbedPane.getCalendarP().addEventBD(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, groups, users, location);
 	}
 
 }

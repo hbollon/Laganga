@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Dimension2D;
+import java.sql.SQLException;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -31,6 +32,9 @@ import model.Agenda;
 import model.EventCalendar;
 import model.entities.Entity;
 import model.entities.Event;
+import model.entities.Location;
+import model.entities.User;
+import model.exceptions.ParticipantsBusyException;
 
 /**
  * Classe Mois héritant de JPanel permettant d'afficher une instance de Calendar contenue dans un JPanel
@@ -116,14 +120,22 @@ public class Mois extends JPanel implements Observer {
 		}
 	}
 	
-	public void addEventBD(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin,
-			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
+	public void addEventBD(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin,
+			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide, List<Entity> groups, List<Entity> users, Location test)
 	{
-		//Event.insert(name, desc, priority, dateBegin, dateEnd, null, null, null, null);
+		try {
+			Event.insert(name, desc, priority, author, dateBegin, dateEnd, test, hide, users, groups);
+		} catch (ParticipantsBusyException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		try {
 			Agenda.agenda.refresh();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
