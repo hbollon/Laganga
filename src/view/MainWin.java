@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import controller.OpenCreatEvent;
+import controller.OpenCreatGroup;
+import controller.OpenDeleteEvent;
 import controller.OpenOngletSupprGroup;
 
 import view.elements.AgendaGroupsEntityTree;
@@ -134,7 +136,6 @@ public class MainWin extends JFrame {
 		deleteEvent = new JMenuItem("Supprimer un évènement");
 		createGroupe = new JMenuItem("Créer un nouveau groupe");
 		delateGroupe = new JMenuItem("Supprimer un groupe");
-		editGroupe = new JMenuItem("Modifier un groupe existant");
 		settings = new JMenuItem("Options");
 		aide = new JMenuItem("Aide");
 		credit = new JMenuItem("A propos");
@@ -144,7 +145,6 @@ public class MainWin extends JFrame {
 		
 		edition.add(createGroupe);
 		edition.add(delateGroupe);
-		edition.add(editGroupe);
 		
 		option.add(settings);
 		
@@ -157,6 +157,8 @@ public class MainWin extends JFrame {
 		barMenu.add(help);
 		
 		createEvent.addActionListener(new OpenCreatEvent());
+		deleteEvent.addActionListener(new OpenDeleteEvent());
+		createGroupe.addActionListener(new OpenCreatGroup());
 		delateGroupe.addActionListener(new OpenOngletSupprGroup());
 		
 		return barMenu;
