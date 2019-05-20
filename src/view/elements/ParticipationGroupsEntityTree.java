@@ -9,7 +9,7 @@ public class ParticipationGroupsEntityTree extends SelectableEntityTree {
 	private static final long serialVersionUID = 7751283723102681638L;
 
 	protected ParticipationGroupsEntityTree(boolean callInternalConstructor) throws Exception {
-		super("Groupes", Group.factory.getAll(), true, "Groupes participant", true);
+		super("Groupes", Group.factory.getAll(), true, "Groupes participant");
 		setEntitySelected(LocalUser.localUser.getUser());
 	}
 	

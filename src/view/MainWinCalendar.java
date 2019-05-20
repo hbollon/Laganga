@@ -15,8 +15,8 @@ public class MainWinCalendar extends JTabbedPane {
 		semaine = new Semaine();
 		mois = new Mois();
 		
-		this.addTab("Semaine", semaine);
 		this.addTab("Mois", mois);
+		this.addTab("Semaine", semaine);
 	}
 	
 	public Mois getMoisP()

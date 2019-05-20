@@ -113,11 +113,10 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		}
 	}
 	
-	public void addEventBD(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin,
-			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide, List<Entity> groups, List<Entity> users, Location test)
+	public void addEventBD(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, boolean hide, List<Entity> groups, List<Entity> users, Location location)
 	{
 		try {
-			Event.insert(name, desc, priority, author, dateBegin, dateEnd, test, hide, users, groups);
+			Event.insert(name, desc, priority, author, dateBegin, dateEnd, location, hide, users, groups);
 		} catch (ParticipantsBusyException e1) {
 			e1.printStackTrace();
 		} catch (SQLException e1) {
@@ -133,8 +132,7 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		}
 	}
 	
-	public void addEventCalendar(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin,
-			int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide)
+	public void addEventCalendar(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, boolean hide)
 	{
 		if(this != null)
 		{
@@ -142,8 +140,8 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 			
 	        newEvent.setHeaderText(name);
 	        newEvent.setDescriptionText(desc);
-	        newEvent.setStartTime(new DateTime(dateBegin.get(java.util.Calendar.YEAR), dateBegin.get(java.util.Calendar.MONTH), dateBegin.get(java.util.Calendar.DAY_OF_MONTH), timeHourBegin, timeMinuteBegin, 00));
-	        newEvent.setEndTime(new DateTime(dateEnd.get(java.util.Calendar.YEAR), dateEnd.get(java.util.Calendar.MONTH), dateEnd.get(java.util.Calendar.DAY_OF_MONTH), timeHourEnd, timeMinuteEnd, 00));
+	        newEvent.setStartTime(new DateTime(dateBegin.get(java.util.Calendar.YEAR), dateBegin.get(java.util.Calendar.MONTH), dateBegin.get(java.util.Calendar.DAY_OF_MONTH), dateBegin.get(java.util.Calendar.HOUR_OF_DAY), dateBegin.get(java.util.Calendar.MINUTE), 00));
+	        newEvent.setEndTime(new DateTime(dateEnd.get(java.util.Calendar.YEAR), dateEnd.get(java.util.Calendar.MONTH), dateEnd.get(java.util.Calendar.DAY_OF_MONTH), dateEnd.get(java.util.Calendar.HOUR_OF_DAY), dateEnd.get(java.util.Calendar.MINUTE), 00));
 	        
 	        this.getSchedule().getItems().add(newEvent);
 		}
@@ -153,15 +151,16 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 	@Override
 	public void update(Observable o, Object arg) {
 		List<Entity> listeEvent= Agenda.agenda.getEvents();
+		this.getSchedule().getItems().clear();
 		
 		for(int i = 0; i < listeEvent.size(); i++)
 		{
 			Event ev = (Event)listeEvent.get(i);
 			
-			GregorianCalendar dateBegin = new GregorianCalendar(ev.getBegin().get(java.util.Calendar.YEAR), ev.getBegin().get(java.util.Calendar.MONTH) + 1, ev.getBegin().get(java.util.Calendar.DAY_OF_MONTH));
-			GregorianCalendar dateEnd = new GregorianCalendar(ev.getEnd().get(java.util.Calendar.YEAR), ev.getEnd().get(java.util.Calendar.MONTH) + 1, ev.getEnd().get(java.util.Calendar.DAY_OF_MONTH));
+			GregorianCalendar dateBegin = new GregorianCalendar(ev.getBegin().get(java.util.Calendar.YEAR), ev.getBegin().get(java.util.Calendar.MONTH) + 1, ev.getBegin().get(java.util.Calendar.DAY_OF_MONTH), ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE));
+			GregorianCalendar dateEnd = new GregorianCalendar(ev.getEnd().get(java.util.Calendar.YEAR), ev.getEnd().get(java.util.Calendar.MONTH) + 1, ev.getEnd().get(java.util.Calendar.DAY_OF_MONTH), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE));
 
-			addEventCalendar(ev.getName(), ev.getType(), ev.getPriority(),  dateBegin, dateEnd, ev.getBegin().get(java.util.Calendar.HOUR_OF_DAY), ev.getBegin().get(java.util.Calendar.MINUTE), ev.getEnd().get(java.util.Calendar.HOUR_OF_DAY), ev.getEnd().get(java.util.Calendar.MINUTE), ev.getHidden());
+			addEventCalendar(ev.getName(), ev.getType(), ev.getPriority(),  dateBegin, dateEnd, ev.getHidden());
 		}
 	}
 }

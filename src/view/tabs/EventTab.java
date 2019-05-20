@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import com.mindfusion.scheduling.Calendar;
+import com.toedter.calendar.JCalendar;
 
 import controller.CreateEventListener;
 import model.LocalUser;
@@ -43,8 +44,8 @@ public class EventTab extends Tab {
 
 	private Component textName;
 	private JTextArea textDescription;
-	private Calendar calendarBegin;
-	private Calendar calendarEnd;
+	private JCalendar calendarBegin;
+	private JCalendar calendarEnd;
 	private JSpinner hourBegin;
 	private JSpinner hourEnd;
 	private JSpinner minuteBegin;
@@ -100,7 +101,7 @@ public class EventTab extends Tab {
 				
 				//Date
 				JLabel labelBegin = new JLabel("Début de l'événement : ");
-				calendarBegin = new Calendar();
+				calendarBegin = new JCalendar();
 						
 				//Heure
 				JPanel timeBegin = new JPanel(new FlowLayout());
@@ -117,7 +118,7 @@ public class EventTab extends Tab {
 				JPanel dateEnd = new JPanel(new FlowLayout());
 				//Date
 				JLabel labelEnd = new JLabel("Fin de l'événement : ");
-				calendarEnd = new Calendar();
+				calendarEnd = new JCalendar();
 				
 				//Heure
 				JPanel timeEnd = new JPanel(new FlowLayout());
@@ -145,7 +146,7 @@ public class EventTab extends Tab {
 			
 			//Date
 			JLabel labelBegin = new JLabel("Début de l'événement : ");
-			calendarBegin = new Calendar();
+			calendarBegin = new JCalendar();
 					
 			//Heure
 			JPanel timeBegin = new JPanel(new FlowLayout());
@@ -162,7 +163,7 @@ public class EventTab extends Tab {
 			JPanel dateEnd = new JPanel(new FlowLayout());
 			//Date
 			JLabel labelEnd = new JLabel("Fin de l'événement : ");
-			calendarEnd = new Calendar();
+			calendarEnd = new JCalendar();
 			
 			//Heure
 			JPanel timeEnd = new JPanel(new FlowLayout());
@@ -314,12 +315,12 @@ public class EventTab extends Tab {
 		return textDescription.getText();
 	}
 	
-	public Calendar getDateBegin()
+	public JCalendar getDateBegin()
 	{
 		return calendarBegin;
 	}
 	
-	public Calendar getDateEnd()
+	public JCalendar getDateEnd()
 	{
 		return calendarEnd;
 	}
@@ -363,8 +364,6 @@ public class EventTab extends Tab {
 	{
 		return listeGroupesParticipantsTree.getSelectedList();
 	}
-	
-
 	
 	public Location getSelectedLocation() {
 		if (locationsTree.getSelectedList().size() == 1)

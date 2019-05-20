@@ -175,10 +175,10 @@ public class MainWin extends JFrame {
 		return barMenu;
 	}
 	
-	public static void callAddEvent(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, int timeHourBegin, int timeMinuteBegin, int timeHourEnd, int timeMinuteEnd, boolean hide, Location location, List<Entity> users, List<Entity> groups)
+	public static void callAddEvent(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, boolean hide, Location location, List<Entity> users, List<Entity> groups)
 	{
-		tabbedPane.getMoisP().getCalendar().addEventBD(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, groups, users, location);
-		tabbedPane.getSemaineP().getCalendar().addEventBD(name, desc, priority, author, dateBegin, dateEnd, timeHourBegin, timeMinuteBegin, timeHourEnd, timeMinuteEnd, hide, groups, users, location);
+		tabbedPane.getMoisP().getCalendar().addEventBD(name, desc, priority, author, dateBegin, dateEnd, hide, groups, users, location);
+		tabbedPane.getSemaineP().getCalendar().addEventCalendar(name, desc, priority, dateBegin, dateEnd, hide);
 	}
 
 }
