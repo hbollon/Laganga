@@ -2,13 +2,12 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,18 +21,17 @@ import controller.SupprimerMembreListener;
 import model.LocalUser;
 import model.entities.Group;
 import model.entities.User;
+import view.tabs.Tab;
 
-public class WinGestionGroup extends JFrame implements Observer {
-
+@SuppressWarnings("deprecation")
+public class WinGestionGroup extends Tab implements Observer {
 	private static final long serialVersionUID = -942892911146765943L;
-
+	
 	public WinGestionGroup(Group group) {
 		super();
 		
-		this.setTitle("Groupe : '" + group.getName() + " '");
-	    this.setSize(800, 250);
-		this.setBackground(Color.DARK_GRAY);
-		this.setLayout(new BorderLayout());
+		setName("Groupe : '" + group.getName() + " '");
+		content.setLayout(new BorderLayout());
 		
 		boolean estProprietaire = LocalUser.localUser.getUser() == group.getOwner();
 			
@@ -94,7 +92,7 @@ public class WinGestionGroup extends JFrame implements Observer {
 			gestGroupe.add(supprimerGroupe);
 			gestGroupe.add(supprimer);
 			
-			this.add(gestGroupe, BorderLayout.CENTER);
+			content.add(gestGroupe, BorderLayout.CENTER);
 			
 		}else {
 			
@@ -120,14 +118,14 @@ public class WinGestionGroup extends JFrame implements Observer {
 			JLabel listeDesMembres = new JLabel("Liste des membres : ");
 			JTree arbre = new JTree(top);
 			JScrollPane liste = new JScrollPane(arbre);
+			liste.setPreferredSize(new Dimension(200,200));
 						
 			gestGroupe.add(listeDesMembres);
 			gestGroupe.add(liste);
 			
-			this.add(gestGroupe, BorderLayout.CENTER);
+			content.add(gestGroupe, BorderLayout.CENTER);
 		}
-		
-		this.setVisible(true);
+		open();
 	}
 
 	@Override
