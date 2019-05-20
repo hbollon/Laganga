@@ -15,7 +15,6 @@ import javax.swing.border.EmptyBorder;
 
 import controller.buttons.ClearNotificationButtonListener;
 import model.NotificationsManager;
-import model.entities.Entity;
 import model.entities.Notification;
 
 /**
@@ -106,6 +105,7 @@ public class NotificationsBar extends JPanel implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		notificationsPanel.removeAll();
+		notificationsPanel.updateUI();
 		
 		List<Notification> list = notificationsManager.getNotifications();
 		
