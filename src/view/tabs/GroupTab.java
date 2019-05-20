@@ -19,16 +19,13 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.mindfusion.scheduling.Calendar;
 
-import controller.CreateEventListener;
 import controller.CreateGroupe;
 import model.LocalUser;
 import model.entities.Entity;
-import model.entities.Event;
 import model.entities.Group;
 import model.entities.User;
 

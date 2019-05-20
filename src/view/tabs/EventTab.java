@@ -20,14 +20,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-import com.mindfusion.scheduling.Calendar;
 import com.toedter.calendar.JCalendar;
 
 import controller.CreateEventListener;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Event;
-import model.entities.Group;
 import model.entities.Location;
 import model.entities.User;
 import view.elements.LocationsSelectableEntityTree;
@@ -186,14 +184,14 @@ public class EventTab extends Tab {
 		if(event != null)
 		{
 			if (event.getCreator() == LocalUser.localUser.getUser()) {
-				JLabel labelDescription = new JLabel("Description de l'énévement : ");
+				JLabel labelDescription = new JLabel("Description de l'événement : ");
 				textDescription = new JTextArea(event.getType());
 				textDescription.setPreferredSize(new Dimension(400, 40));
 				description.add(labelDescription);
 				description.add(textDescription);
 			}
 			else {
-				JLabel labelDescription = new JLabel("Description de l'énévement : \n" + event.getType());
+				JLabel labelDescription = new JLabel("Description de l'événement : \n" + event.getType());
 				description.add(labelDescription);
 			}
 		}
@@ -273,14 +271,14 @@ public class EventTab extends Tab {
 		//panel degré d'importance de l'évenement
 		JPanel degreeImportance = new JPanel(new FlowLayout());
 		JLabel labelImportance = new JLabel("Style d'événement : ");
-		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV proffessionel déplaçable", "RDV personnel non déplaçable", "RDV proffessionnel non déplaçable", "Autre"};
+		Object[] elements = new Object[] {"", "RDV personnel déplaçable", "RDV professionnel déplaçable", "RDV personnel non déplaçable", "RDV professionnel non déplaçable", "Autre"};
 		importance = new JComboBox<Object>(elements);
 		degreeImportance.add(labelImportance);
 		degreeImportance.add(importance);
 		
 		//CheckBox pour si les details de l'événement est visible ou non
 		JPanel eventVisible = new JPanel(new FlowLayout());
-		JLabel labelVisible = new JLabel("Descrition de l'événement caché : ");
+		JLabel labelVisible = new JLabel("Description de l'événement caché : ");
 		checkVisible = new JCheckBox();
 		eventVisible.add(labelVisible);
 		eventVisible.add(checkVisible);
@@ -292,6 +290,7 @@ public class EventTab extends Tab {
 		JButton annuleEvent = new JButton("Annuler");
 		JButton ajoutEvent = new JButton("Ajouter l'événement");
 		ajoutEvent.addActionListener(new CreateEventListener(this));
+		annuleEvent.addActionListener(e -> this.close());
 		buttonPane.add(annuleEvent);
 		buttonPane.add(ajoutEvent);
 	   

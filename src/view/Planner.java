@@ -47,6 +47,7 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 	public Planner(CalendarView test) {
 		super();
 		
+		//Début initialisation du Calendar
 		this.beginInit();
 		this.setCurrentView(test);
 		this.getWeekRangeSettings().setHeaderStyle(EnumSet.of(WeekRangeHeaderStyle.Title));
@@ -55,6 +56,7 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		this.setCustomDraw(EnumSet.of(CustomDrawElements.MonthRangeHeader));
 		this.endInit();
 		
+		//Ajout listeners
 		this.addCalendarListener(new CalendarAdapter(){
 			public void draw(CalendarDrawEvent e) {
 				calendarDraw(e);
@@ -68,6 +70,7 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 
 	}
 	
+	//Listener pour ouvrir une fenetre quand on clique su un évènement
 	protected void calendarItemClicked(ItemMouseEvent e)
 	{
 		if (e.getButton() == MouseEvent.BUTTON1 && e.getClicks() > 1)
@@ -78,6 +81,7 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		}
 	}
 
+	//Méthode qui redéssine le Calendar
 	protected void calendarDraw(CalendarDrawEvent e)
 	{
 		if (e.getElement() == CustomDrawElements.TimetableItem)
@@ -113,6 +117,9 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		}
 	}
 	
+	/* Méthode d'ajout d'évènement dans la base de donnée
+	 * Elle appelle insert de la Classe event et lui passe en paramètre tout le nécéssaire pour créer une entrée dans la base
+	 */
 	public void addEventBD(String name, String desc, int priority, User author, GregorianCalendar dateBegin, GregorianCalendar dateEnd, boolean hide, List<Entity> groups, List<Entity> users, Location location)
 	{
 		try {
@@ -131,7 +138,9 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 			e.printStackTrace();
 		}
 	}
-	
+	/*
+	 *  Méthode qui ajoute un événement localement dans le Calendar (permet d'afficher les événements)
+	 */
 	public void addEventCalendar(String name, String desc, int priority, GregorianCalendar dateBegin, GregorianCalendar dateEnd, boolean hide)
 	{
 		if(this != null)
@@ -147,7 +156,10 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		}
 	}
 
-	
+	/*
+	 * Méthode d'Observer
+	 * Permet de mettre à jour le Calendar quand il est notifié
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		List<Entity> listeEvent= Agenda.agenda.getEvents();

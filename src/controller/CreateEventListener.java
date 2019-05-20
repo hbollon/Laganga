@@ -14,7 +14,8 @@ import view.MainWin;
 import view.tabs.EventTab;
 
 /**
- * Listener créant un Event dans la base de donnée et localement
+ * Listener récupérant les attributs nécéssaires à la creation d'un event
+ * Il appel ensuite la méthode statique "MainWin.callAddEvent()"
  * 
  * @author hbollon
  *
@@ -43,6 +44,7 @@ public class CreateEventListener implements ActionListener {
 	{
 		try
 		{
+			//Récupération des attributs depuis l'instance de EventTab
 			name = win.getName();
 			dateBegin = new GregorianCalendar(win.getDateBegin().getCalendar().get(Calendar.YEAR), win.getDateBegin().getCalendar().get(Calendar.MONTH) - 1, win.getDateBegin().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourBegin(), win.getMinuteBegin());
 			dateEnd = new GregorianCalendar(win.getDateEnd().getCalendar().get(Calendar.YEAR), win.getDateEnd().getCalendar().get(Calendar.MONTH) - 1, win.getDateEnd().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourEnd(), win.getMinuteEnd());
@@ -59,6 +61,7 @@ public class CreateEventListener implements ActionListener {
 			else
 				throw new Exception();
 					
+			//Méthode statique de MainWin, elle permet de démarrer l'ajout d'évènement dans la base
 			MainWin.callAddEvent(name, desc, priority, author, dateBegin, dateEnd, hide, location, users, groups);
 		}
 		catch (Exception e)
@@ -70,5 +73,6 @@ public class CreateEventListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		createEventLocal();		
+		win.close();
 	}
 }

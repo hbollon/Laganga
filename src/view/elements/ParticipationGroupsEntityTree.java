@@ -2,7 +2,13 @@ package view.elements;
 
 import model.LocalUser;
 import model.entities.Group;
-import model.entities.User;
+
+/**
+ * Arbre permettant de séléctionner les groupes participant à l'évènement en cours de création
+ * 
+ * @author hbollon
+ *
+ */
 
 public class ParticipationGroupsEntityTree extends SelectableEntityTree {
 	
