@@ -16,7 +16,7 @@ public class AgendaUsersEntityTree extends SelectableEntityTree {
 	 * Constructeur interne
 	 */
 	protected AgendaUsersEntityTree(boolean callInternalConstructor) throws Exception {
-		super("Tous les utilisateurs", User.factory.getAll(), true, "Utilisateurs actifs", true);
+		super("Tous les utilisateurs", User.factory.getAll(), true, "Utilisateurs actifs", SelectableEntityTree.NO_MAX, true);
 		setEntitySelected(LocalUser.localUser.getUser());
 	}
 	

@@ -232,7 +232,7 @@ public class Event extends Entity {
 			attendingUsers.add(((EventUserParticipation) userParticipations.get(i)).getUser());
 	}
 	
-	// Rafraîchir la liste des groupes participnts
+	// Rafraîchir la liste des groupes participants
 	public void refreshAttendingGroupsList() {
 		attendingGroups.clear();
 		
@@ -240,7 +240,7 @@ public class Event extends Entity {
 			attendingGroups.add(((EventGroupParticipation) groupParticipations.get(i)).getGroup());
 	}
 	
-	// Rafraîchir la liste de tous les utilisateurs participant (individuellement + membres des groupes participants)
+	// Rafraîchir la liste de tous les utilisateurs participant à l'évènement (individuellement + membres des groupes participants)
 	public void refreshParticipantsList() {
 		participants.clear();
 		participants.addAll(attendingUsers);
@@ -249,36 +249,18 @@ public class Event extends Entity {
 			participants.addAll(attendingGroups.get(i).getMembers());
 	}
 	
-	/*
 	// Est-ce que les participants passés (utilisateurs et membres des groupes) sont libres à cette plage horaire ?
-	public static List<Entity> getBusyParticipants(List<Entity> users, List<Entity> groups, Calendar from, Calendar to) throws Exception {
-		List<Entity> participants = new ArrayList<Entity>(); // Liste de tous les participants (individuels + membres des groupes)
-		List<Entity> busyParticipants = new ArrayList<Entity>(); // Liste des utilisateurs occupés (à remplir)
-		
-		participants.addAll(users); // Ajout des participants individuels
-		
-		// Ajout des participants membres des groupes
-		for (int i = 0; i < groups.size(); i++) {
-			List<Entity> members = ((Group) groups.get(i)).getMembers();
-			
-			// Parcourir les membres du groupe
-			for (int j = 0; j < members.size(); j++) {
-				User user = (User) members.get(i);
-				
-				if (!participants.contains(user))
-					participants.add(user);
-			}
-		}
+	public static List<User> getBusyParticipants(List<User> participants, Calendar from, Calendar to) throws Exception {
+		List<User> busy = new ArrayList<User>(); // Liste des utilisateurs occupés (à remplir)
 		
 		// Recherche des utilisateurs occupés
 		for (int i = 0; i < participants.size(); i++) {
 			User user = (User) participants.get(i);
 			
 			if (user.isBusy(from, to))
-				busyParticipants.add(user);
+				busy.add(user);
 		}
 		
-		return busyParticipants;
+		return busy;
 	}
-	*/
 }

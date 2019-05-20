@@ -28,6 +28,7 @@ public class CreateEventListener implements ActionListener {
 	private int timeMinuteBegin;
 	private int timeHourEnd;
 	private int timeMinuteEnd;
+	private Location location;
 	private String desc;
 	private boolean hide;
 	private List<Entity> users;
@@ -50,6 +51,7 @@ public class CreateEventListener implements ActionListener {
 		timeMinuteBegin = win.getMinuteBegin();
 		timeHourEnd = win.getHourEnd();
 		timeMinuteEnd = win.getMinuteEnd();
+		location = win.getSelectedLocation();
 		desc = win.getDesc();
 		priority = win.getPriority().getSelectedIndex();
 		hide = win.getHide();

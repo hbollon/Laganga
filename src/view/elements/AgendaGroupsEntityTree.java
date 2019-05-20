@@ -15,7 +15,7 @@ public class AgendaGroupsEntityTree extends SelectableEntityTree {
 	 * Constructeur interne
 	 */
 	protected AgendaGroupsEntityTree(boolean callInternalConstructor) throws Exception {
-		super("Tous les groupes", Group.factory.getAll(), true, "Groupes actifs", true);
+		super("Tous les groupes", Group.factory.getAll(), true, "Groupes actifs", SelectableEntityTree.NO_MAX, true);
 	}
 	
 	
