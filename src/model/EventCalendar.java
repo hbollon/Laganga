@@ -5,6 +5,7 @@ import com.mindfusion.scheduling.model.Appointment;
 import com.mindfusion.scheduling.model.Contact;
 import com.mindfusion.scheduling.model.Resource;
 
+import model.entities.Event;
 import model.entities.Group;
 
 /**
@@ -20,14 +21,22 @@ public class EventCalendar extends Appointment {
 	private boolean _kept;
 	private String _customField;
 	private Group groupe;
+	private Event event;
 	
-	public EventCalendar()
+	public EventCalendar(Event ev)
 	{
 		super();
+		this.event = ev;
 		_kept = true;
 		_customField = DateTime.now().toString("HH:mm a");
 	}
 	
+	public EventCalendar() {
+		super();
+		_kept = true;
+		_customField = DateTime.now().toString("HH:mm a");
+	}
+
 	public boolean getKept()
 	{
 		return _kept;
@@ -49,7 +58,7 @@ public class EventCalendar extends Appointment {
 	 */
 	public Object Clone()
 	{
-		EventCalendar clone = new EventCalendar();
+		EventCalendar clone = new EventCalendar(event);
 
 		clone.setAllDayEvent(this.getAllDayEvent());
 		clone.setDescriptionText(this.getDescriptionText());
@@ -78,6 +87,11 @@ public class EventCalendar extends Appointment {
 		return clone;
 	}
 
+	public Event getEvent()
+	{
+		return event;
+	}
+	
 	public String getCustomField()
 	{
 		return _customField;
