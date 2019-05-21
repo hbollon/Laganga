@@ -126,6 +126,9 @@ public class Group extends Entity {
 		GroupMembership.factory.insert(values);
 		refreshMemberships();
 		
+		// Envoyer une notification à l'utilisateur
+		Notification.create("Vous avez rejoint un groupe", "Vous avez rejoint le groupe \""+getName()+"\"", user);
+		
 		// Ajout réussi, retourner true
 		return true;
 	}
@@ -143,6 +146,9 @@ public class Group extends Entity {
 		
 		membership.delete();
 		refreshMemberships();
+		
+		// Envoyer une notification à l'utilisateur
+		Notification.create("Vous êtes parti d'un groupe", "Vous avez quitté le groupe \""+getName()+"\"", user);
 		
 		// Suppression réussie, retourner true
 		return true;

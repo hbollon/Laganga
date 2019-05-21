@@ -6,7 +6,7 @@ import javax.swing.JTree;
 
 import model.entities.Entity;
 import model.entities.Group;
-import view.WinGestionGroup;
+import view.tabs.GroupTab;
 
 /**
  * L'EntityTree permettant de sélectionner un groupe à afficher
@@ -29,7 +29,11 @@ public class GroupsEntityTree extends EntityTree {
 	 * Évènements
 	 */
 	public void onTreeDoubleClicked(JTree jTree, List<Entity> entities, Entity entity) {
-		WinGestionGroup groupTab = new WinGestionGroup((Group) entity);
-		groupTab.switchTo();
+		try {
+			GroupTab groupTab = new GroupTab((Group) entity);
+			groupTab.switchTo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

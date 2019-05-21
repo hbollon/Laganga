@@ -52,6 +52,14 @@ public class SelectableEntityTree extends EntityTree {
 	
 	
 	/*
+	 * Setteurs
+	 */
+	public void setSelectedList(List<Entity> selectedList) {
+		this.selectedList = selectedList;
+	}
+	
+	
+	/*
 	 * Constructeur interne
 	 */
 	protected SelectableEntityTree(String treeName, List<Entity> baseList, boolean isFilterable, String selectedTreeName, int maxSelectableItems, boolean callInternalConstructor) {
