@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import model.Database;
 import model.LocalUser;
+import model.entities.Notification;
 import view.SplashWin;
 
 public abstract class Main {
@@ -23,5 +24,7 @@ public abstract class Main {
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
 		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
 		
+		// Ajout d'une notification de test
+		Notification.create("Bienvenue dans Laganga !", "Bien content de vous revoir !");
 	}
 }
