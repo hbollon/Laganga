@@ -4,10 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.LocalUser;
 import model.entities.Entity;
+import model.entities.Event;
+import model.entities.Group;
 import model.entities.Location;
 import model.entities.User;
 import view.MainWin;
@@ -60,9 +64,40 @@ public class CreateEventListener implements ActionListener {
 				location = win.getSelectedLocation();
 			else
 				throw new Exception();
-					
+			
+			// Ajout l'utilisateur courant dans les participants à l'évènement
+			if (!users.contains(LocalUser.localUser.getUser()))
+				users.add(LocalUser.localUser.getUser());
+			
 			//Méthode statique de MainWin, elle permet de démarrer l'ajout d'évènement dans la base
-			MainWin.callAddEvent(name, desc, priority, author, dateBegin, dateEnd, hide, location, users, groups);
+			//MainWin.callAddEvent(name, desc, priority, author, dateBegin, dateEnd, hide, location, users, groups);
+			
+			/*
+			 * Ajout dans la base de données
+			 */
+			Map<String, Object> values = new HashMap<String, Object>();
+			values.put("name", name);
+			values.put("type", desc);
+			values.put("priority", priority);
+			values.put("creator", author);
+			values.put("begin", dateBegin);
+			values.put("end", dateEnd);
+			values.put("location", location);
+			values.put("hidden", hide);
+			
+			Event event = (Event) Event.factory.insert(values);
+			
+			// Ajout des utilisateurs
+			for (int i = 0; i < users.size(); i++)
+				event.addParticipant((User) users.get(i));
+			
+			// Ajout des groupes
+			for (int i = 0; i < groups.size(); i++)
+				event.addParticipant((Group) groups.get(i));
+			
+			// Mettre à jour la vue et fermer l'onglet
+			win.close();
+			MainWin.mainWin.refresh();
 		}
 		catch (Exception e)
 		{

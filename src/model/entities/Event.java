@@ -263,4 +263,50 @@ public class Event extends Entity {
 		
 		return busy;
 	}
+	
+	
+	/*
+	 * Ajout/suppression de participants
+	 */
+	
+	// Ajouter un utilisateur participant
+	public boolean addParticipant(User user) throws SQLException, Exception {
+		// Si l'utilisateur est déjà membre du groupe, tout arrêter et retourner false
+		if (user.isAttendingEvent(this))
+			return false;
+		
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("user", user);
+		values.put("event", this);
+		
+		EventUserParticipation.factory.insert(values);
+		refreshParticipations();
+		
+		// Envoyer une notification à l'utilisateur
+		Notification.create("Vous avez été ajouté à un évènement", "Vous participez désormais à l'évènement \""+getName()+"\"", user);
+		
+		// Ajout réussi, retourner true
+		return true;
+	}
+	
+	// Ajouter un groupe participant
+	public boolean addParticipant(Group group) throws SQLException, Exception {
+		// Si l'utilisateur est déjà membre du groupe, tout arrêter et retourner false
+		if (group.isAttendingEvent(this))
+			return false;
+		
+		Map<String, Object> values = new HashMap<String, Object>();
+		values.put("group", group);
+		values.put("event", this);
+		
+		EventGroupParticipation.factory.insert(values);
+		refreshParticipations();
+		
+		// Envoyer une notification aux membres du groupe
+		for (int i = 0; i < group.getMembers().size(); i++)
+			Notification.create("Vous avez été ajouté à un évènement", "Vous participez désormais à l'évènement \""+getName()+"\"", group.getMembers().get(i));
+		
+		// Ajout réussi, retourner true
+		return true;
+	}
 }

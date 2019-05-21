@@ -17,6 +17,7 @@ import controller.OpenCreatEvent;
 import controller.OpenCreatGroup;
 import controller.OpenDeleteEvent;
 import controller.OpenOngletSupprGroup;
+import model.Agenda;
 import model.entities.Entity;
 import model.entities.Location;
 import model.entities.User;
@@ -190,6 +191,7 @@ public class MainWin extends JFrame {
 			usersTree.refreshBaseList(); // Mise à jour de la liste des utilisateurs
 			groupsTree.refreshBaseList(); // Mise à jour de la liste des groupes
 			groupsTab.refresh();
+			Agenda.agenda.refresh(); // Mise à jour des évènements
 			notificationBar.getNotificationsManager().refresh(); // Mise à jour des notifications
 		} catch (Exception e) {
 			e.printStackTrace();
