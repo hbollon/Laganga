@@ -250,7 +250,7 @@ public class Event extends Entity {
 	}
 	
 	// Retourne les utilisateurs ne pouvant pas participer à l'évènement parmis les utilisateurs passés
-	public List<User> getBusyUsers(List<User> users) throws Exception {
+	public List<User> getBusyUsers(List<Entity> users, List<Entity> groups) throws Exception {
 		List<User> busy = new ArrayList<User>(); // Liste des utilisateurs occupés (à remplir)
 		
 		// Recherche des utilisateurs occupés
@@ -259,6 +259,18 @@ public class Event extends Entity {
 			
 			if (!user.canAttendEvent(this))
 				busy.add(user);
+		}
+		
+		// Recherche des membres de groupes occupés
+		for (int i = 0; i < groups.size(); i++) {
+			Group group = (Group) groups.get(i);
+			
+			for (int j = 0; j < group.getMembers().size(); j++) {
+				User user = group.getMembers().get(j);
+				
+				if (!user.canAttendEvent(this) && !busy.contains(user))
+					busy.add(user);
+			}
 		}
 		
 		return busy;

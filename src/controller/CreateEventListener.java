@@ -14,6 +14,7 @@ import model.entities.Event;
 import model.entities.Group;
 import model.entities.Location;
 import model.entities.User;
+import view.FatalErrorWin;
 import view.MainWin;
 import view.tabs.EventTab;
 
@@ -63,11 +64,7 @@ public class CreateEventListener implements ActionListener {
 			if(win.getSelectedLocation() != null)
 				location = win.getSelectedLocation();
 			else
-				throw new Exception();
-			
-			// Ajout l'utilisateur courant dans les participants à l'évènement
-			if (!users.contains(LocalUser.localUser.getUser()))
-				users.add(LocalUser.localUser.getUser());
+				throw new Exception("Veuillez préciser un lieu");
 			
 			//Méthode statique de MainWin, elle permet de démarrer l'ajout d'évènement dans la base
 			//MainWin.callAddEvent(name, desc, priority, author, dateBegin, dateEnd, hide, location, users, groups);
@@ -87,6 +84,19 @@ public class CreateEventListener implements ActionListener {
 			
 			Event event = (Event) Event.factory.insert(values);
 			
+			// Les utilisateurs peuvent-ils participer à l'évènement ?
+			List<User> busy = event.getBusyUsers(users, groups);
+			if (busy.size() > 0) {
+				event.delete();
+				
+				String error = "Les utilisateurs suivants sont occupés :<br />";
+				for (int i = 0; i < busy.size(); i++)
+					error += "- "+busy.get(i).getFirstName()+" "+busy.get(i).getLastName()+"<br />";
+				error += "Veuillez vérifier leurs agendas et changer le créneau en conséquence.";
+				
+				throw new Exception(error);
+			}
+			
 			// Ajout des utilisateurs
 			for (int i = 0; i < users.size(); i++)
 				event.addParticipant((User) users.get(i));
@@ -101,13 +111,13 @@ public class CreateEventListener implements ActionListener {
 		}
 		catch (Exception e)
 		{
-			System.err.println("Error : location is null");
+			System.err.println(e.getMessage());
+			new FatalErrorWin(e.getMessage());
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		createEventLocal();		
-		win.close();
+		createEventLocal();
 	}
 }

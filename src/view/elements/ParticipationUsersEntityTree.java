@@ -25,7 +25,9 @@ public class ParticipationUsersEntityTree extends SelectableEntityTree {
 	
 	public ParticipationUsersEntityTree() {
 		this(true);
+		
 		updateModel();
+		updateView();
 	}
 	
 	public void update() {

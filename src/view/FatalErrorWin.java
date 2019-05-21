@@ -24,7 +24,7 @@ public class FatalErrorWin extends JFrame {
 		
 		setTitle("Laganga - Erreur");
 		setLocationRelativeTo(null);
-		setSize(600, 150);
+		setSize(700, 300);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -35,7 +35,7 @@ public class FatalErrorWin extends JFrame {
 		// Message d'erreur
 		JPanel statusPanel = new JPanel(new GridLayout(0, 1));
 		statusPanel.add(new JLabel("Une erreur est survenue :", JLabel.CENTER));
-		statusPanel.add(new JLabel(status, JLabel.CENTER));
+		statusPanel.add(new JLabel("<html>"+status+"</html>", JLabel.CENTER));
 		
 		content.add(statusPanel);
 		
