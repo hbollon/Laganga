@@ -76,7 +76,8 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 		{
 			this.resetDrag();
 			try {
-				new EventTab((Event) Event.factory.getByID(((EventCalendar)e.getItem()).getEvent().getID()));
+				EventTab eventTab = new EventTab((Event) Event.factory.getByID(((EventCalendar)e.getItem()).getEvent().getID()));
+				eventTab.switchTo();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -166,8 +167,8 @@ public class Planner extends com.mindfusion.scheduling.Calendar implements Obser
 			
 	        newEvent.setHeaderText(name);
 	        newEvent.setDescriptionText(desc);
-	        newEvent.setStartTime(new DateTime(dateBegin.get(java.util.Calendar.YEAR), dateBegin.get(java.util.Calendar.MONTH), dateBegin.get(java.util.Calendar.DAY_OF_MONTH), dateBegin.get(java.util.Calendar.HOUR_OF_DAY), dateBegin.get(java.util.Calendar.MINUTE), 00));
-	        newEvent.setEndTime(new DateTime(dateEnd.get(java.util.Calendar.YEAR), dateEnd.get(java.util.Calendar.MONTH), dateEnd.get(java.util.Calendar.DAY_OF_MONTH), dateEnd.get(java.util.Calendar.HOUR_OF_DAY), dateEnd.get(java.util.Calendar.MINUTE), 00));
+	        newEvent.setStartTime(new DateTime(dateBegin.get(java.util.Calendar.YEAR), dateBegin.get(java.util.Calendar.MONTH) + 1, dateBegin.get(java.util.Calendar.DAY_OF_MONTH), dateBegin.get(java.util.Calendar.HOUR_OF_DAY), dateBegin.get(java.util.Calendar.MINUTE), 00));
+	        newEvent.setEndTime(new DateTime(dateEnd.get(java.util.Calendar.YEAR), dateEnd.get(java.util.Calendar.MONTH) + 1, dateEnd.get(java.util.Calendar.DAY_OF_MONTH), dateEnd.get(java.util.Calendar.HOUR_OF_DAY), dateEnd.get(java.util.Calendar.MINUTE), 00));
 	        
 	        this.getSchedule().getItems().add(newEvent);
 		}

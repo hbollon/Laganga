@@ -50,8 +50,8 @@ public class CreateEventListener implements ActionListener {
 		{
 			//Récupération des attributs depuis l'instance de EventTab
 			name = win.getName();
-			dateBegin = new GregorianCalendar(win.getDateBegin().getCalendar().get(Calendar.YEAR), win.getDateBegin().getCalendar().get(Calendar.MONTH) - 1, win.getDateBegin().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourBegin(), win.getMinuteBegin());
-			dateEnd = new GregorianCalendar(win.getDateEnd().getCalendar().get(Calendar.YEAR), win.getDateEnd().getCalendar().get(Calendar.MONTH) - 1, win.getDateEnd().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourEnd(), win.getMinuteEnd());
+			dateBegin = new GregorianCalendar(win.getDateBegin().getCalendar().get(Calendar.YEAR), win.getDateBegin().getCalendar().get(Calendar.MONTH), win.getDateBegin().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourBegin(), win.getMinuteBegin());
+			dateEnd = new GregorianCalendar(win.getDateEnd().getCalendar().get(Calendar.YEAR), win.getDateEnd().getCalendar().get(Calendar.MONTH), win.getDateEnd().getCalendar().get(Calendar.DAY_OF_MONTH), win.getHourEnd(), win.getMinuteEnd());
 			location = win.getSelectedLocation();
 			desc = win.getDesc();
 			priority = win.getPriority().getSelectedIndex();
