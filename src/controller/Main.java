@@ -22,9 +22,6 @@ public abstract class Main {
 		Database.database.connect();
 		
 		// Bypass de la connexion pour le debugging (connexion de l'utilisateur 1)
-		LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
-		
-		// Ajout d'une notification de test
-		Notification.create("Bienvenue dans Laganga !", "Bien content de vous revoir !");
+		//LocalUser.localUser.login("julien.valverde@netc.fr", "issou");
 	}
 }
