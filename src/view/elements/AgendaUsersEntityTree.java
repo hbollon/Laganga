@@ -1,7 +1,10 @@
 package view.elements;
 
+import java.util.ArrayList;
+
 import model.Agenda;
 import model.LocalUser;
+import model.entities.Entity;
 import model.entities.User;
 
 /**
@@ -15,8 +18,9 @@ public class AgendaUsersEntityTree extends SelectableEntityTree {
 	/*
 	 * Constructeur interne
 	 */
-	protected AgendaUsersEntityTree(boolean callInternalConstructor) throws Exception {
-		super("Tous les utilisateurs", User.factory.getAll(), true, "Utilisateurs actifs", SelectableEntityTree.NO_MAX, true);
+	protected AgendaUsersEntityTree(boolean callInternalConstructor) {
+		super("Tous les utilisateurs", new ArrayList<Entity>(), true, "Utilisateurs actifs", SelectableEntityTree.NO_MAX, true);
+		refreshBaseList();
 		setEntitySelected(LocalUser.localUser.getUser());
 	}
 	
@@ -24,7 +28,7 @@ public class AgendaUsersEntityTree extends SelectableEntityTree {
 	/*
 	 * Constructeur public
 	 */
-	public AgendaUsersEntityTree() throws Exception {
+	public AgendaUsersEntityTree() {
 		this(true);
 		
 		updateModel();
@@ -40,6 +44,15 @@ public class AgendaUsersEntityTree extends SelectableEntityTree {
 		
 		try {
 			Agenda.agenda.refresh();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void refreshBaseList() {
+		try {
+			setBaseList(User.factory.getAll());
+			updateView();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

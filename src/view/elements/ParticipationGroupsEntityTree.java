@@ -1,6 +1,8 @@
 package view.elements;
 
-import model.LocalUser;
+import java.util.ArrayList;
+
+import model.entities.Entity;
 import model.entities.Group;
 
 /**
@@ -14,16 +16,21 @@ public class ParticipationGroupsEntityTree extends SelectableEntityTree {
 	
 	private static final long serialVersionUID = 7751283723102681638L;
 
-	protected ParticipationGroupsEntityTree(boolean callInternalConstructor) throws Exception {
-		super("Groupes", Group.factory.getAll(), true, "Groupes participant");
-		setEntitySelected(LocalUser.localUser.getUser());
+	protected ParticipationGroupsEntityTree(boolean callInternalConstructor) {
+		super("Groupes", new ArrayList<Entity>(), true, "Groupes participant");
+		update();
 	}
 	
-	public ParticipationGroupsEntityTree() throws Exception {
+	public ParticipationGroupsEntityTree() {
 		this(true);
-		
-		updateModel();
-		updateView();
 	}
 	
+	public void update() {
+		try {
+			setBaseList(Group.factory.getAll());
+			updateView();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

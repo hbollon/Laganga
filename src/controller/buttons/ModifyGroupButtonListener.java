@@ -1,4 +1,4 @@
-package controller;
+package controller.buttons;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +10,7 @@ import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
+import view.MainWin;
 import view.tabs.GroupTab;
 
 public class ModifyGroupButtonListener implements ActionListener {
@@ -78,5 +79,8 @@ public class ModifyGroupButtonListener implements ActionListener {
 				}
 			}
 		}
+		
+		groupTab.close();
+		MainWin.mainWin.refresh();
 	}
 }

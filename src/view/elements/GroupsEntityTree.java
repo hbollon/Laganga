@@ -1,5 +1,6 @@
 package view.elements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTree;
@@ -20,8 +21,8 @@ public class GroupsEntityTree extends EntityTree {
 	 * Constructeur
 	 */
 	public GroupsEntityTree() throws Exception {
-		super("Tous les groupes", Group.factory.getAll(), true);
-		updateView();
+		super("Tous les groupes", new ArrayList<Entity>(), true);
+		refresh();
 	}
 	
 	
@@ -32,6 +33,15 @@ public class GroupsEntityTree extends EntityTree {
 		try {
 			GroupTab groupTab = new GroupTab((Group) entity);
 			groupTab.switchTo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void refresh() {
+		try {
+			setBaseList(Group.factory.getAll());
+			updateView();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

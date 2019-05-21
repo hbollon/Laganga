@@ -2,9 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -14,7 +12,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import controller.OpenCreatEvent;
 import controller.OpenCreatGroup;
@@ -39,6 +36,8 @@ import view.tabs.GroupsTab;
 public class MainWin extends JFrame { 
 	private static final long serialVersionUID = 1L;
 	
+	public static MainWin mainWin;
+	
 	private JPanel windowPanel = null;
 	private JPanel centerPanel = null;
 	private JPanel leftPanel = null;
@@ -58,15 +57,19 @@ public class MainWin extends JFrame {
 	private JMenuItem settings = null;
 	private JMenuItem aide = null;
 	private JMenuItem credit = null;
+	private AgendaUsersEntityTree usersTree;
+	private AgendaGroupsEntityTree groupsTree;
+	private GroupsTab groupsTab;
 	
 	public static MainWinCalendar tabbedPane;
 	
 	public MainWin() throws Exception 
 	{
 		super();
+		mainWin = this;
 		initialize();
 	}
-	 
+	
 	public void initialize()
 	{
 		tabbedPane = new MainWinCalendar(this);
@@ -83,7 +86,7 @@ public class MainWin extends JFrame {
 	    
 	    // Ajout des onglets
 	    try {
-			new GroupsTab();
+			groupsTab = new GroupsTab();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,8 +118,10 @@ public class MainWin extends JFrame {
 			jPanelTree = new JPanel(new GridLayout(2, 1));
 			
 			try {
-				jPanelTree.add(new AgendaUsersEntityTree());
-				jPanelTree.add(new AgendaGroupsEntityTree());
+				usersTree = new AgendaUsersEntityTree();
+				groupsTree = new AgendaGroupsEntityTree();
+				jPanelTree.add(usersTree);
+				jPanelTree.add(groupsTree);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -179,5 +184,15 @@ public class MainWin extends JFrame {
 		tabbedPane.getMoisP().getCalendar().addEventBD(name, desc, priority, author, dateBegin, dateEnd, hide, groups, users, location);
 		tabbedPane.getSemaineP().getCalendar().addEventCalendar(name, desc, priority, dateBegin, dateEnd, hide);
 	}
-
+	
+	public void refresh() {
+		try {
+			usersTree.refreshBaseList(); // Mise à jour de la liste des utilisateurs
+			groupsTree.refreshBaseList(); // Mise à jour de la liste des groupes
+			groupsTab.refresh();
+			notificationBar.getNotificationsManager().refresh(); // Mise à jour des notifications
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

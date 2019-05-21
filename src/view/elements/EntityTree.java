@@ -63,6 +63,14 @@ public class EntityTree extends JPanel {
 	
 	
 	/*
+	 * Setteurs
+	 */
+	public void setBaseList(List<Entity> baseList) {
+		this.baseList = baseList;
+	}
+	
+	
+	/*
 	 * Constructeur interne
 	 */
 	protected EntityTree(String treeName, List<Entity> baseList, boolean isFilterable, boolean callInternalConstructor) {

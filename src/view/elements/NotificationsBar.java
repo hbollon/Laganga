@@ -40,6 +40,14 @@ public class NotificationsBar extends JPanel implements Observer {
 	
 	
 	/*
+	 * Getteurs
+	 */
+	public NotificationsManager getNotificationsManager() {
+		return notificationsManager;
+	}
+	
+	
+	/*
 	 * Constructeur
 	 */
 	public NotificationsBar() {

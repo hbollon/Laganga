@@ -1,6 +1,9 @@
 package view.elements;
 
+import java.util.ArrayList;
+
 import model.Agenda;
+import model.entities.Entity;
 import model.entities.Group;
 
 /**
@@ -15,7 +18,8 @@ public class AgendaGroupsEntityTree extends SelectableEntityTree {
 	 * Constructeur interne
 	 */
 	protected AgendaGroupsEntityTree(boolean callInternalConstructor) throws Exception {
-		super("Tous les groupes", Group.factory.getAll(), true, "Groupes actifs", SelectableEntityTree.NO_MAX, true);
+		super("Tous les groupes", new ArrayList<Entity>(), true, "Groupes actifs", SelectableEntityTree.NO_MAX, true);
+		refreshBaseList();
 	}
 	
 	
@@ -24,7 +28,6 @@ public class AgendaGroupsEntityTree extends SelectableEntityTree {
 	 */
 	public AgendaGroupsEntityTree() throws Exception {
 		this(true);
-		updateView();
 	}
 	
 	
@@ -36,6 +39,15 @@ public class AgendaGroupsEntityTree extends SelectableEntityTree {
 		
 		try {
 			Agenda.agenda.refresh();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void refreshBaseList() {
+		try {
+			setBaseList(Group.factory.getAll());
+			updateView();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

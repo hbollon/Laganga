@@ -24,7 +24,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.mindfusion.scheduling.Calendar;
 
-import controller.ModifyGroupButtonListener;
+import controller.buttons.ModifyGroupButtonListener;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Group;
