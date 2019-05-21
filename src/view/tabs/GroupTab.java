@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -23,11 +24,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.mindfusion.scheduling.Calendar;
 
-import controller.CreateGroupe;
+import controller.ModifyGroupButtonListener;
 import model.LocalUser;
 import model.entities.Entity;
 import model.entities.Group;
 import model.entities.User;
+import view.elements.EntityTree;
+import view.elements.SelectableEntityTree;
 
 /**
  * Un onglet de test pour servir d'exemple
@@ -47,6 +50,7 @@ public class GroupTab extends Tab {
 	private JSpinner minuteEnd;
 	private JComboBox<Object> importance;
 	private JCheckBox eventVisible;
+	private SelectableEntityTree membersSelector;
 	
 	public GroupTab() throws Exception {
 		this(null);
@@ -63,6 +67,18 @@ public class GroupTab extends Tab {
 		
 		// Le JPanel content représente le contenu de l'onglet
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
+		
+		/*
+		 * Boutons de la header
+		 */
+		
+		// Validation des modifications
+		if (group == null || group.getOwner() == LocalUser.localUser.getUser()) {
+			JButton ok = new JButton("Valider");
+				ok.addActionListener(new ModifyGroupButtonListener(group, this));
+				headerWest.add(ok);
+		}
+		
 		
 		//Panel pour le nom de l'événement
 		JPanel name = new JPanel(new FlowLayout());
@@ -84,61 +100,30 @@ public class GroupTab extends Tab {
 		content.add(name);
 		
 		
-		//panel membres du groupe
-		JPanel participants = new JPanel(new FlowLayout());
-		JLabel labelParticipants = new JLabel("Membres participants du groupe : "); 
-		participants.add(labelParticipants);
-		
-		JPanel panMembres = new JPanel(new BorderLayout()); 
-		JPanel listes = new JPanel(new FlowLayout());
-		
-		JPanel search = new JPanel(new FlowLayout()); //paneau pour la barre recherche et la liste de membres dans la base de donnée
-		JTextField text = new JTextField("Rechercher membre"); //champ de texte pour la recherche
-		text.setPreferredSize(new Dimension(200, 25));
-		JButton image = new JButton(new ImageIcon(new ImageIcon("./res/loading.gif").getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT))); //boutton qui lance la recherche
-		/** Ajout des element de la barre de recherche dans le paneau **/
-		search.add(text); 
-		search.add(image);
-		panMembres.add(search, BorderLayout.NORTH);
-		
-		/** 
-		 * Liste des membres qui peut-etre rajouter dans un événement 
-		 * **/
-		DefaultMutableTreeNode allUsersTree = new DefaultMutableTreeNode("Membres");
-		List<Entity> allUsers = User.factory.getAll();
-		for(int i = 0; i < allUsers.size(); i++) {
-			User member = (User) allUsers.get(i);
-			allUsersTree.add(new DefaultMutableTreeNode(member.getFirstName() + " " + member.getLastName()));
-		}
-		JTree listeMembres = new JTree(allUsersTree);
-		JScrollPane liste = new JScrollPane(listeMembres); //ajout de la liste dans un JScroll pan pour avoir une barre de scroll
-		liste.setPreferredSize(new Dimension(200,200));
-		
-		participants.add(panMembres);
-		listes.add(liste);
-		/**
-		 * deuxieme liste
+		/*
+		 * Affichage/modification des membres
 		 */
-		DefaultMutableTreeNode allparticipantsTree = new DefaultMutableTreeNode("Membres participants");
-		allparticipantsTree.add(new DefaultMutableTreeNode("Rachid Ben mha dit 'La salope' "));
-		JTree listeMembresParticipantsTree = new JTree(allparticipantsTree);
-		JScrollPane listeMembresParticipants = new JScrollPane(listeMembresParticipantsTree);
-		listeMembresParticipants.setPreferredSize(new Dimension(200,200));
+		if (group == null) { // Création d'un nouveau groupe
+			membersSelector = new SelectableEntityTree("Tous les utilisateurs", User.factory.getAll(), true, "Membres");
+				content.add(membersSelector);
+		}
+		else { // Affichage/modification d'un groupe existant
+			// Conversion de List<User> vers List<Entity>
+			List<User> members = group.getMembers();
+			List<Entity> treeMembers = new ArrayList<Entity>();
+			for (int i = 0; i < members.size(); i++)
+				treeMembers.add(members.get(i));
+			
+			if (group.getOwner() == LocalUser.localUser.getUser()) {
+				membersSelector = new SelectableEntityTree("Tous les utilisateurs", User.factory.getAll(), true, "Membres");
+					membersSelector.setSelectedList(treeMembers);
+					membersSelector.updateView();
+					content.add(membersSelector);
+			}
+			else
+				content.add(new EntityTree("Membres", treeMembers, true));
+		}
 		
-		listes.add(listeMembresParticipants);
-		panMembres.add(listes, BorderLayout.CENTER);
-		
-		
-		//Panel bouton
-		JPanel buttonPane = new JPanel(new FlowLayout());
-		JButton annule = new JButton("Annuler");
-		JButton ajoutGroupe = new JButton("Créer groupe");
-		ajoutGroupe.addActionListener(new CreateGroupe(this));
-		buttonPane.add(annule);
-		buttonPane.add(ajoutGroupe);
-	   
-		content.add(participants);
-	    content.add(buttonPane);
 		
 		open(); // Ouverture de l'onglet
 	}
@@ -193,4 +178,7 @@ public class GroupTab extends Tab {
 		return eventVisible;
 	}
 	
+	public SelectableEntityTree getMembersSelector() {
+		return membersSelector;
+	}
 }
