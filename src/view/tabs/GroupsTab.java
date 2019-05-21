@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import controller.OpenCreatGroup;
 import view.elements.GroupsEntityTree;
 
 /**
@@ -27,7 +28,7 @@ public class GroupsTab extends Tab {
 		content.setLayout(new BorderLayout());
 		content.add(new JLabel("Double-cliquez sur un groupe pour l'ouvrir", JLabel.CENTER), BorderLayout.NORTH);
 		content.add(new GroupsEntityTree(), BorderLayout.CENTER);
-		
+		newGroup.addActionListener(new OpenCreatGroup());
 		open();
 	}
 }

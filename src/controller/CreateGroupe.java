@@ -11,7 +11,6 @@ public class CreateGroupe implements ActionListener {
 
 	public CreateGroupe(GroupTab ouient) {
 		this.ouient = ouient;
-		
 	}
 	
 	@Override

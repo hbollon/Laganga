@@ -12,12 +12,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.toedter.calendar.JCalendar;
+
 import controller.CloseWindow;
 import controller.Inscription;
 
 public class WinInscription extends JFrame {
 
 	private static final long serialVersionUID = -5918855599444972396L;
+	
+	private JTextField firstName;
+	private JTextField name;
+	private JTextField mail;
+	private JTextField mdp;
 
 	public WinInscription() {
 		super();
@@ -33,10 +40,10 @@ public class WinInscription extends JFrame {
 		
 		JPanel panelName = new JPanel(new FlowLayout());
 		JLabel labelFirstName = new JLabel("Prénom : ");
-		JTextField firstName = new JTextField();
+		firstName = new JTextField();
 		firstName.setPreferredSize(new Dimension(100, 24));
 		JLabel labelName = new JLabel("Nom de famille : ");
-		JTextField name = new JTextField();
+		name = new JTextField();
 		name.setPreferredSize(new Dimension(100, 24));
 		panelName.add(labelFirstName);
 		panelName.add(firstName);
@@ -45,14 +52,14 @@ public class WinInscription extends JFrame {
 		
 		JPanel adresseMail = new JPanel(new FlowLayout());
 		JLabel labelMail = new JLabel("Adresse mail : ");
-		JTextField mail = new JTextField();
+		mail = new JTextField();
 		mail.setPreferredSize(new Dimension(100, 24));
 		adresseMail.add(labelMail);
 		adresseMail.add(mail);
 		
 		JPanel password = new JPanel(new FlowLayout());
 		JLabel labelmdp = new JLabel("Mot de passe : ");
-		JTextField mdp = new JTextField();
+		mdp = new JTextField();
 		mdp.setPreferredSize(new Dimension(100, 24));
 		password.add(labelmdp);
 		password.add(mdp);
@@ -69,7 +76,27 @@ public class WinInscription extends JFrame {
 		
 		this.setVisible(true);
 		
-		inscription.addActionListener(new Inscription());
+		inscription.addActionListener(new Inscription(this));
 		this.addWindowListener(new CloseWindow(this));
+	}
+	
+	public String getFirstName()
+	{
+		return ((JTextField)firstName).getText();
+	}
+	
+	public String getName()
+	{
+		return ((JTextField)name).getText();
+	}
+	
+	public String getMail()
+	{
+		return ((JTextField)mail).getText();
+	}
+	
+	public String getmdp()
+	{
+		return ((JTextField)mdp).getText();
 	}
 }

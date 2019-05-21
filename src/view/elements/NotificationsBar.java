@@ -93,6 +93,7 @@ public class NotificationsBar extends JPanel implements Observer {
 		notifPanel.add(new JLabel("<html><h5>"+notification.getTitle()+"<br />"+notification.getTime().getTime()+"</h5>"+notification.getDescription()+"</html>"));
 		
 		JButton delete = new JButton("X");
+			delete.addActionListener(new ClearNotificationButtonListener(notificationsManager, notification));
 			notifPanel.add(delete);
 	}
 	
